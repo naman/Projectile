@@ -1,0 +1,52 @@
+{% extends "projectile/base_admin.html" %}
+{% load humanize %}
+
+{% block content %}
+<div class="jumbotron">
+  <div align="center" class="container">
+    <br/>
+    <br/>
+
+    <h1>Batches</h1>
+  </div>
+  <button id="batch" class="btn btn-primary btn-fab btn-raised mdi-content-add"></button>
+</div>
+<div class="container">
+  {% for l in batch%}
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+     <a href="/batch/{{ l.pk }}"> <h3 class="panel-title" style="color:white">{{ l.title }}</h3> 
+
+     </a>
+   </div>
+   <div class="panel-body">
+   <h4 >Created on: {{ l.createdon }}</h4>
+   {% ifequal l.pg_or_not 'G' %}
+   <h5 >Graduate</h5>
+   {% else %}
+   <h5>Post-Graduate</h5>
+   {% endifequal %}
+   </div>
+ </div>
+ {% endfor %}
+</div>
+{% if not batch %}
+<div class="container">
+  <h4 align="center">There are no batches right now.</h4>
+</div>
+{% endif %}
+
+<!-- Modal -->
+
+<div id="batchmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      </div>
+      <div class="modal-body" id="batchdata">
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

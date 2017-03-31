@@ -1,0 +1,27 @@
+{% extends "projectile/base_modals.html" %}
+
+{% block content %}
+<div class="jumbotron">
+  <div align="center" class="container">
+
+    
+    <h1>My Applications</h1>
+  </div>
+</div>
+{% for job in jobs %}
+<!-- <div class="container"> -->
+    <div class="panel panel-default">
+        <a href="/job/{{ job.pk }}" class="list-group-item">
+            <h6 class="list-group-item-heading">{{ job.company_name }}</h6>
+            <h6 class="list-group-item-heading">{{ job.profile }}</h6>
+            <p class="list-group-item-text">{{ job.details }}</p>
+        </a>
+    </div>
+<!-- </div> -->
+{% endfor %}
+{% if not jobs %}
+    <div class="container">
+        <h4 style="margin-left:7em">You haven't applied to any jobs.</h4>
+    </div>
+{% endif %}
+{% endblock %}

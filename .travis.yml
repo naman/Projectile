@@ -1,5 +1,5 @@
 # //=======================================================================
-# // Copyright JobPort, IIIT Delhi 2015.
+# // Copyright Projectile, IIIT Delhi 2015.
 # // Distributed under the MIT License.
 # // (See accompanying file LICENSE or copy at
 # //  http://opensource.org/licenses/MIT)
@@ -24,5 +24,5 @@ branches:
  only:
   - master
 script:
-  - cd placement
+  - cd dhcs
   - python manage.py test

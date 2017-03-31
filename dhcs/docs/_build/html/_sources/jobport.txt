@@ -1,0 +1,70 @@
+projectile package
+===============
+
+Submodules
+----------
+
+projectile.helpers module
+----------------------
+
+.. automodule:: projectile.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+projectile.middleware module
+-------------------------
+
+.. automodule:: projectile.middleware
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+projectile.models module
+---------------------
+
+.. automodule:: projectile.models
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+projectile.search_indexes module
+-----------------------------
+
+.. automodule:: projectile.search_indexes
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+projectile.storage module
+--------------------
+
+.. automodule:: projectile.storage
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+projectile.tests module
+--------------------
+
+.. automodule:: projectile.tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+projectile.urls module
+-------------------
+
+.. automodule:: projectile.urls
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+projectile.views module
+--------------------
+
+.. automodule:: projectile.views
+    :members:
+    :undoc-members:
+    :show-inheritance: 

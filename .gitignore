@@ -53,7 +53,7 @@ coverage.xml
 docs/_build
 
 #staticfiles
-placement/static
+dhcs/static
 
 #idea
 .idea
@@ -62,6 +62,6 @@ placement/static
 *.pdf
 
 #Database/Index Files
-placement/jobport/migrations
-placement/placement/whoosh_index
-placement/jobport.db
+dhcs/projectile/migrations
+dhcs/dhcs/whoosh_index
+dhcs/projectile.db

@@ -1,0 +1,14 @@
+{% extends "projectile/base_modals.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
+<br/>
+<div class="container">
+    <!-- <div> -->
+    <div class="row">
+        <div class="col-md-10">
+            <form action="{% url 'feedback' %}" role="form" class="form-horizontal" method="post" enctype="multipart/form-data">
+                {% csrf_token %} {% bootstrap_form form layout="horizontal" %} {% buttons submit='Shoot' layout='horizontal' %}{% endbuttons %}
+                <h5 style="color:gray">You can always reach me directly at <a href="mailto:naman13064@iiitd.ac.in" target=”_blank”>naman@iiitd</a></h5>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,9 +1,9 @@
-# Contributing to Jobport
-Thank you for your interest in contributing to Jobport!
+# Contributing to Projectile
+Thank you for your interest in contributing to Projectile!
 
 
 ## Contributing Code
-If you haven't already, please set up your local environment using instructions from [this Wiki](https://github.com/IIIT-Delhi/placement/wiki).
+If you haven't already, please set up your local environment using instructions from [this Wiki](https://github.com/IIIT-Delhi/dhcs/wiki).
 
 - Fork or clone the repo.
 - Make a some changes on your local branch
