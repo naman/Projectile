@@ -39,7 +39,7 @@
             
   <h1>Source code for projectile.models</h1><div class="highlight"><pre>
 <span class="c"># //=======================================================================</span>
-<span class="c"># // Copyright Projectile, IIIT Delhi 2015.</span>
+<span class="c"># // Copyright Projectile, IIIT Delhi 2017.</span>
 <span class="c"># // Distributed under the MIT License.</span>
 <span class="c"># // (See accompanying file LICENSE or copy at</span>
 <span class="c"># //  http://opensource.org/licenses/MIT)</span>
@@ -175,14 +175,14 @@
 		<span class="p">(</span><span class="mi">2012</span><span class="p">,</span> <span class="s">&#39;2012&#39;</span><span class="p">),</span>
 		<span class="p">(</span><span class="mi">2013</span><span class="p">,</span> <span class="s">&#39;2013&#39;</span><span class="p">),</span>
 		<span class="p">(</span><span class="mi">2014</span><span class="p">,</span> <span class="s">&#39;2014&#39;</span><span class="p">),</span>
-		<span class="p">(</span><span class="mi">2015</span><span class="p">,</span> <span class="s">&#39;2015&#39;</span><span class="p">),</span>
+		<span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="s">&#39;2017&#39;</span><span class="p">),</span>
 		<span class="p">(</span><span class="mi">2016</span><span class="p">,</span> <span class="s">&#39;2016&#39;</span><span class="p">),</span>
 		<span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="s">&#39;2017&#39;</span><span class="p">),</span>
 		<span class="p">)</span>
 	<span class="n">startyear_ug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s">&quot;Undergraduate Starting Year&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">STARTYEARS</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s">&quot;2011&quot;</span><span class="p">,</span>
 		<span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 	<span class="n">passingyear_ug</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s">&quot;Undergraduate Completion Year&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">ENDYEARS</span><span class="p">,</span>
-		<span class="n">default</span><span class="o">=</span><span class="s">&quot;2015&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+		<span class="n">default</span><span class="o">=</span><span class="s">&quot;2017&quot;</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
 
 	<span class="n">startyear_pg</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">(</span><span class="s">&quot;Postgraduate Starting Year&quot;</span><span class="p">,</span> <span class="n">max_length</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">choices</span><span class="o">=</span><span class="n">STARTYEARS</span><span class="p">,</span> <span class="n">blank</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span>
 		<span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
@@ -291,7 +291,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2015, Naman Gupta.
+      &copy;2017, Naman Gupta.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>

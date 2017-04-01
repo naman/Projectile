@@ -1,5 +1,5 @@
 # //=======================================================================
-# // Copyright Projectile, IIIT Delhi 2015.
+# // Copyright Projectile, IIIT Delhi 2017.
 # // Distributed under the MIT License.
 # // (See accompanying file LICENSE or copy at
 # //  http://opensource.org/licenses/MIT)
@@ -151,14 +151,14 @@ class Student(models.Model):
         (2012, '2012'),
         (2013, '2013'),
         (2014, '2014'),
-        (2015, '2015'),
+        (2017, '2017'),
         (2016, '2016'),
         (2017, '2017'),
     )
     startyear_ug = models.IntegerField("Undergraduate Starting Year", max_length=4, choices=STARTYEARS, default="2011",
                                        blank=True, null=True)
     passingyear_ug = models.IntegerField("Undergraduate Completion Year", max_length=4, choices=ENDYEARS,
-                                         default="2015", blank=True, null=True)
+                                         default="2017", blank=True, null=True)
 
     startyear_pg = models.IntegerField("Postgraduate Starting Year", max_length=4, choices=STARTYEARS, blank=True,
                                        null=True)

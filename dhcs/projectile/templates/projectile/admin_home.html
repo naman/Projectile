@@ -1,71 +1,119 @@
-{% extends "projectile/base_admin.html" %}
+{% extends "projectile/base_admin.html" %} {% load humanize %} {% block content %}
 
-{% load humanize %}
-{% block content %}
-
-<div class="jumbotron">
-  <div align="center" class="container">
-    <br/>
-    <br/>
-    
-    <h1>Admin Home</h1>
-  </div>
-</div>
+<br/>
+<br/>
+<br/>
+<br/>
 
 <div class="container">
-  {% for job in jobs %}
-
-  {% if job.deadlineexpired %} 
-  <div class="panel panel-danger" >
-    {% elif not job.deadlineexpired %} 
-    <div class="panel panel-primary" >
-     
-      {% endif %}
-      <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{ job.pk }}" aria-controls="collapseExample{{ job.pk }}">
-        <h3 class="panel-title" >{{ job.company_name }}</h3>
-      </div>
-      <div class="panel-body collapse" id="collapseExample{{ job.pk }}">
-        <a href="/job/{{ job.pk }}"><h6>{{ job.profile }}</h6></a>
-        
-        <h6>Posted on: {{ job.createdon }}</h6>
-        <h6>Date of Visit: {{ job.dateofvisit }}</h6>
-        <div class="panel-footer">
-          Deadline: {{ job.deadline }}
-          {% if job.deadlineexpired %} 
-          <span class="label label-danger"> 
-            {{ job.deadline|naturaltime }} 
-            {% elif not job.deadlineexpired %} 
-            <span class="label label-success"> {{ job.deadline|naturaltime }}</span> {% endif %}</span>
-          </div>
-          <h6></h6>
+    <div class="row">
+        <div class="col-xs-12 col-md-9">
+            <h3>ONGOING PROJECTS</h3>
+            <!-- <hr class="divider"> -->
+            <hr style="width: 100%;  height: 2px; background-color:#005A6A;" /> {% if not projects %}
+            <h4 align="text-center">There are no projects available right now.</h4> {% endif %}
+            <!-- <div class="row">
+                {% for project in projects %} {% if project.deadlineexpired %}
+                <div class="col-xs-12 col-md-3">
+                    <div class="panel panel-danger">
+                        {% elif not project.deadlineexpired %}
+                        <div class="panel panel-primary">
+                            {% endif %}
+                            <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{ project.pk }}" aria-controls="collapseExample{{ project.pk }}">
+                                <h3 class="panel-title">{{ project.company_name }}</h3>
+                            </div>
+                            <div class="panel-body collapse" id="collapseExample{{ project.pk }}">
+                                <a href="/project/{{ project.pk }}"><h6>{{ project.profile }}</h6></a>
+                                <h6>Posted on: {{ project.createdon }}</h6>
+                                <h6>Date of Visit: {{ project.dateofvisit }}</h6>
+                                <div class="panel-footer">
+                                    Deadline: {{ project.deadline }} {% if project.deadlineexpired %}
+                                    <span class="label label-danger">
+						{{ project.deadline|naturaltime }}
+						{% elif not project.deadlineexpired %}
+						<span class="label label-success"> {{ project.deadline|naturaltime }}</span> {% endif %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div> -->
         </div>
-      </div>
-
-      
-      
-
-      {% endfor %}
+        <div class="col-xs-6 col-md-3">
+            <div class="well well-lg" style="background-color: #005A6A">
+                <h3 class="text-center" style="color: white;">NOTIFICATIONS </h3>
+                <hr class="divider" />
+                {% if not notifications %}
+                <h4 class="text-center" style="color: white;" align="text-center">There are no notifications right now.</h4> {% endif %} {% for n in notifications %}
+                <div class="row">
+                </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
-
-<!--
-            <script>
-                      (function() {
-                        var cx = '012742927787870246921:awu6ouvfwzi';
-                        var gcse = document.createElement('script');
-                        gcse.type = 'text/javascript';
-                        gcse.async = true;
-                        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-                            '//www.google.com/cse/cse.js?cx=' + cx;
-                        var s = document.getElementsByTagName('script')[0];
-                        s.parentNode.insertBefore(gcse, s);
-                      })();
-                    </script>
-                <gcse:search></gcse:search>
-              -->
-
-              {% if not jobs %}
-              <div class="container">
-                <h4 align="center">There are no jobs available right now.</h4>
-              </div>
-              {% endif %}
-              {% endblock %}
+    <div class="row">
+        <div class="col-xs-12 col-md-9">
+            <h3>PAST PROJECTS</h3>
+            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" /> {% if not projects %}
+            <h4 align="text-center">There are no projects available right now.</h4> {% endif %}
+            <div class="center">
+                <!-- <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li>
+                            <a href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li><a href="#">1</a></li>
+                        <li><a href="#">2</a></li>
+                        <li><a href="#">3</a></li>
+                        <li><a href="#">4</a></li>
+                        <li><a href="#">5</a></li>
+                        <li>
+                            <a href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav> -->
+                <nav aria-label="...">
+                    <ul class="pager">
+                        <li><a href="#">Previous</a></li>
+                        <li><a href="#">Next</a></li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- <div class="row">
+                {% for project in projects %} {% if project.deadlineexpired %}
+                <div class="col-xs-12 col-md-3">
+                    <div class="panel panel-danger">
+                        {% elif not project.deadlineexpired %}
+                        <div class="panel panel-primary">
+                            {% endif %}
+                            <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{ project.pk }}" aria-controls="collapseExample{{ project.pk }}">
+                                <h3 class="panel-title">{{ project.company_name }}</h3>
+                            </div>
+                            <div class="panel-body collapse" id="collapseExample{{ project.pk }}">
+                                <a href="/project/{{ project.pk }}"><h6>{{ project.profile }}</h6></a>
+                                <h6>Posted on: {{ project.createdon }}</h6>
+                                <h6>Date of Visit: {{ project.dateofvisit }}</h6>
+                                <div class="panel-footer">
+                                    Deadline: {{ project.deadline }} {% if project.deadlineexpired %}
+                                    <span class="label label-danger">
+						{{ project.deadline|naturaltime }}
+						{% elif not project.deadlineexpired %}
+						<span class="label label-success"> {{ project.deadline|naturaltime }}</span> {% endif %}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        </div>
+    </div>
+</div>
+{% endblock %}

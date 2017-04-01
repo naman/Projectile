@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 #
 # Projectile documentation build configuration file, created by
-# sphinx-quickstart on Fri Sep 11 05:09:40 2015.
+# sphinx-quickstart on Fri Sep 11 05:09:40 2017.
 #
 # This file is execfile()d with the current directory set to its
 # containing dir.
@@ -56,7 +56,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Projectile'
-copyright = u'2015, Naman Gupta'
+copyright = u'2017, Naman Gupta'
 author = u'Naman Gupta'
 
 # The version info for the project you're documenting, acts as redhcs for

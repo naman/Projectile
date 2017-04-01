@@ -4,12 +4,14 @@
 
 <head>
     <title>Projectile</title>
-    <script src="{% static "js/jquery-2.1.1.min.js" %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
     {% block pagelibraries %}{% endblock %}
-    <link rel="stylesheet" href="{% static "css/showup.css" %}">
-    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{% static "css/ripples.min.css" %}" rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link href="{% static "css/material-wfont.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/ripples.min.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/logo.css" %}">
+    <link rel="stylesheet" href="{% static "css/showup.css" %}">
 </head>
 
 <body>
@@ -24,20 +26,23 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/">Projectile</a>
+                <!-- <a class="navbar-brand" href="/">Projectile</a> -->
+ <a class="navbar-brand" href="/" title="Projectile">
+        <img class="img-responsive" src="{% static "images/projectilelogo.png" %}">
+    </a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="/openjob/">New Job Opening</a></li>
-                    <li><a href="/stats">Statistics</a></li>
-                    <li><a href="/batches/">Batches</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>
                         <a id="search" href="#" class="glyphicon glyphicon-search"></a>
                     </li>
-                    <li><a href="#" id="fb">Feedback</a></li>
+                    <li class="active"><a href="/"><strong>Home</strong></a></li>
+                    <li><a href="/add_project/"><strong>Add Project</strong></a></li>
+                    <li><a href="/all_requests/"><strong>All Requests</strong></a></li>
+                    <li><a href="#" id="fb"><strong>Feedback</strong></a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} {{ user.last_name }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -67,8 +72,8 @@
         <div class="container">
             <p>
                 <ul class="nav nav-pills nav-justified">
-                    <li><a href="/">Projectile, 2015</a></li>
-                    <li><a href="http://byld.iiitd.edu.in" target="_blank">Byld</a></li>
+                    <li><a href="/">Projectile, 2017</a></li>
+                    <li><a href="#" target="_blank">RoadRunner Labs</a></li>
                     <li><a href="http://www.iiitd.ac.in" target="_blank">© IIIT Delhi</a></li>
                 </ul>
         </div>
@@ -84,17 +89,6 @@
             </div>
         </div>
     </div>
-    <!-- <div id="uploadmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-				</div>
-				<div class="modal-body" id="uploaddata">
-				</div>
-			</div>
-		</div>
-	</div> -->
     <div id="fbmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -107,16 +101,22 @@
         </div>
     </div>
     <!-- Your site ends -->
-    <script src="{% static "js/showup.js" %}"></script>
-    <script src="{% static "js/bootstrap.min.js" %}"></script>
-    <script src="{% static "js/ripples.js" %}"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="{% static "js/material.min.js" %}"></script>
-    <script>
-    $().showUp('.navbar', {
-        upClass: 'navbar-show',
-        downClass: 'navbar-hide'
+    <script src="{% static "js/ripples.js" %}"></script>
+
+
+    <script type="text/javascript">
+    $('.navbar li').click(function(e) {
+        $('.navbar li.active').removeClass('active');
+        var $this = $(this);
+        if (!$this.hasClass('active')) {
+            $this.addClass('active');
+        }
+        // e.preventDefault();
     });
     </script>
+
     <script type="text/javascript">
     window.onload = function() {
         $("#search").on('click', function() {
@@ -138,31 +138,32 @@
             });
         })
         $("#fb").on('click', function() {
-                $("#fbdata").load("{% url 'feedback' %}", function(responseTxt, statusTxt, xhr) {
-                    if (statusTxt == "success")
-                    // alert("External content loaded successfully!");
-                        $("#fbmodal").modal('show');
-                    if (statusTxt == "error")
-                        alert("Error: " + xhr.status + ": " + xhr.statusText);
-                });
+            $("#fbdata").load("{% url 'feedback' %}", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success")
+                // alert("External content loaded successfully!");
+                    $("#fbmodal").modal('show');
+                if (statusTxt == "error")
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
 
-            })
-            // 		$("#cgpa").on('click', function(){
-            // 			$("#uploaddata").load("{% url 'uploadcgpa' %}",function(responseTxt,statusTxt,xhr){
-            // 				if(statusTxt=="success")
-            // 		// alert("External content loaded successfully!");
-            // 	$("#uploadmodal").modal('show');
-            // 	if(statusTxt=="error")
-            // 		alert("Error: "+xhr.status+": "+xhr.statusText);
-            // });
-            // 		})
+        })
     }
     </script>
+
     <script>
     $(document).ready(function() {
         $.material.init();
     });
     </script>
+
+    <script src="{% static "js/showup.js" %}"></script>
+    <script>
+    $().showUp('.navbar', {
+        upClass: 'navbar-show',
+        downClass: 'navbar-hide'
+    });
+    </script>
+
 </body>
 
 </html>
