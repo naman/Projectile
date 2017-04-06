@@ -1,34 +1,15 @@
-{% extends "projectile/base_newuser.html" %}
-{% load bootstrap3 %}
-
-{% block pagelibraries %}
-    {{ form.media }}
-{% endblock %}
-
-{% block content %}
-<div class="jumbotron">
-  <div align="center" class="container">
-    <br/>
-  <br/>
-  
-    <h1>Hi there!</h1>
-    <h3>Please fill details regarding the project you want to add.</h3>
-    <!-- <h6>Under Graduate Students should leave the PG fields blank.</h6>
-    <h6>Check the Sample Resume Format at the bottom of this Page</h6> -->
-  </div>
-</div>
-
-
+{% extends "projectile/base_newuser.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
+<br/>
+<br/>
+<br/>
+<br/>
 <div class="container">
-    <form role="form" class="form-horizontal" action="{% url 'newuser' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% bootstrap_form form layout="horizontal" %}
-        {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
-    </form>
+    <ol class="breadcrumb">
+        <li>
+            <a href="#">Home</a>
+        </li>
+        <li class="active">Add Project</li>
+    </ol>
+    <h3>Please fill details regarding the project you want to add.</h3>
 </div>
-
-<script>
-
-</script>
-
 {% endblock %}
