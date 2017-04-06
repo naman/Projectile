@@ -783,3 +783,7 @@ def search(request):
                           {'search_query': query, 'results': form.search()})
     else:
         return render(request, 'projectile/notallowed.html')  # 403 Error
+
+@login_required()
+def projectpage(request):
+    return render(request, 'projectile/student_projectpage.html')
