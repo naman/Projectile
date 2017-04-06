@@ -46,35 +46,22 @@
             <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
             <!-- {% if not projects %}
             <h4 align="text-center">There are no projects available right now.</h4> {% endif %} -->
-            
             <div class="center">
                 <div class="row">
-                    <!-- {% for project in projects %} {% if project.deadlineexpired %} -->
-                    <div class="col-xs-12 col-md-3">
-                        <!-- <div class="panel panel-danger"> -->
-                        <!-- {% elif not project.deadlineexpired %} -->
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="panel panel-primary">
-                            <!-- {% endif %} -->
                             <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{ project.pk }}" aria-controls="collapseExample{{ project.pk }}">
                                 <h3 class="panel-title">Project #1</h3>
                             </div>
                             <div class="panel-body collapse" id="collapseExample{{ project.pk }}">
                                 <a href="/project/{{ project.pk }}"><h6>CSE</h6></a>
                                 <h6>Posted on: Jan 6, 2017</h6>
-                                <!-- <h6>Date of Visit: {{ project.dateofvisit }}</h6> -->
                                 <div class="panel-footer">
                                     Deadline: Aug 6, 2017
-                                    <!-- {% if project.deadlineexpired %} -->
-                                    <!-- <span class="label label-danger"> -->
-                                    <!-- {{ project.deadline|naturaltime }} -->
-                                    <!-- {% elif not project.deadlineexpired %} -->
                                     <span class="label label-success"> Aug 6, 2017 </span>
-                                    <!-- {% endif %} -->
-                                    <!-- </span> -->
                                 </div>
                             </div>
                         </div>
-                        <!-- {% endfor %} -->
                     </div>
                 </div>
             </div>
