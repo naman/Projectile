@@ -393,3 +393,11 @@ class RootSearchForm(haystack.forms.SearchForm):
         # you can then adjust the search results and ask for instance to order the results by title
         # sqs = sqs.order_by(title)
         return sqs
+
+
+class AddProjectForm(forms.ModelForm):
+
+    class Meta:
+        model = Project
+        fields = ['description', 'area', 'hours_of_work',
+                  'openings', 'related_research', 'invite_people', 'progress_till_date', 'faculty_working']
