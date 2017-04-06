@@ -638,6 +638,10 @@ def feedback(request):
         return render(request, 'projectile/feedback.html', context)
 
 
+def apply(request):
+    return render(request, 'projectile/student_project_apply.html')
+
+
 @login_required()
 def fileview(request, filename):
     """Protect the resume location, by adding headers, using nginx."""
