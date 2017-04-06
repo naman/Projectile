@@ -30,6 +30,10 @@ from projectile.models import Job, Student, Batch
 from dhcs import settings
 
 
+def student_professor(request):
+    return render(request, "projectile/student_professor.html")
+
+
 def _send_mail(subject, text_content, host_user, recipient_list):
     """Sending mail to the recipient_list. Written by http://darkryder.me/."""
     msg = EmailMultiAlternatives(
