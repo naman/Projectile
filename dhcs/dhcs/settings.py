@@ -132,3 +132,6 @@ HAYSTACK_CONNECTIONS = {
 }
 
 RESUME_URL = "https://docs.google.com/a/iiitd.ac.in/document/d/10uKehH-VwEWLV_KSf7Hot0j8eYjoBjPQ8Xh_UnVwKUU/edit?usp=sharing"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '557623148806-rc57nlhuq4f55059qpoo383026k11eeg.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'UNUlQ4I1sR-sT1OrRY67pmtF'

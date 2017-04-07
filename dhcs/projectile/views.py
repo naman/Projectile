@@ -81,7 +81,7 @@ def home(request):
             studentgroup = Group.objects.get(name='student')
             if (not is_member(request.user, studentgroup)):
                 return HttpResponseRedirect('/newuser')
-            return render(request, 'projectile/home_student.html', context)
+            return render(request, 'projectile/student_home.html', context)
     return render(request, 'projectile/welcome.html')
 
 
@@ -787,3 +787,7 @@ def search(request):
                           {'search_query': query, 'results': form.search()})
     else:
         return render(request, 'projectile/notallowed.html')  # 403 Error
+
+@login_required()
+def projectpage(request):
+    return render(request, 'projectile/student_projectpage.html')

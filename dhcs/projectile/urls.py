@@ -69,5 +69,6 @@ urlpatterns = patterns('',
                        url(r'files/jobfiles/(.+)',
                            views.docfileview, name='docfileview'),
                        url(r'search/results/$', views.search, name='search'),
+                       url(r'project/$', views.projectpage, name='projectpage'),
                        # url(r'material.min.js.map$',views.test,name='test'),
                        )
