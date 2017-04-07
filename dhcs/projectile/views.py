@@ -23,7 +23,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
 from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline
-from projectile.models import Project, Student
+from projectile.models import Project, Student, Professor
 
 
 def student_professor(request):
@@ -451,5 +451,6 @@ def search(request):
 
 
 @login_required()
-def professors_home(request):
-    return render(request, 'projectile/student_professors.html')
+def student_professors(request):
+    context = Professor.objects.all()
+    return render(request, 'projectile/student_professors.html', context)
