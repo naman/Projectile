@@ -38,6 +38,10 @@ def professor_addproject(request):
     return render(request, "projectile/professor_addproject.html")
 
 
+def admin_notification(request):
+    return render(request, "projectile/admin_notification.html")
+
+
 def _send_mail(subject, text_content, host_user, recipient_list):
     """Sending mail to the recipient_list. Written by http://darkryder.me/."""
     msg = EmailMultiAlternatives(
@@ -787,6 +791,7 @@ def search(request):
                           {'search_query': query, 'results': form.search()})
     else:
         return render(request, 'projectile/notallowed.html')  # 403 Error
+
 
 @login_required()
 def projectpage(request):

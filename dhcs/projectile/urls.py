@@ -16,6 +16,7 @@ handler404 = 'views.my_404_view'
 urlpatterns = patterns('',
                        url(r'^student_professor/$', views.student_professor, name='student_professor'),
                        url(r'^add_project/$', views.professor_addproject, name='professor_addproject'),
+                       url(r'^all_requests/$', views.admin_notification, name='admin_notification'),
                        url(r'^$', views.home, name='home'),
                        url(r'^logout/$', views.logout, name='logout'),
                        url(r'^needlogin/$', views.needlogin, name='needlogin'),
