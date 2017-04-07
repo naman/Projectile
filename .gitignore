@@ -65,3 +65,5 @@ dhcs/static
 dhcs/projectile/migrations
 dhcs/dhcs/whoosh_index
 dhcs/projectile.db
+*.jpeg
+*.png

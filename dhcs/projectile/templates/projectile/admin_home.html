@@ -13,13 +13,13 @@
                 {% for project in projects %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="panel panel-primary">
-                        <a href=""><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
+                        <a href=""><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
                         <div class="panel-body" id="collapseExample{{ project.pk }}">
-                            <a style="text-decoration: none;" href="/project/{{ project.pk }}/edit"><h4>{{ project.name }} </h4></a>
+                            <a style="text-decoration: none;" href="/project/{{project.pk}}/"><h4>{{ project.name }} </h4></a>
                             <p>{{ project.project_type }}</p>
                             <p>{{ project.interest_areas }}</p>
                             <p>Posted on: {{ project.createdon}}</p>
-                            <p>Deadline: {{ project.deadline}}</p>
+                            <!-- <p>Deadline: {{ project.deadline}}</p> -->
                         </div>
                     </div>
                 </div>
@@ -50,34 +50,6 @@
                     </ul>
                 </nav>
             </div>
-            <!-- <div class="row">
-                {% for project in projects %} {% if project.deadlineexpired %}
-                <div class="col-xs-12 col-md-3">
-                    <div class="panel panel-danger">
-                        {% elif not project.deadlineexpired %}
-                        <div class="panel panel-primary">
-                            {% endif %}
-                            <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{ project.pk }}" aria-controls="collapseExample{{ project.pk }}">
-                                <h3 class="panel-title">{{ project.company_name }}</h3>
-                            </div>
-                            <div class="panel-body collapse" id="collapseExample{{ project.pk }}">
-                                <a href="/project/{{ project.pk }}"><h6>{{ project.profile }}</h6></a>
-                                <h6>Posted on: {{ project.createdon }}</h6>
-                                <h6>Date of Visit: {{ project.dateofvisit }}</h6>
-                                <div class="panel-footer">
-                                    Deadline: {{ project.deadline }} {% if project.deadlineexpired %}
-                                    <span class="label label-danger">
-                        {{ project.deadline|naturaltime }}
-                        {% elif not project.deadlineexpired %}
-                        <span class="label label-success"> {{ project.deadline|naturaltime }}</span> {% endif %}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div> -->
         </div>
     </div>
 </div>

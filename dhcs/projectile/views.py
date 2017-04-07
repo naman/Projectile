@@ -9,6 +9,10 @@
 # __author__ = 'naman'
 
 
+import os
+import zipfile
+import StringIO
+
 from dhcs import settings
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
@@ -30,7 +34,7 @@ def professor_addproject(request):
     return render(request, "projectile/professor_addproject.html")
 
 
-def admin_notification(request):
+def admin_notifications(request):
     return render(request, "projectile/admin_notification.html")
 
 
@@ -53,6 +57,9 @@ def home(request):
     if request.user.is_authenticated():
         context = {'user': request.user,
                    'projects': Project.objects.all().order_by('-deadline')}
+        p = Project.objects.all()[0]
+        print p.image_file
+
         if is_member(request.user, 'admin'):
             return render(request, 'projectile/admin_home.html', context)
         else:
@@ -68,7 +75,7 @@ def projectapply(request, projectid):
     """Apply for a project, if deadline permits."""
     if (timezone.now() < Project.objects.get(pk=projectid).deadline):
         if (is_eligible(request.user.student, Project.objects.get(pk=projectid))['value']):
-            request.user.student.companyapplications.add(
+            request.user.student.projectapplications.add(
                 Project.objects.get(pk=projectid))
             messages.success(request, 'Thanks for applying!')
             return HttpResponseRedirect('/')
@@ -82,7 +89,7 @@ def projectapply(request, projectid):
 def projectwithdraw(request, projectid):
     """Withdraw from the project, if deadline permits."""
     if (timezone.now() < Project.objects.get(pk=projectid).deadline):
-        request.user.student.companyapplications.remove(
+        request.user.student.projectapplications.remove(
             Project.objects.get(pk=projectid))
         messages.success(request, 'You have withdrawn!')
         return HttpResponseRedirect('/')
@@ -97,7 +104,7 @@ def myapplications(request):
     if (not is_member(request.user, studentgroup)):
         return HttpResponseRedirect('/newuser')
     context = {'user': request.user,
-               'projects': request.user.student.companyapplications.all()}
+               'projects': request.user.student.projectapplications.all()}
     return render(request, 'projectile/applications_student.html', context)
 
 
@@ -109,7 +116,7 @@ def projectpage(request, projectid):
                    'project': Project.objects.get(pk=projectid)}
         return render(request, 'projectile/admin_project.html', context)
     else:
-        hasapplied = request.user.student.companyapplications.filter(
+        hasapplied = request.user.student.projectapplications.filter(
             pk__contains=projectid).count()
         iseligible = is_eligible(request.user.student,
                                  Project.objects.get(pk=projectid))
@@ -265,6 +272,40 @@ def openproject(request):
 
 
 @login_required()
+def getresumes(request, projectid):
+    """Return resumes for students according to the incoming request."""
+    if is_admin(request.user):
+        filenames = []
+        if (request.GET.get('req') == 'selected'):
+            checklist = Project.objects.get(
+                pk=projectid).selectedcandidates.all()
+            zip_subdir = Project.objects.get(
+                pk=projectid).name + "_Selected_Resumes"
+        else:
+            checklist = Project.objects.get(
+                pk=projectid).applicants.all()  # AllApplicants
+            zip_subdir = Project.objects.get(
+                pk=projectid).name + "_Applicant_Resumes"
+        for student in checklist:
+            filenames.append(student.resume.path)
+        zip_filename = "%s.zip" % zip_subdir
+        s = StringIO.StringIO()
+        zf = zipfile.ZipFile(s, "w")
+
+        for fpath in filenames:
+            fdir, fname = os.path.split(fpath)
+            zip_path = os.path.join(zip_subdir, fname)
+            zf.write(fpath, zip_path)
+        zf.close()
+        resp = HttpResponse(
+            s.getvalue(), mimetype="application/x-zip-compressed")
+        resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
+        return resp
+    else:
+        return render(request, 'projectport/badboy.html')
+
+
+@login_required()
 def projectdelete(request, projectid):
     """Delete a Project from admin side."""
     if is_admin(request.user):
@@ -369,6 +410,15 @@ def apply(request):
     return render(request, 'projectile/student_project_apply.html')
 
 
+# @login_required()
+# def fileview(request, filename):
+#     """Protect the resume location, by adding headers, using nginx."""
+#     response = HttpResponse()
+#     response['Content-Type'] = 'application/png'
+#     response['X-Accel-Redirect'] = "/protected/%s" % filename
+#     return response
+
+
 @login_required()
 def fileview(request, filename):
     """Protect the resume location, by adding headers, using nginx."""
@@ -401,11 +451,6 @@ def search(request):
                           {'search_query': query, 'results': form.search()})
     else:
         return render(request, 'projectile/notallowed.html')  # 403 Error
-
-
-@login_required()
-def projectpage(request):
-    return render(request, 'projectile/student_projectpage.html')
 
 
 @login_required()

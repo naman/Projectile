@@ -29,21 +29,39 @@ class Project(models.Model):
     description = models.CharField("Description", max_length=10000)
     progress_till_date = models.CharField(
         "Progress till date", max_length=10000, blank=True)
-    # mentors = models.ManyToManyField already added in professor's model
+
+    eligibility_criteria = models.CharField(
+        "Eligibility Criteria", max_length=10000, blank=True)
+
+    PROJECT_TYPES = (
+        ('R', 'Research'),
+        ('IP', 'Independent Project'),
+        ('IS', 'Independent Study'),
+        ('BTP', 'B. Tech Project'),
+        ('MTP', 'M. Tech Project (Thesis)'),
+        ('IN', 'Internship'),
+        ('ENT', 'Enterpreneurship'),
+        ('DEV', 'Development'),
+        ('GEN', 'General'),
+    )
+    project_type = models.CharField(
+        "Project Type", max_length=3, choices=PROJECT_TYPES, default='R')
 
     interest_areas = models.CharField(
         "Interest Areas (comma separated)", default="None",
         max_length=10000, blank=True)
-
+    image_file = models.FileField("File ", upload_to='image_file',
+                                  default='', storage=OverwriteStorage(),
+                                  blank=True, null=True)
     PROJECTSTREAMS = (
-        ('CSE', 'CSE'),
-        ('ECE', 'ECE'),
-        ('CSAM', 'CSAM'),
-        ('CB', 'CB'),
+        ('CS', 'Computer Science'),
+        ('EC', 'Eelectronics and Communications'),
+        ('CSAM', 'Computer Science in Applied Mathematics'),
+        ('CB', 'Computational Biology'),
         ('DES', 'Design'),
         ('ITS', 'IT and Society'),
     )
-    project_stream = models.CharField(
+    streams = models.CharField(
         "Project Stream", max_length=3, choices=PROJECTSTREAMS, default='CSE')
 
     cgpa_min = models.FloatField(
@@ -81,15 +99,8 @@ class Student(models.Model):
     cgpa = models.FloatField(
         "CGPA", max_length=4, default=0, blank=True)
 
-    backs = (
-        (0, '0'),
-        (1, '1'),
-        (2, '2'),
-        (3, '3'),
-        (4, '4+'),
-    )
     backlogs = models.IntegerField(
-        "Number of Backlogs", max_length=2, default=0, choices=backs)
+        "Number of Backlogs", max_length=2, default=0)
 
     interest_areas = models.CharField(
         "Interest Areas (comma separated)", default="None",
