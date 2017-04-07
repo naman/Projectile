@@ -9,246 +9,130 @@
             <h3 style="font-weight: bold; letter-spacing: .05em;">My Projects</h3>
             <!-- <hr class="divider"> -->
             <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
-            <h5 align="text-center">You haven't opted for any projects.</h5> 
-                
-            
+            <h5 align="text-center">You haven't opted for any projects.</h5>
         </div>
     </div>
-   
     <br/>
     <br/>
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <h3 style="font-weight: bold; letter-spacing: .05em;">Recommended Projects</h3>
-            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
-            <!-- {% if not projects %}
-            <h4 align="text-center">There are no projects available right now.</h4> {% endif %} -->
-            <div class="center">
-                <div class="row">
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
-                                <p>Independent Project </p>
-                                <h6>Posted on: Jan 6, 2017</h6>
-                                
-                            </div>
-                            <div style="background-color: red; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> NOT AVAILABLE </span>
-                                </div>
+            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" /> {% if not projects %}
+            <h4 align="text-center">There are no projects available right now.</h4> {% endif %}
+            <div class="row">
+                {% for project in projects %}
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="panel panel-primary">
+                        <a href=""><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
+                        <div class="panel-body" id="collapseExample{{ project.pk }}">
+                            <a style="text-decoration: none;" href="/project/{{project.pk}}/"><h4>{{ project.name }} </h4></a>
+                            <p>{{ project.project_type }}</p>
+                            <p>{{ project.interest_areas }}</p>
+                            <p>Posted on: {{ project.createdon}}</p>
+                            <!-- <p>Deadline: {{ project.deadline}}</p> -->
+                        </div>
+                        <div style="background-color: red; text-align: center;" class="panel-footer">
+                            <!-- <span style="color: white; font-weight: normal;">Available</span> -->
+                            <span id="apply" style="color: white; font-weight: bold;"> NOT AVAILABLE </span>
                         </div>
                     </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href=/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
-                                <p>Independent Project </p>
-                                <h6>Posted on: Jan 6, 2017</h6>
-                                
-                            </div>
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
-                                <p>Independent Project </p>
-                                <h6>Posted on: Jan 6, 2017</h6>
-                                
-                            </div>
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
-                                <p>Independent Project </p>
-                                <h6>Posted on: Jan 6, 2017</h6>
-                                
-                            </div>
-                            <a id="apply">
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
-                                </a>
-                        </div>
-                    </div>
-                
-
-                    <!-- <div class="row">
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Project #1</h3>
-                                </div>
-                                <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                    <a href="/project/{{ project.pk }}"><h6>CSE</h6></a>
-                                    <h6>Posted on: Jan 6, 2017</h6>
-                                    
-                                </div>
-                                <div class="panel-footer">
-                                        Deadline: Aug 6, 2017
-                                        <span class="label label-success"> Aug 6, 2017 </span>
-                                    </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
     <br/>
     <br/>
-    <div class="row">
-        <div class="col-xs-12 col-md-12">
-            <div style="margin-bottom: -10px;" class="row">
-                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                    <h3 style="font-weight: bold; letter-spacing: .05em;">All Projects</h3>
+    <div class="row ">
+        <div class="col-xs-12 col-md-12 ">
+            <div style="margin-bottom: -10px; " class="row ">
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 ">
+                    <h3 style="font-weight: bold; letter-spacing: .05em; ">All Projects</h3>
                 </div>
-                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                    
-                    <button style="font-size:80%; margin-top: 15px; margin-bottom: 0px; color: white;" type="button" data-toggle="dropdown" class=" btn btn-primary dropdown-toggle pull-right">Filter<span style="margin-left: 20%; color: white;" class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="#">Action</a></li>
-                            <li><a href="#">Another action</a></li>
-                            <li class="divider"></li>
-                            <li><a href="#">Separated link</a></li>
-                        </ul>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 ">
+                    <button style="font-size:80%; margin-top: 15px; margin-bottom: 0px; color: white; " type="button " data-toggle="dropdown " class=" btn btn-primary dropdown-toggle pull-right ">Filter<span style="margin-left: 20%; color: white; " class="caret "></span></button>
+                    <ul class="dropdown-menu dropdown-menu-right ">
+                        <li><a href="# ">Action</a></li>
+                        <li><a href="# ">Another action</a></li>
+                        <li class="divider "></li>
+                        <li><a href="# ">Separated link</a></li>
+                    </ul>
                 </div>
             </div>
-            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
-            <div class="center">
-                <div class="row">
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
+            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A; " />
+            <div class="center ">
+                <div class="row ">
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
+                        <div class="panel panel-primary ">
+                            <!-- <div class="panel-heading ">
+                                <h3 class="panel-title ">Project #1</h3>
                             </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
+                            <a href="/project/{{ project.pk }} "><img src="../../static/images/project.jpeg " class="img-responsive " alt="Image "></a>
+                            <div class="panel-body " id="collapseExample{{ project.pk }} ">
+                                <a style="text-decoration: none; " href="/project/{{ project.pk }} "><h3>Project Name </h3></a>
                                 <p>Independent Project </p>
                                 <h6>Posted on: Jan 6, 2017</h6>
-                                
                             </div>
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
+                            <div style="background-color: green; text-align: center; " class="panel-footer ">
+                                <!-- <span style="color: white; font-weight: normal; ">Available</span> -->
+                                <span id="apply " style="color: white; font-weight: bold; "> APPLY </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
+                        <div class="panel panel-primary ">
+                            <!-- <div class="panel-heading ">
+                                <h3 class="panel-title ">Project #1</h3>
                             </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
+                            <a href="/project/{{ project.pk }} "><img src="../../static/images/project.jpeg " class="img-responsive " alt="Image "></a>
+                            <div class="panel-body " id="collapseExample{{ project.pk }} ">
+                                <a style="text-decoration: none; " href="/project/{{ project.pk }} "><h3>Project Name </h3></a>
                                 <p>Independent Project </p>
                                 <h6>Posted on: Jan 6, 2017</h6>
-                                
                             </div>
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
+                            <div style="background-color: green; text-align: center; " class="panel-footer ">
+                                <!-- <span style="color: white; font-weight: normal; ">Available</span> -->
+                                <span id="apply " style="color: white; font-weight: bold; "> APPLY </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
+                        <div class="panel panel-primary ">
+                            <!-- <div class="panel-heading ">
+                                <h3 class="panel-title ">Project #1</h3>
                             </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
+                            <a href="/project/{{ project.pk }} "><img src="../../static/images/project.jpeg " class="img-responsive " alt="Image "></a>
+                            <div class="panel-body " id="collapseExample{{ project.pk }} ">
+                                <a style="text-decoration: none; " href="/project/{{ project.pk }} "><h3>Project Name </h3></a>
                                 <p>Independent Project </p>
                                 <h6>Posted on: Jan 6, 2017</h6>
-                                
                             </div>
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
+                            <div style="background-color: green; text-align: center; " class="panel-footer ">
+                                <!-- <span style="color: white; font-weight: normal; ">Available</span> -->
+                                <span id="apply " style="color: white; font-weight: bold; "> APPLY </span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
+                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
+                        <div class="panel panel-primary ">
+                            <!-- <div class="panel-heading ">
+                                <h3 class="panel-title ">Project #1</h3>
                             </div> -->
-                            <a href="/project/{{ project.pk }}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/project/{{ project.pk }}"><h3>Project Name </h3></a>
+                            <a href="/project/{{ project.pk }} "><img src="../../static/images/project.jpeg " class="img-responsive " alt="Image "></a>
+                            <div class="panel-body " id="collapseExample{{ project.pk }} ">
+                                <a style="text-decoration: none; " href="/project/{{ project.pk }} "><h3>Project Name </h3></a>
                                 <p>Independent Project </p>
                                 <h6>Posted on: Jan 6, 2017</h6>
-                                
                             </div>
-                            <div style="background-color: green; text-align: center;" class="panel-footer">
-                                    <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                                    <span id="apply" style="color: white; font-weight: bold;"> APPLY </span>
-                                </div>
+                            <div style="background-color: green; text-align: center; " class="panel-footer ">
+                                <!-- <span style="color: white; font-weight: normal; ">Available</span> -->
+                                <span id="apply " style="color: white; font-weight: bold; "> APPLY </span>
+                            </div>
                         </div>
                     </div>
-                
-
-                    <!-- <div class="row">
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Project #1</h3>
-                                </div>
-                                <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                    <a href="/project/{{ project.pk }}"><h6>CSE</h6></a>
-                                    <h6>Posted on: Jan 6, 2017</h6>
-                                    
-                                </div>
-                                <div class="panel-footer">
-                                        Deadline: Aug 6, 2017
-                                        <span class="label label-success"> Aug 6, 2017 </span>
-                                    </div>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
