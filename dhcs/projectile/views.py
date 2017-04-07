@@ -8,26 +8,22 @@
 
 # __author__ = 'naman'
 
-import StringIO
 import csv
-import os
-import zipfile
 from multiprocessing import Process
 
+from dhcs import settings
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import EmailMultiAlternatives
-from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
 from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline
-from projectile.models import Job, Student, Batch
-from dhcs import settings
+from projectile.models import Project, Student
 
 
 def student_professor(request):
@@ -78,7 +74,7 @@ def home(request):
     """Landing home page after login of student or admin."""
     if request.user.is_authenticated():
         context = {'user': request.user,
-                   'jobs': Job.objects.all().order_by('-deadline')}
+                   'projects': Project.objects.all().order_by('-deadline')}
         if is_member(request.user, 'admin'):
             return render(request, 'projectile/admin_home.html', context)
         else:
@@ -90,12 +86,12 @@ def home(request):
 
 
 @login_required()
-def jobapply(request, jobid):
-    """Apply for a job, if deadline permits."""
-    if (timezone.now() < Job.objects.get(pk=jobid).deadline):
-        if (is_eligible(request.user.student, Job.objects.get(pk=jobid))['value']):
+def projectapply(request, projectid):
+    """Apply for a project, if deadline permits."""
+    if (timezone.now() < Project.objects.get(pk=projectid).deadline):
+        if (is_eligible(request.user.student, Project.objects.get(pk=projectid))['value']):
             request.user.student.companyapplications.add(
-                Job.objects.get(pk=jobid))
+                Project.objects.get(pk=projectid))
             messages.success(request, 'Thanks for applying!')
             return HttpResponseRedirect('/')
         else:
@@ -105,11 +101,11 @@ def jobapply(request, jobid):
 
 
 @login_required()
-def jobwithdraw(request, jobid):
-    """Withdraw from the job, if deadline permits."""
-    if (timezone.now() < Job.objects.get(pk=jobid).deadline):
+def projectwithdraw(request, projectid):
+    """Withdraw from the project, if deadline permits."""
+    if (timezone.now() < Project.objects.get(pk=projectid).deadline):
         request.user.student.companyapplications.remove(
-            Job.objects.get(pk=jobid))
+            Project.objects.get(pk=projectid))
         messages.success(request, 'You have withdrawn!')
         return HttpResponseRedirect('/')
     else:
@@ -118,31 +114,32 @@ def jobwithdraw(request, jobid):
 
 @login_required()
 def myapplications(request):
-    """Enumerate student's applications for a job."""
+    """Enumerate student's applications for a project."""
     studentgroup = Group.objects.get(name='student')
     if (not is_member(request.user, studentgroup)):
         return HttpResponseRedirect('/newuser')
     context = {'user': request.user,
-               'jobs': request.user.student.companyapplications.all()}
+               'projects': request.user.student.companyapplications.all()}
     return render(request, 'projectile/applications_student.html', context)
 
 
 @login_required()
-def jobpage(request, jobid):
-    """Loads the page for a particular Job."""
+def projectpage(request, projectid):
+    """Loads the page for a particular Project."""
     if is_admin(request.user):
-        context = {'user': request.user, 'job': Job.objects.get(pk=jobid)}
-        return render(request, 'projectile/admin_job.html', context)
+        context = {'user': request.user,
+                   'project': Project.objects.get(pk=projectid)}
+        return render(request, 'projectile/admin_project.html', context)
     else:
         hasapplied = request.user.student.companyapplications.filter(
-            pk__contains=jobid).count()
+            pk__contains=projectid).count()
         iseligible = is_eligible(request.user.student,
-                                 Job.objects.get(pk=jobid))
-        deadlinepassed = checkdeadline(Job.objects.get(pk=jobid))
-        context = {'user': request.user, 'job': Job.objects.get(pk=jobid), 'deadlinepassed': deadlinepassed,
+                                 Project.objects.get(pk=projectid))
+        deadlinepassed = checkdeadline(Project.objects.get(pk=projectid))
+        context = {'user': request.user, 'project': Project.objects.get(pk=projectid), 'deadlinepassed': deadlinepassed,
                    'hasapplied': hasapplied, 'iseligible': iseligible['value'],
                    'iseligiblereasons': iseligible['reasons']}
-        return render(request, 'projectile/job_student.html', context)
+        return render(request, 'projectile/project_student.html', context)
 
 
 @login_required()
@@ -158,7 +155,7 @@ def admineditstudent(request, studentid):
                     usr.resume = Student.objects.get(pk=studentid).resume
                 else:
                     my_student = Student.objects.get(pk=studentid)
-                    usr.resume.name = my_student.batch.title + '_' + \
+                    usr.resume.name = my_student.course_enrolled + '_' + \
                         my_student.user.username.split('@')[0] + ".pdf"
                     if "@iiitd.ac.in" in request.user.username:
                         usr.email = Student.objects.get(
@@ -169,7 +166,7 @@ def admineditstudent(request, studentid):
                 usr.save()
                 form.save_m2m()
                 messages.success(request, 'Your form was saved')
-                return HttpResponseRedirect('/batches')
+                return HttpResponseRedirect('/')
             else:
                 messages.error(request, 'Error in form!')
                 context = {'form': form}
@@ -181,43 +178,6 @@ def admineditstudent(request, studentid):
                        'form': studentform, 'layout': 'horizontal'}
             return render(request, 'projectile/admin_editstudent.html', context)
         return HttpResponseRedirect('/')
-    else:
-        return render(request, 'projectile/badboy.html')
-
-
-@login_required()
-def getresumes(request, jobid):
-    """Return resumes for students according to the incoming request."""
-    if is_admin(request.user):
-        filenames = []
-        if (request.GET.get('req') == 'selected'):
-            checklist = Job.objects.get(pk=jobid).selectedcandidates.all()
-            zip_subdir = Job.objects.get(pk=jobid).company_name + "_" + Job.objects.get(
-                pk=jobid).profile + "_Selected_Resumes"
-        else:
-            checklist = Job.objects.get(
-                pk=jobid).applicants.all()  # AllApplicants
-            zip_subdir = Job.objects.get(pk=jobid).company_name + "_" + Job.objects.get(
-                pk=jobid).profile + "_Applicant_Resumes"
-        for student in checklist:
-            if (request.GET.get('qual') == 'G' and student.batch.pg_or_not == 'G'):
-                continue
-            if (request.GET.get('qual') == 'P' and student.batch.pg_or_not == 'P'):
-                continue
-            filenames.append(student.resume.path)
-        zip_filename = "%s.zip" % zip_subdir
-        s = StringIO.StringIO()
-        zf = zipfile.ZipFile(s, "w")
-
-        for fpath in filenames:
-            fdir, fname = os.path.split(fpath)
-            zip_path = os.path.join(zip_subdir, fname)
-            zf.write(fpath, zip_path)
-        zf.close()
-        resp = HttpResponse(
-            s.getvalue(), mimetype="application/x-zip-compressed")
-        resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
-        return resp
     else:
         return render(request, 'projectile/badboy.html')
 
@@ -241,7 +201,7 @@ def profile(request):
             if (request.FILES.__len__() == 0):
                 usr.resume = request.user.student.resume
             else:
-                usr.resume.name = usr.batch.title + '_' + \
+                usr.resume.name = usr.course_enrolled + '_' + \
                     request.user.username.split('@')[0] + ".pdf"
             usr.save()
             messages.success(request, 'Your details were saved.')
@@ -274,7 +234,6 @@ def newuser(request):
                 usr.resume.name = request.user.username.split('@')[0] + ".pdf"
                 usr.save()
                 studentgroup.user_set.add(request.user)
-                usr.batch = form.cleaned_data['batch']
 
                 messages.success(
                     request, 'Your details were saved. Welcome to Projectile.')
@@ -302,18 +261,15 @@ def needlogin(request):
 
 
 @login_required()
-def openjob(request):
-    """Open a new Job from admin side."""
+def openproject(request):
+    """Open a new Project from admin side."""
     if is_admin(request.user):
         if request.method == 'POST':
-            form = forms.JobForm(request.POST)
+            form = forms.ProjectForm(request.POST)
             if form.is_valid():
-                tosavejob = form.save(commit=False)
-                tosavejob.createdon = timezone.now()
-                tosavejob.save()
-                for x in form.cleaned_data['batch']:
-                    tosavejob.batch.add(x)
-                tosavejob.save()
+                tosaveproject = form.save(commit=False)
+                tosaveproject.createdon = timezone.now()
+                tosaveproject.save()
                 recipients = []
                 for student in Student.objects.all():
                     if student.status == 'D' or student.status == 'NI':
@@ -322,8 +278,8 @@ def openjob(request):
 
                 settings.EMAIL_HOST_USER += 'projectileiiitd@gmail.com'
                 send_mail(
-                    'New Job in Projectile!',
-                    'Hey!\n\nA new job for ' + tosavejob.profile + ', ' + tosavejob.company_name +
+                    'New Project in Projectile!',
+                    'Hey!\n\nA new project for ' + tosaveproject.profile + ', ' + tosaveproject.company_name +
                     ' was added on Projectile. \n Please login at projectile.iiitd.edu.in:8081',
                     recipients
                 )
@@ -331,63 +287,64 @@ def openjob(request):
                 return HttpResponseRedirect('/')
             else:
                 context = {'form': form}
-                return render(request, 'projectile/openjob.html', context)
+                return render(request, 'projectile/openproject.html', context)
         else:
-            form = forms.JobForm()
+            form = forms.ProjectForm()
             c = {'form': form}
-            return render(request, 'projectile/openjob.html', c)
+            return render(request, 'projectile/openproject.html', c)
     else:
         return render(request, 'projectile/notallowed.html')
 
 
 @login_required()
-def jobdelete(request, jobid):
-    """Delete a Job from admin side."""
+def projectdelete(request, projectid):
+    """Delete a Project from admin side."""
     if is_admin(request.user):
-        Job.objects.get(pk=jobid).delete()
+        Project.objects.get(pk=projectid).delete()
         return HttpResponseRedirect('/')
 
 
 @login_required()
-def jobedit(request, jobid):
-    """Edit Job details from admin side."""
+def projectedit(request, projectid):
+    """Edit Project details from admin side."""
     if is_admin(request.user):
         if request.method == 'POST':
-            form = forms.JobForm(request.POST, request.FILES,
-                                 instance=Job.objects.get(pk=jobid))
+            form = forms.ProjectForm(request.POST, request.FILES,
+                                     instance=Project.objects.get(pk=projectid))
             if form.is_valid():
                 form.save()  # This does the trick!
-                messages.success(request, 'Job was saved')
-                return HttpResponseRedirect('/job/' + str(jobid) + '/')
+                messages.success(request, 'Project was saved')
+                return HttpResponseRedirect('/project/' + str(projectid) + '/')
             else:
                 context = {'form': form}
-                return render(request, 'projectile/admin_editjob.html', context)
+                return render(request, 'projectile/admin_editproject.html', context)
         else:
-            form = forms.JobForm(instance=Job.objects.get(pk=jobid))
+            form = forms.ProjectForm(
+                instance=Project.objects.get(pk=projectid))
             c = {'form': form}
-            return render(request, 'projectile/admin_editjob.html', c)
+            return render(request, 'projectile/admin_editproject.html', c)
 
 
 @login_required()
-def jobapplicants(request, jobid):
-    """See the applicants for a particular Job."""
+def projectapplicants(request, projectid):
+    """See the applicants for a particular Project."""
     if is_admin(request.user):
         count = 0
         for student in Student.objects.all():
-            if is_eligible(student, Job.objects.get(pk=jobid))['value']:
+            if is_eligible(student, Project.objects.get(pk=projectid))['value']:
                 count = count + 1
-        context = {'eligiblestudentcount': count, 'applicants': Job.objects.get(pk=jobid).applicants.all(),
-                   'job': Job.objects.get(pk=jobid)}
-        return render(request, 'projectile/admin_jobapplicants.html', context)
+        context = {'eligiblestudentcount': count, 'applicants': Project.objects.get(pk=projectid).applicants.all(),
+                   'project': Project.objects.get(pk=projectid)}
+        return render(request, 'projectile/admin_projectapplicants.html', context)
 
 
 @login_required()
-def sendselectedemail(request, jobid):
-    """Send mail to selected students for a particular Job."""
+def sendselectedemail(request, projectid):
+    """Send mail to selected students for a particular Project."""
     if is_admin(request.user):
         candemail = []
-        thejob = Job.objects.get(pk=jobid)
-        for candidate in thejob.selectedcandidates.all():
+        theproject = Project.objects.get(pk=projectid)
+        for candidate in theproject.selectedcandidates.all():
             candidate.status = 'P'
             candidate.save()
             candemail = candemail + [str(candidate.email)]
@@ -395,7 +352,7 @@ def sendselectedemail(request, jobid):
         send_mail(
             'Congratulations! You\'ve been placed! :D',
             "Hey!\n\nCongratulations! You have been placed as " +
-            thejob.profile + ' at ' + thejob.company_name + "!!",
+            theproject.profile + ' at ' + theproject.company_name + "!!",
             candemail
         )
         settings.EMAIL_HOST_USER += ''
@@ -404,30 +361,30 @@ def sendselectedemail(request, jobid):
 
 
 @login_required()
-def adminjobselected(request, jobid):
-    """Select the final students fot the Job :D"""
+def adminprojectselected(request, projectid):
+    """Select the final students fot the Project :D"""
     if is_admin(request.user):
         if request.method == 'POST':
             form = forms.AdminSelectedApplicantsForm(
-                request.POST, instance=Job.objects.get(pk=jobid))
+                request.POST, instance=Project.objects.get(pk=projectid))
             if form.is_valid():
-                tosavejob = form.save(commit=False)
-                tosavejob.save()
+                tosaveproject = form.save(commit=False)
+                tosaveproject.save()
                 form.save()
                 form.save_m2m()
-                for candidate in Job.objects.get(pk=jobid).selectedcandidates.all():
+                for candidate in Project.objects.get(pk=projectid).selectedcandidates.all():
                     candidate.status = 'P'
                     candidate.save()
                 return HttpResponseRedirect('/')
             else:
                 context = {'form': form}
-                return render(request, 'projectile/admin_jobselections.html', context)
+                return render(request, 'projectile/admin_projectselections.html', context)
         else:
             form = forms.AdminSelectedApplicantsForm(
-                instance=Job.objects.get(pk=jobid))
-            context = {'selected': Job.objects.get(pk=jobid).selectedcandidates.all(), 'form': form,
-                       'job': Job.objects.get(pk=jobid)}
-            return render(request, 'projectile/admin_jobselections.html', context)
+                instance=Project.objects.get(pk=projectid))
+            context = {'selected': Project.objects.get(pk=projectid).selectedcandidates.all(), 'form': form,
+                       'project': Project.objects.get(pk=projectid)}
+            return render(request, 'projectile/admin_projectselections.html', context)
 
 
 @login_required()
@@ -457,157 +414,6 @@ def uploadcgpa(request):
             return render(request, 'projectile/admin_uploadcgpa.html')
     else:
         return render(request, 'projectile/notallowed.html')  # 403 Error
-
-
-@login_required()
-def stats(request):
-    """Calculating statistics for the statistics page."""
-    if is_admin(request.user):
-        numstudentsplaced = 0
-        cgpahistdata = []
-        uninterested_students = []
-        Students = Student.objects.all()
-        Jobs = Job.objects.all()
-        for student in Students:
-            if student.status == 'P':
-                numstudentsplaced += 1
-            if student.status == 'NI' or student.status == 'D':
-                uninterested_students += 1
-            # CGPA Hist
-            if student.batch.pg_or_not == 'G':
-                if student.cgpa_ug != None and student.cgpa_ug != 0:
-                    cgpahistdata.append([student.rollno, student.cgpa_ug])
-            else:
-                if student.cgpa_pg != None and student.cgpa_pg != 0:
-                    cgpahistdata.append([student.rollno, student.cgpa_pg])
-
-        jobcgpahistdata = []
-        for job in Jobs:
-            if job.cgpa_min != None:
-                jobcgpahistdata.append(
-                    [(job.company_name + ", " + job.profile), job.cgpa_min])
-
-        interested_students = len(Students) - len(uninterested_students)
-        placedunplaceddata = [["Placed Students", numstudentsplaced],
-                              ["Unplaced Students", interested_students - numstudentsplaced]]
-
-        context = {'cgpahistdata': cgpahistdata, 'jobcgpahistdata': jobcgpahistdata,
-                   'placedunplaceddata': placedunplaceddata, 'numstudents': interested_students,
-                   'numstudentsplaced': numstudentsplaced, 'numjobs': len(Jobs)}
-        return render(request, 'projectile/admin_stats.html', context)
-
-
-@login_required()
-def blockedUnplacedlist(request):
-    """Retrieves the list for Unplaced or Blocked/Debarred students."""
-    if is_admin(request.user):
-        response = HttpResponse(content_type='text/csv')
-        if (request.GET.get('req') == 'debarred'):
-            students = Student.objects.filter(status='D')
-            response[
-                'Content-Disposition'] = str('attachment; filename="' + 'BlockedStudents_list.csv"')
-        elif (request.GET.get('req') == 'unplaced'):
-            students = Student.objects.filter(status='N')
-            response[
-                'Content-Disposition'] = str('attachment; filename="' + 'UnplacedStudents_list.csv"')
-        elif (request.GET.get('req') == 'placed'):
-            students = Student.objects.filter(status='P')
-            response[
-                'Content-Disposition'] = str('attachment; filename="' + 'PlacedStudents_list.csv"')
-        elif (request.GET.get('req') == 'notInterested'):
-            students = Student.objects.filter(status='NI')
-            response[
-                'Content-Disposition'] = str('attachment; filename="' + 'NotInterested_list.csv"')
-        elif (request.GET.get('req') == 'all'):
-            students = Student.objects.all()
-            response[
-                'Content-Disposition'] = str('attachment; filename="' + 'All_list.csv"')
-        writer = csv.writer(response)
-        writer.writerow(
-            ["RollNo", "Name", "Email", "Gender", "Batch", "UnderGrad CGPA", "PostGrad CGPA{for PG}",
-             "Graduating University",
-             "PostGraduating University", "10th Marks", "12th Marks", "Backlogs", "Contact No."])
-        for student in students:
-            writer.writerow(
-                [student.rollno, student.name, student.email, student.get_gender_display(), student.batch,
-                 student.cgpa_ug,
-                 student.cgpa_pg, student.university_ug, student.university_pg, student.percentage_tenth,
-                 student.percentage_twelfth, student.get_backlogs_display(), student.phone])
-        return response
-    else:
-        return render(request, 'projectile/badboy.html')
-
-
-@login_required()
-def getjobcsv(request, jobid):
-    """Gets different (Eligible, Applied, Selected) CSVs for a particular Jobs."""
-    if is_admin(request.user):
-        response = HttpResponse(content_type='text/csv')
-        if (request.GET.get('req') == 'selected'):
-            studlist = Job.objects.get(pk=jobid).selectedcandidates.all()
-            name = Job.objects.get(pk=jobid).company_name + "_" + Job.objects.get(
-                pk=jobid).profile + "_Selected.csv"
-        elif (request.GET.get('req') == 'applied'):
-            studlist = Job.objects.get(pk=jobid).applicants.all()
-            name = Job.objects.get(pk=jobid).company_name + "_" + Job.objects.get(
-                pk=jobid).profile + "_Applicants.csv"
-        elif (request.GET.get('req') == 'eligible'):
-            studlist = []
-            for student in Student.objects.all():
-                if is_eligible(student, Job.objects.get(pk=jobid))['value']:
-                    studlist.append(student)
-            name = Job.objects.get(pk=jobid).company_name + "_" + Job.objects.get(
-                pk=jobid).profile + "_Eligible.csv"
-
-        response[
-            'Content-Disposition'] = str('attachment; filename="' + name + '"')
-        writer = csv.writer(response)
-        writer.writerow([Job.objects.get(pk=jobid).company_name,
-                         Job.objects.get(pk=jobid).profile])
-        writer.writerow(
-            ["RollNo", "Name", "Email", "Gender", "CGPA", "Batch", "Graduating University", "10th Marks",
-             "12th Marks", "Backlogs", "Conact No.", "UnderGrad CGPA{PG}"]
-        )
-        for student in studlist:
-            if (student.batch.pg_or_not == 'G' and request.GET.get('qualification') != 'pg'):
-                writer.writerow(
-                    [student.rollno, student.name, student.email, student.get_gender_display(), student.cgpa_ug,
-                     student.batch,
-                     student.university_ug, student.percentage_tenth, student.percentage_twelfth,
-                     student.get_backlogs_display(), student.phone]
-                )
-            if (student.batch.pg_or_not == 'P' and request.GET.get('qualification') != 'ug'):
-                writer.writerow(
-                    [student.rollno, student.name, student.email, student.get_gender_display(), student.cgpa_pg,
-                     student.batch, student.university_pg, student.percentage_tenth, student.percentage_twelfth,
-                     student.get_backlogs_display(), student.phone, student.cgpa_ug]
-                )
-        return response
-    else:
-        return render(request, 'projectile/badboy.html')
-
-
-@login_required()
-def getbatchlist(request, batchid):
-    """Retrieves the list for students in a Batch."""
-    if is_admin(request.user):
-        response = HttpResponse(content_type='text/csv')
-        studlist = Batch.objects.get(pk=batchid).studentsinbatch.all()
-        name = Batch.objects.get(pk=batchid).title
-        response[
-            'Content-Disposition'] = str('attachment; filename="' + name + '_list.csv"')
-        writer = csv.writer(response)
-        writer.writerow(
-            ["RollNo", "Name", "Email", "Gender", "UnderGrad CGPA", "PostGrad CGPA", "Graduating University",
-             "PostGraduating University", "10th Marks", "12th Marks", "Backlogs", "Contact No."])
-        for student in studlist:
-            writer.writerow(
-                [student.rollno, student.name, student.email, student.get_gender_display(), student.cgpa_ug,
-                 student.cgpa_pg, student.university_ug, student.university_pg, student.percentage_tenth,
-                 student.percentage_twelfth, student.get_backlogs_display(), student.phone])
-        return response
-    else:
-        return render(request, 'projectile/badboy.html')
 
 
 def feedback(request):
@@ -681,132 +487,11 @@ def fileview(request, filename):
 
 @login_required()
 def docfileview(request, filename):
-    """Protect the job file location, by adding headers, using nginx."""
+    """Protect the project file location, by adding headers, using nginx."""
     response = HttpResponse()
     response['Content-Type'] = 'application/pdf'
-    response['X-Accel-Redirect'] = "/jobfiles/%s" % filename
+    response['X-Accel-Redirect'] = "/projectfiles/%s" % filename
     return response
-
-
-@login_required()
-def batchcreate(request):
-    """Create a Batch."""
-    if is_admin(request.user):
-        if request.method == 'POST':
-            form = forms.BatchForm(request.POST)
-            if form.is_valid():
-                tosavebatch = form.save(commit=False)
-                tosavebatch.createdon = timezone.now()
-                tosavebatch.save()
-            else:
-                messages.error(
-                    request, "There was error in the data, please try again!")
-            return HttpResponseRedirect(reverse('viewbatches'))
-        else:
-            form = forms.BatchForm()
-            c = {'form': form}
-            return render(request, 'projectile/openbatch.html', c)
-    else:
-        return render(request, 'projectile/notallowed.html')
-
-
-@login_required()
-def batchdestroy(request, batchid):
-    """Delete a Batch."""
-    if is_admin(request.user):
-        Batch.objects.get(pk=batchid).delete()
-        return HttpResponseRedirect('/')
-
-
-@login_required()
-def batchedit(request, batchid):
-    """Edit details of a Batch."""
-    if is_admin(request.user):
-        if request.method == 'POST':
-            form = forms.BatchForm(
-                request.POST, instance=Batch.objects.get(pk=batchid))
-            if form.is_valid():
-                form.save()
-                messages.success(request, 'Batch was updated!')
-                return HttpResponseRedirect('/batch/' + str(batchid) + '/')
-            else:
-                context = {'form': form}
-                return render(request, 'projectile/admin_editbatch.html', context)
-        else:
-            form = forms.BatchForm(instance=Batch.objects.get(pk=batchid))
-            c = {'form': form}
-            return render(request, 'projectile/admin_editbatch.html', c)
-
-
-@login_required()
-def viewbatches(request):
-    """View the list of all Batches."""
-    if is_admin(request.user):
-        batches = Batch.objects.all()
-        return render(request, 'projectile/batches.html', {'batch': batches})
-    else:
-        return render(request, 'projectile/badboy.html')
-
-
-@login_required()
-def batchpage(request, batchid):
-    """Batch Page."""
-    if is_admin(request.user):
-        context = {'user': request.user, 'student': Batch.objects.get(pk=batchid).studentsinbatch.all(),
-                   'batch': Batch.objects.get(pk=batchid)}
-
-        return render(request, 'projectile/admin_batch.html', context)
-    return render(request, 'projectile/welcome.html')
-
-
-@login_required()
-def getbatchresumes(request, batchid):
-    """Get resumes for a Batch."""
-    if is_admin(request.user):
-        filenames = []
-        checklist = Batch.objects.get(pk=batchid).studentsinbatch.all()
-        zip_subdir = Batch.objects.get(pk=batchid).title + "_resumes"
-        for student in checklist:
-            filenames.append(student.resume.path)
-        zip_filename = "%s.zip" % zip_subdir
-        s = StringIO.StringIO()
-        zf = zipfile.ZipFile(s, "w")
-        for fpath in filenames:
-            fdir, fname = os.path.split(fpath)
-            zip_path = os.path.join(zip_subdir, fname)
-            zf.write(fpath, zip_path)
-        zf.close()
-        resp = HttpResponse(
-            s.getvalue(), mimetype="application/x-zip-compressed")
-        resp['Content-Disposition'] = 'attachment; filename=%s' % zip_filename
-        return resp
-    else:
-        return render(request, 'projectile/badboy.html')
-
-
-@login_required()
-def uploadstudentsinbatch(request, batchid):
-    """Add students in a batch, by uploading a CSV. Will not be required IMHO."""
-    if is_admin(request.user):
-        if request.method == 'POST':
-            file = request.FILES['students']
-            notfound = []
-            for row in csv.reader(file.read().splitlines()):
-                try:
-                    stud = Student.objects.get(pk=row[0])
-                    batch = Batch.get.objects(pk=batchid)
-                    stud.batch = batch
-                    stud.save()
-                except ObjectDoesNotExist:
-                    notfound.append(row[0])
-            context = {'notfound': notfound}
-            messages.success(
-                request, 'Students succesfully added to the Batch!')
-            return render(request, 'projectile/admin_addstudentstobatch.html', context)
-        else:
-            return render(request, 'projectile/admin_addstudentstobatch.html')
-    else:
-        return render(request, 'projectile/notallowed.html')  # 403 Error
 
 
 @login_required()
@@ -825,6 +510,5 @@ def search(request):
         return render(request, 'projectile/notallowed.html')  # 403 Error
 
 
-@login_required()
 def projectpage(request):
     return render(request, 'projectile/student_projectpage.html')

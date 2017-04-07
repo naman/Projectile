@@ -17,20 +17,19 @@ from django.db.models.fields.files import FieldFile
 from django.forms import RadioSelect
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
-from projectile.models import Job, Student, Feedback, Batch
+from projectile.models import Project, Student, Feedback
 
 EXTENSIONS = ['pdf']
 MAX_UPLOAD_SIZE = "5242880"
 
 
-class JobForm(forms.ModelForm):
+class ProjectForm(forms.ModelForm):
 
     class Meta:
-        model = Job
+        model = Project
         exclude = ['createdon']
         widgets = {'deadline': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True}),
-                   'dateofvisit': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True}),
-                   'batch': forms.CheckboxSelectMultiple}
+                   'dateofvisit': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True})}
 
     def clean_jobfile(self):
         jobfile = self.cleaned_data['jobfile']
@@ -74,12 +73,12 @@ class JobForm(forms.ModelForm):
 class AdminSelectedApplicantsForm(forms.ModelForm):
 
     class Meta:
-        model = Job
+        model = Project
         fields = ['selected']
 
     # widgets = {'CB':forms.CheckBoxSelectMultiple}
 
-    # Representing the many to many related field in Job
+    # Representing the many to many related field in Project
     selected = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset=Student.objects.all(),
                                               required=False)
 
@@ -104,7 +103,7 @@ class AdminSelectedApplicantsForm(forms.ModelForm):
 
     # Overriding save allows us to process the value of 'selected' field
     def save(self, commit=True):
-        # Get the unsaved Job instance
+        # Get the unsaved Project instance
         instance = forms.ModelForm.save(self, False)
 
         # Prepare a 'save_m2m' method for the form,
@@ -131,8 +130,7 @@ class StudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['resume', 'phone', 'email_personal',
-                  'percentage_tenth', 'percentage_twelfth', 'backlogs']
+        fields = ['resume', 'transcript', 'email', 'backlogs']
         widgets = {'dob': DateTimePicker(
             options={"format": "YYYY-MM-DD", "pickTime": False})}
 
@@ -149,32 +147,18 @@ class StudentForm(forms.ModelForm):
             raise forms.ValidationError('File type is not supported')
         return resume
 
-    def clean_percentage_tenth(self):
-        percent10 = self.cleaned_data['percentage_tenth']
-        if (percent10 > 100):
-            raise forms.ValidationError(
-                "10th Percentage cannot be more than 100%!")
-        if (percent10 < 0):
-            raise forms.ValidationError(
-                "10th Percentage cannot be less than 0!")
-        return percent10
-
-    def clean_percentage_twelfth(self):
-        percent12 = self.cleaned_data['percentage_twelfth']
-        if (percent12 > 100):
-            raise forms.ValidationError(
-                "12th Percentage cannot be more than 100%!")
-        if (percent12 < 0):
-            raise forms.ValidationError(
-                "12th Percentage cannot be less than 0!")
-        return percent12
-
-    def clean_phone(self):
-        phoneno = self.cleaned_data['phone']
-        if (not phoneno.isdigit()):
-            raise forms.ValidationError(
-                "Phone number must contain only numbers!")
-        return phoneno
+    def clean_transcript(self):
+        transcript = self.cleaned_data['transcript']
+        transcriptext = transcript.name.split('.')[-1]
+        if type(transcript) == FieldFile:
+            return transcript
+        if transcriptext in EXTENSIONS:
+            if transcript._size > MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Please keep filesize under %s. Current filesize %s') % (
+                    filesizeformat(MAX_UPLOAD_SIZE), filesizeformat(transcript._size))
+        else:
+            raise forms.ValidationError('File type is not supported')
+        return transcript
 
     def clean_dob(self):
         DateOB = self.cleaned_data['dob']
@@ -369,13 +353,6 @@ class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
         widgets = {'type': RadioSelect()}
-
-
-class BatchForm(forms.ModelForm):
-
-    class Meta:
-        model = Batch
-        exclude = ['createdon']
 
 
 class RootSearchForm(haystack.forms.SearchForm):
