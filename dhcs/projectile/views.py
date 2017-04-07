@@ -73,7 +73,7 @@ def home(request):
             studentgroup = Group.objects.get(name='student')
             if (not is_member(request.user, studentgroup)):
                 return HttpResponseRedirect('/newuser')
-            return render(request, 'projectile/home_student.html', context)
+            return render(request, 'projectile/student_home.html', context)
     return render(request, 'projectile/welcome.html')
 
 
