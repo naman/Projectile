@@ -26,20 +26,13 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         exclude = ['createdon']
-        widgets = {'deadline': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True}),
-                   'dateofvisit': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True})}
+        widgets = {'deadline': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True})}
 
     def clean_jobfile(self):
         jobfile = self.cleaned_data['jobfile']
         if type(jobfile) == FieldFile:
             return jobfile
         return jobfile
-
-    def clean_dateofvisit(self):
-        DateOfVisit = self.cleaned_data['dateofvisit']
-        if (DateOfVisit < timezone.now()):
-            raise forms.ValidationError("Date of Visit cannot be in the Past.")
-        return DateOfVisit
 
     def clean_deadline(self):
         deadline = self.cleaned_data['deadline']
@@ -109,7 +102,14 @@ class StudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['resume', 'transcript', 'email', 'backlogs']
+        fields = ['cgpa', 'resume', 'transcript', 'backlogs']
+
+    def clean_resume(self):
+        cgpa = self.cleaned_data['cgpa']
+        if cgpa < 0 or cgpa > 10:
+            raise forms.ValidationError(
+                'CGPA cannot be negative or greater than 10. Please provide a value between 0 and 10')
+        return cgpa
 
     def clean_resume(self):
         resume = self.cleaned_data['resume']
@@ -154,6 +154,13 @@ class NewStudentForm(forms.ModelForm):
         return rollno
 
     def clean_resume(self):
+        cgpa = self.cleaned_data['cgpa']
+        if cgpa < 0 or cgpa > 10:
+            raise forms.ValidationError(
+                'CGPA cannot be negative or greater than 10. Please provide a value between 0 and 10')
+        return cgpa
+
+    def clean_resume(self):
         resume = self.cleaned_data['resume']
         resumeext = resume.name.split('.')[-1]
         if type(resume) == FieldFile:
@@ -194,6 +201,13 @@ class AdminStudentForm(forms.ModelForm):
         exclude = ['user']
         widgets = {'gender': RadioSelect(),
                    'projectapplications': forms.CheckboxSelectMultiple}
+
+    def clean_resume(self):
+        cgpa = self.cleaned_data['cgpa']
+        if cgpa < 0 or cgpa > 10:
+            raise forms.ValidationError(
+                'CGPA cannot be negative or greater than 10. Please provide a value between 0 and 10')
+        return cgpa
 
     def clean_resume(self):
         resume = self.cleaned_data['resume']

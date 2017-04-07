@@ -39,15 +39,13 @@
                     <li>
                         <a id="search" href="#" class="glyphicon glyphicon-search"></a>
                     </li>
-                    <li class="active"><a href="/"><strong>Home</strong></a></li>
-                    <li><a href="/add_project/"><strong>Add Project</strong></a></li>
-                    <li><a href="/all_requests/"><strong>All Requests</strong></a></li>
-                    <li><a href="#" id="fb"><strong>Feedback</strong></a></li>
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/openproject/">Add Project</a></li>
+                    <li><a href="/all_requests/">All Requests</a></li>
+                    <li><a href="#" id="fb">Feedback<</a></li>
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} {{ user.last_name }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/uploadcgpa">Upload Student CGPA CSV</a></li>
-                            <li class="divider"></li>
                             <li><a href="/logout">Sign Out</a></li>
                         </ul>
                     </li>
@@ -124,15 +122,6 @@
                 if (statusTxt == "success")
                 // alert("External content loaded successfully!");
                     $("#searchmodal").modal('show');
-                if (statusTxt == "error")
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
-            });
-        })
-        $("#batch").on('click', function() {
-            $("#batchdata").load("{% url 'openbatch' %}", function(responseTxt, statusTxt, xhr) {
-                if (statusTxt == "success")
-                // alert("External content loaded successfully!");
-                    $("#batchmodal").modal('show');
                 if (statusTxt == "error")
                     alert("Error: " + xhr.status + ": " + xhr.statusText);
             });

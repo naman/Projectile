@@ -25,7 +25,7 @@ class Project(models.Model):
         else:
             return False
 
-    project_name = models.CharField("Title", max_length=200)
+    name = models.CharField("Title", max_length=200)
     description = models.CharField("Description", max_length=10000)
     progress_till_date = models.CharField(
         "Progress till date", max_length=10000, blank=True)
@@ -42,7 +42,6 @@ class Project(models.Model):
         ('CB', 'CB'),
         ('DES', 'Design'),
         ('ITS', 'IT and Society'),
-        ('B', 'Both'),
     )
     project_stream = models.CharField(
         "Project Stream", max_length=3, choices=PROJECTSTREAMS, default='CSE')
@@ -57,11 +56,9 @@ class Project(models.Model):
     )
     status = models.CharField("Status", max_length=1,
                               choices=OPENED_CLOSED, default='O')
-
     projectfile = models.FileField("File ", upload_to='projectfiles',
                                    default='', storage=OverwriteStorage(),
                                    blank=True, null=True)
-
     createdon = models.DateTimeField(
         "Application Creation Date", default=datetime.now)
     deadline = models.DateTimeField(
@@ -69,7 +66,7 @@ class Project(models.Model):
     deadlineexpired = property(checkdeadline)
 
     def __str__(self):  # __unicode__ on Python 2
-        return self.project_name
+        return self.name
 
 
 class Student(models.Model):
@@ -82,7 +79,7 @@ class Student(models.Model):
 
     email = models.EmailField(max_length=70)
     cgpa = models.FloatField(
-        "Postgraduate CGPA", max_length=4, default=0, blank=True)
+        "CGPA", max_length=4, default=0, blank=True)
 
     backs = (
         (0, '0'),
@@ -146,8 +143,8 @@ class Feedback(models.Model):
         ('F', 'Feature Request'),
         ('C', 'Comment'),
     )
-    type = models.CharField("Feedback Type", max_length=1,
-                            choices=TYPES, default='C')
+    feedback_type = models.CharField("Feedback Type", max_length=1,
+                                     choices=TYPES, default='C')
     title = models.CharField("Title", max_length=100)
     body = models.TextField("Feedback Details")
     createdon = models.DateTimeField(auto_now_add=True)

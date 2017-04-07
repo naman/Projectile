@@ -17,7 +17,7 @@ PROJECT_ROOT = os.path.abspath(
 SECRET_KEY = 'idlwh11s_3v0oycy-eos6stc#y(ieb074j5w=&6or6y=p4%y(&'
 DEBUG = True
 TEMPLATE_DEBUG = True
-# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = (
     'suit',
@@ -30,15 +30,15 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'django.contrib.humanize',
     'projectile',
-    'south',
+    # 'south',
     'bootstrap3',
     'timezone_field',
     'datetimezone_field',
     'bootstrap3_datetime',
-    'googlecharts',
+    # 'googlecharts',
     'haystack',
-    'djrill',
-    'longerusernameandemail',
+    # 'djrill',
+    # 'longerusernameandemail',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,18 +54,6 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'dhcs.urls'
 WSGI_APPLICATION = 'dhcs.wsgi.application'
-
-# Uncomment below lines to use postgresql OR Comment below lines to use SQLite3
-# DATABASES = {
-# 	'default': {
-# 			'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-# 			'NAME': 'projectile',                      # Or path to database file if using sqlite3.
-# 			'USER': '',
-# 			'PASSWORD': '',
-# 			'HOST': 'localhost',                      # Empty for localhost through domain sockets or           '127.0.0.1' for localhost through TCP.
-# 			'PORT': '',                      # Set to empty string for default.
-# 		}
-# }
 
 # comment below lines to use postgresql
 DATABASES = {
@@ -84,14 +72,13 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 
-# SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = False
-
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS = ['iiitd.ac.in']
 SOCIAL_AUTH_GOOGLE_OAUTH2_USE_DEPRECATED_API = True
 SOCIAL_AUTH_GOOGLE_PLUS_USE_DEPRECATED_API = True
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get(
-    'SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '557623148806-rc57nlhuq4f55059qpoo383026k11eeg.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'UNUlQ4I1sR-sT1OrRY67pmtF'
+
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/newuser/'
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/needlogin/'
@@ -118,8 +105,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MEDIA_ROOT = 'files'
 MEDIA_URL = '/files/'
 
-MANDRILL_API_KEY = os.environ.get('MANDRILL_API_KEY')
-EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+# MANDRILL_API_KEY = os.environ.get('MANDRILL_API_KEY')
+# EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 EMAIL_HOST_USER = ''
 
 GOOGLECHARTS_API = '1.1'
@@ -132,6 +119,3 @@ HAYSTACK_CONNECTIONS = {
 }
 
 RESUME_URL = "https://docs.google.com/a/iiitd.ac.in/document/d/10uKehH-VwEWLV_KSf7Hot0j8eYjoBjPQ8Xh_UnVwKUU/edit?usp=sharing"
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '557623148806-rc57nlhuq4f55059qpoo383026k11eeg.apps.googleusercontent.com'
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'UNUlQ4I1sR-sT1OrRY67pmtF'

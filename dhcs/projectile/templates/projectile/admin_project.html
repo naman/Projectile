@@ -5,7 +5,7 @@
   <div align="center" class="container">
       <br/>
     <br/>
-    
+
     <h1>{{ job.company_name }}</h1>
     <h4>{{ job.profile }}</h4>
   </div>
@@ -27,20 +27,20 @@
     <h3>Selection Process:</h3>
     <p>{{ job.selectionprocess }}</p>
     <h3>Minimum Eligibility Criteria</h3>
-    <h4>For Batches:</h4> 
+    <h4>For Batches:</h4>
     {% for b in job.batch.all %}
          {{b.title }}<p> </p>
-    
+
     {% endfor %}
 
         <h4>10th Marks: </h4><p>{{ job.min_tenthmarks }}</p>
-    
+
         <h4>12th Marks: </h4><p>{{ job.min_twelfthmarks }}</p>
         <h4>CGPA: </h4><p>{{ job.cgpa_min }}</p>
         <h4>Max Backlogs: </h4><p>{{ job.max_blacklogs }}</p>
     </div>
 </div>
-     
+
     <a href="/job/{{ job.pk }}/edit"><button type="button" class="btn btn-warning">Edit</button> </a>
     <a href="/job/{{ job.pk }}/applicants"><button type="button" class="btn btn-info">View Applicants</button> </a>
     <a href="/job/{{ job.pk }}/selections"><button type="button" class="btn btn-success">Select Applicants</button> </a>

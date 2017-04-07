@@ -8,16 +8,12 @@
 
 # __author__ = 'naman'
 
-import csv
-from multiprocessing import Process
 
 from dhcs import settings
 from django.contrib import messages
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
@@ -38,21 +34,6 @@ def admin_notification(request):
     return render(request, "projectile/admin_notification.html")
 
 
-def _send_mail(subject, text_content, host_user, recipient_list):
-    """Sending mail to the recipient_list. Written by http://darkryder.me/."""
-    msg = EmailMultiAlternatives(
-        subject, text_content, host_user, recipient_list)
-    a = msg.send()
-    print "Mail sent"
-
-
-def send_mail(subject, text_content, recipient_list):
-    """Start the process for sending mails. Written by http://darkryder.me/."""
-    p = Process(target=_send_mail, args=(subject, text_content,
-                                         settings.EMAIL_HOST_USER, recipient_list))
-    p.start()
-
-
 def server_error(request):
     """Error page for 500."""
     response = render(request, "projectile/500.html")
@@ -66,9 +47,6 @@ def not_found(request):
     response.status_code = 404
     return response
 
-
-# def test(request):
-#   return render(request, 'projectile/material.min.js.map')
 
 def home(request):
     """Landing home page after login of student or admin."""
@@ -157,6 +135,8 @@ def admineditstudent(request, studentid):
                     my_student = Student.objects.get(pk=studentid)
                     usr.resume.name = my_student.course_enrolled + '_' + \
                         my_student.user.username.split('@')[0] + ".pdf"
+                    usr.transcript.name = my_student.course_enrolled + '_' + \
+                        my_student.user.username.split('@')[0] + ".pdf"
                     if "@iiitd.ac.in" in request.user.username:
                         usr.email = Student.objects.get(
                             pk=studentid).user.username
@@ -232,6 +212,8 @@ def newuser(request):
                 usr.email = request.user.username + "@iiitd.ac.in"
                 usr.name = request.user.first_name + " " + request.user.last_name
                 usr.resume.name = request.user.username.split('@')[0] + ".pdf"
+                usr.transcript.name = request.user.username.split('@')[
+                    0] + ".pdf"
                 usr.save()
                 studentgroup.user_set.add(request.user)
 
@@ -239,12 +221,12 @@ def newuser(request):
                     request, 'Your details were saved. Welcome to Projectile.')
                 return HttpResponseRedirect('/')
             else:
-                context = {'form': form, 'resumer_url': settings.RESUME_URL}
+                context = {'form': form, 'resume_url': settings.RESUME_URL}
                 return render(request, 'projectile/newstudent.html', context)
         elif request.method == 'GET':
             studentform = forms.NewStudentForm()
             context = {'user': request.user, 'form': studentform, 'layout': 'horizontal',
-                       'resumer_url': settings.RESUME_URL}
+                       'resume_url': settings.RESUME_URL}
             return render(request, 'projectile/newstudent.html', context)
     return HttpResponseRedirect('/')
 
@@ -270,28 +252,14 @@ def openproject(request):
                 tosaveproject = form.save(commit=False)
                 tosaveproject.createdon = timezone.now()
                 tosaveproject.save()
-                recipients = []
-                for student in Student.objects.all():
-                    if student.status == 'D' or student.status == 'NI':
-                        continue
-                recipients.append(student.email)
-
-                settings.EMAIL_HOST_USER += 'projectileiiitd@gmail.com'
-                send_mail(
-                    'New Project in Projectile!',
-                    'Hey!\n\nA new project for ' + tosaveproject.profile + ', ' + tosaveproject.company_name +
-                    ' was added on Projectile. \n Please login at projectile.iiitd.edu.in:8081',
-                    recipients
-                )
-                settings.EMAIL_HOST_USER += ''
                 return HttpResponseRedirect('/')
             else:
                 context = {'form': form}
                 return render(request, 'projectile/openproject.html', context)
         else:
             form = forms.ProjectForm()
-            c = {'form': form}
-            return render(request, 'projectile/openproject.html', c)
+            context = {'form': form}
+            return render(request, 'projectile/openproject.html', context)
     else:
         return render(request, 'projectile/notallowed.html')
 
@@ -339,28 +307,6 @@ def projectapplicants(request, projectid):
 
 
 @login_required()
-def sendselectedemail(request, projectid):
-    """Send mail to selected students for a particular Project."""
-    if is_admin(request.user):
-        candemail = []
-        theproject = Project.objects.get(pk=projectid)
-        for candidate in theproject.selectedcandidates.all():
-            candidate.status = 'P'
-            candidate.save()
-            candemail = candemail + [str(candidate.email)]
-        settings.EMAIL_HOST_USER += 'projectileiiitd@gmail.com'
-        send_mail(
-            'Congratulations! You\'ve been placed! :D',
-            "Hey!\n\nCongratulations! You have been placed as " +
-            theproject.profile + ' at ' + theproject.company_name + "!!",
-            candemail
-        )
-        settings.EMAIL_HOST_USER += ''
-        messages.success(request, 'Mails Sent!')
-    return HttpResponseRedirect('/')
-
-
-@login_required()
 def adminprojectselected(request, projectid):
     """Select the final students fot the Project :D"""
     if is_admin(request.user):
@@ -387,35 +333,6 @@ def adminprojectselected(request, projectid):
             return render(request, 'projectile/admin_projectselections.html', context)
 
 
-@login_required()
-def uploadcgpa(request):
-    """Upload the CGPA CSV for all the students, to update student CGPAs."""
-    if is_admin(request.user):
-        if request.method == 'POST':
-            if (not request.FILES.get('cgpafile', None)) or not request.FILES['cgpafile'].size:
-                messages.error(request, 'File Not Found!')
-                return render(request, 'projectile/admin_uploadcgpa.html')
-            upload_file = request.FILES['cgpafile']
-            notfound = []
-            for row in csv.reader(upload_file.read().splitlines()):
-                try:
-                    stud = Student.objects.get(pk=row[0])
-                    if (row[0][:2].upper() == 'MT'):
-                        stud.cgpa_pg = float(row[1])
-                    else:
-                        stud.cgpa_ug = float(row[1])
-                    stud.save()
-                except ObjectDoesNotExist:
-                    notfound.append(row[0])
-            context = {'notfound': notfound}
-            messages.success(request, 'CGPA was succesfully uploaded')
-            return render(request, 'projectile/admin_uploadcgpa.html', context)
-        else:
-            return render(request, 'projectile/admin_uploadcgpa.html')
-    else:
-        return render(request, 'projectile/notallowed.html')  # 403 Error
-
-
 def feedback(request):
     """FeedbackForm"""
     if (request.method == 'POST'):
@@ -426,11 +343,11 @@ def feedback(request):
             type = form.cleaned_data['type']
             type = dict(form.fields['type'].choices)[type]
             settings.EMAIL_HOST_USER += 'Tester@projectile.iiitd.edu.in'
-            send_mail(
-                '[' + type + '] ' + form.cleaned_data['title'],
-                'A new feedback was posted on Projectile' + '\n\n' +
-                form.cleaned_data['body'], ['projectileiiitd@gmail.com']
-            )
+            # send_mail(
+            #     '[' + type + '] ' + form.cleaned_data['title'],
+            #     'A new feedback was posted on Projectile' + '\n\n' +
+            #     form.cleaned_data['body'], ['projectileiiitd@gmail.com']
+            # )
             settings.EMAIL_HOST_USER += ''
             messages.success(
                 request, 'Thanks for filling your precious feedback! :) ')
@@ -445,40 +362,11 @@ def feedback(request):
 
 
 def filter(request):
-    """FeedbackForm"""
-    # if (request.method == 'POST'):
-    #     form = forms.FeedbackForm(request.POST)
-    #     # pdb.set_trace()
-    #     if form.is_valid():
-    #         form.save()
-    #         type = form.cleaned_data['type']
-    #         type = dict(form.fields['type'].choices)[type]
-    #         settings.EMAIL_HOST_USER += 'Tester@projectile.iiitd.edu.in'
-    #         send_mail(
-    #             '[' + type + '] ' + form.cleaned_data['title'],
-    #             'A new feedback was posted on Projectile' + '\n\n' +
-    #             form.cleaned_data['body'], ['projectileiiitd@gmail.com']
-    #         )
-    #         settings.EMAIL_HOST_USER += ''
-    #         messages.success(
-    #             request, 'Thanks for filling your precious feedback! :) ')
-    #         return HttpResponseRedirect('/')
-    #     else:
-    #         context = {'form': form}
-    #         return render(request, 'projectile/modal_filter.html', context)
-    # else:
-    #     form = forms.FeedbackForm()
-    #     context = {'form': form}
-    #     return render(request, 'projectile/modal_filter.html', context)
     return render(request, 'projectile/student_filter_modal.html')
 
 
 def apply(request):
     return render(request, 'projectile/student_project_apply.html')
-
-
-def profile(request):
-    return render(request, 'projectile/student_profile_modal.html')
 
 
 @login_required()
