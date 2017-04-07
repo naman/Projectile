@@ -60,6 +60,7 @@ urlpatterns = patterns('',
                        url(r'files/projectfiles/(.+)',
                            views.docfileview, name='docfileview'),
                        url(r'search/results/$', views.search, name='search'),
+                       url(r'professors/$', views.professors_home, name='professors_home'),
                        url(r'^feedback/$', views.feedback, name='feedback'),
 
 

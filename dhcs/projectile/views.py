@@ -510,5 +510,11 @@ def search(request):
         return render(request, 'projectile/notallowed.html')  # 403 Error
 
 
+@login_required()
 def projectpage(request):
     return render(request, 'projectile/student_projectpage.html')
+
+
+@login_required()
+def professors_home(request):
+    return render(request, 'projectile/student_professors.html')
