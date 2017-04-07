@@ -14,9 +14,12 @@ from projectile import views
 handler404 = 'views.my_404_view'
 
 urlpatterns = patterns('',
-                       url(r'^student_professor/$', views.student_professor, name='student_professor'),
-                       url(r'^add_project/$', views.professor_addproject, name='professor_addproject'),
-                       url(r'^all_requests/$', views.admin_notification, name='admin_notification'),
+                       url(r'^student_professor/$',
+                           views.student_professor, name='student_professor'),
+                       url(r'^add_project/$', views.professor_addproject,
+                           name='professor_addproject'),
+                       url(r'^all_requests/$', views.admin_notification,
+                           name='admin_notification'),
                        url(r'^$', views.home, name='home'),
                        url(r'^logout/$', views.logout, name='logout'),
                        url(r'^needlogin/$', views.needlogin, name='needlogin'),
@@ -64,11 +67,8 @@ urlpatterns = patterns('',
                        url(r'^batch/(?P<batchid>\d+)/getbatchresume/$',
                            views.getbatchresumes, name='getbatchresumes'),
                        url(r'^feedback/$', views.feedback, name='feedback'),
-<<<<<<< HEAD
                        url(r'^filter/$', views.filter, name='filter'),
-=======
                        url(r'^apply/$', views.apply, name='apply'),
->>>>>>> fc1bd330a675ee826d18e12cfd4c01575d011272
                        url(r'^extraStuff/$', views.blockedUnplacedlist,
                            name='blockedUnplacedlist'),
                        url(r'files/resume/(.+)', views.fileview, name='fileview'),

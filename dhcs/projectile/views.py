@@ -638,7 +638,6 @@ def feedback(request):
         return render(request, 'projectile/feedback.html', context)
 
 
-<<<<<<< HEAD
 def filter(request):
     """FeedbackForm"""
     if (request.method == 'POST'):
@@ -665,10 +664,10 @@ def filter(request):
         form = forms.FeedbackForm()
         context = {'form': form}
         return render(request, 'projectile/modal_filter.html', context)
-=======
+
+
 def apply(request):
     return render(request, 'projectile/student_project_apply.html')
->>>>>>> fc1bd330a675ee826d18e12cfd4c01575d011272
 
 
 @login_required()
