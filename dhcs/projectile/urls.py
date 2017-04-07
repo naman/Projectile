@@ -25,6 +25,7 @@ urlpatterns = patterns('',
                        # modals
                        url(r'^filter/$', views.filter, name='filter'),
                        url(r'^apply/$', views.apply, name='apply'),
+                       url(r'^profile/$', views.profile, name='profile'),
 
                        # old pages
                        url(r'^$', views.home, name='home'),

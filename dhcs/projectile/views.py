@@ -446,34 +446,39 @@ def feedback(request):
 
 def filter(request):
     """FeedbackForm"""
-    if (request.method == 'POST'):
-        form = forms.FeedbackForm(request.POST)
-        # pdb.set_trace()
-        if form.is_valid():
-            form.save()
-            type = form.cleaned_data['type']
-            type = dict(form.fields['type'].choices)[type]
-            settings.EMAIL_HOST_USER += 'Tester@projectile.iiitd.edu.in'
-            send_mail(
-                '[' + type + '] ' + form.cleaned_data['title'],
-                'A new feedback was posted on Projectile' + '\n\n' +
-                form.cleaned_data['body'], ['projectileiiitd@gmail.com']
-            )
-            settings.EMAIL_HOST_USER += ''
-            messages.success(
-                request, 'Thanks for filling your precious feedback! :) ')
-            return HttpResponseRedirect('/')
-        else:
-            context = {'form': form}
-            return render(request, 'projectile/modal_filter.html', context)
-    else:
-        form = forms.FeedbackForm()
-        context = {'form': form}
-        return render(request, 'projectile/modal_filter.html', context)
+    # if (request.method == 'POST'):
+    #     form = forms.FeedbackForm(request.POST)
+    #     # pdb.set_trace()
+    #     if form.is_valid():
+    #         form.save()
+    #         type = form.cleaned_data['type']
+    #         type = dict(form.fields['type'].choices)[type]
+    #         settings.EMAIL_HOST_USER += 'Tester@projectile.iiitd.edu.in'
+    #         send_mail(
+    #             '[' + type + '] ' + form.cleaned_data['title'],
+    #             'A new feedback was posted on Projectile' + '\n\n' +
+    #             form.cleaned_data['body'], ['projectileiiitd@gmail.com']
+    #         )
+    #         settings.EMAIL_HOST_USER += ''
+    #         messages.success(
+    #             request, 'Thanks for filling your precious feedback! :) ')
+    #         return HttpResponseRedirect('/')
+    #     else:
+    #         context = {'form': form}
+    #         return render(request, 'projectile/modal_filter.html', context)
+    # else:
+    #     form = forms.FeedbackForm()
+    #     context = {'form': form}
+    #     return render(request, 'projectile/modal_filter.html', context)
+    return render(request, 'projectile/student_filter_modal.html')
 
 
 def apply(request):
     return render(request, 'projectile/student_project_apply.html')
+
+
+def profile(request):
+    return render(request, 'projectile/student_profile_modal.html')
 
 
 @login_required()

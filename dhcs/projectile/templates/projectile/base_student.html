@@ -100,13 +100,32 @@
             </div>
         </div>
     </div>
+    <div id="profilemodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body" id="profiledata">
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="applymodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
+                <!-- <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                </div>
+                </div> -->
                 <div class="modal-body" id="applydata">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="filtermodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+               <!--  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div> -->
+                <div class="modal-body" id="filterdata">
                 </div>
             </div>
         </div>
@@ -161,6 +180,15 @@
                 if (statusTxt == "success")
                 // alert("External content loaded successfully!");
                     $("#applymodal").modal('show');
+                if (statusTxt == "error")
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
+        })
+        $("#profile").on('click', function() {
+            $("#profiledata").load("{% url 'profile' %}", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success")
+                // alert("External content loaded successfully!");
+                    $("#profilemodal").modal('show');
                 if (statusTxt == "error")
                     alert("Error: " + xhr.status + ": " + xhr.statusText);
             });
