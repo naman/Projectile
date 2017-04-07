@@ -67,3 +67,6 @@ dhcs/dhcs/whoosh_index
 dhcs/projectile.db
 *.jpeg
 *.png
+*.jpg
+*.doc
+*.docx

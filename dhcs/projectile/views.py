@@ -57,9 +57,6 @@ def home(request):
     if request.user.is_authenticated():
         context = {'user': request.user,
                    'projects': Project.objects.all().order_by('-deadline')}
-        p = Project.objects.all()[0]
-        print p.image_file
-
         if is_member(request.user, 'admin'):
             return render(request, 'projectile/admin_home.html', context)
         else:
