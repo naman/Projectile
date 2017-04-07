@@ -25,7 +25,15 @@ class Project(models.Model):
         else:
             return False
 
-    project_name = models.CharField("Project Title", max_length=200)
+    project_name = models.CharField("Title", max_length=200)
+    description = models.CharField("Description", max_length=10000)
+    progress_till_date = models.CharField(
+        "Progress till date", max_length=10000, blank=True)
+    # mentors = models.ManyToManyField already added in professor's model
+
+    interest_areas = models.CharField(
+        "Interest Areas (comma separated)", default="None",
+        max_length=10000, blank=True)
 
     PROJECTSTREAMS = (
         ('CSE', 'CSE'),
@@ -87,20 +95,27 @@ class Student(models.Model):
         "Number of Backlogs", max_length=2, default=0, choices=backs)
 
     interest_areas = models.CharField(
-        "Interest Areas (comma separated)", default="None", max_length=10000, blank=True)
+        "Interest Areas (comma separated)", default="None",
+        max_length=10000, blank=True)
     expertise_areas = models.CharField(
-        "Expertise Areas (comma separated)", default="None", max_length=10000, blank=True)
+        "Expertise Areas (comma separated)", default="None",
+        max_length=10000, blank=True)
     programming_languages = models.CharField(
-        "Programming Languages (comma separated)", default="None", max_length=10000, blank=True)
+        "Programming Languages (comma separated)", default="None",
+        max_length=10000, blank=True)
     tools_and_technologies = models.CharField(
-        "Tools and technologies (comma separated)", default="None", max_length=10000, blank=True)
+        "Tools and technologies (comma separated)", default="None",
+        max_length=10000, blank=True)
     work_experience = models.CharField(
-        "Work Experience (comma separated)", default="None", max_length=10000, blank=True)
+        "Work Experience (comma separated)", default="None",
+        max_length=10000, blank=True)
 
     resume = models.FileField(
-        "resume", upload_to='resume', default='', storage=OverwriteStorage())
+        "resume", upload_to='resume', default='',
+        storage=OverwriteStorage())
     transcript = models.FileField(
-        "transcript", upload_to='transcript', default='', storage=OverwriteStorage())
+        "transcript", upload_to='transcript', default='',
+        storage=OverwriteStorage())
 
     projectapplications = models.ManyToManyField(
         Project, related_name='applicants', null=True, blank=True)
@@ -110,6 +125,19 @@ class Student(models.Model):
 
     def __str__(self):  # __unicode__ on Python 2
         return self.pk + ' ' + self.name
+
+
+class Professor(models.Model):
+    user = models.OneToOneField(User)
+    name = models.CharField("Full Name", max_length=100)
+    email = models.EmailField(max_length=70)
+    interest_areas = models.CharField(
+        "Interest Areas (comma separated)", default="None",
+        max_length=10000, blank=True)
+    website = models.CharField(
+        "Website Link: ", max_length=100, blank=True, null=True)
+    projects_mentored = models.ManyToManyField(
+        Project, related_name='mentors', null=True, blank=True)
 
 
 class Feedback(models.Model):

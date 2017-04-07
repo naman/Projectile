@@ -8,8 +8,6 @@
 
 # __author__ = 'naman'
 
-import re
-
 import haystack.forms
 from bootstrap3_datetime.widgets import DateTimePicker
 from django import forms
@@ -17,7 +15,7 @@ from django.db.models.fields.files import FieldFile
 from django.forms import RadioSelect
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
-from projectile.models import Project, Student, Feedback
+from projectile.models import Project, Student, Feedback, Professor
 
 EXTENSIONS = ['pdf']
 MAX_UPLOAD_SIZE = "5242880"
@@ -36,26 +34,6 @@ class ProjectForm(forms.ModelForm):
         if type(jobfile) == FieldFile:
             return jobfile
         return jobfile
-
-    def clean_percentage_tenth(self):
-        percent10 = self.cleaned_data['percentage_tenth']
-        if (percent10 > 100):
-            raise forms.ValidationError(
-                "10th Percentage cannot be more than 100%!")
-        if (percent10 < 0):
-            raise forms.ValidationError(
-                "10th Percentage cannot be less than 0!")
-        return percent10
-
-    def clean_percentage_twelfth(self):
-        percent12 = self.cleaned_data['percentage_twelfth']
-        if (percent12 > 100):
-            raise forms.ValidationError(
-                "12th Percentage cannot be more than 100%!")
-        if (percent12 < 0):
-            raise forms.ValidationError(
-                "12th Percentage cannot be less than 0!")
-        return percent12
 
     def clean_dateofvisit(self):
         DateOfVisit = self.cleaned_data['dateofvisit']
@@ -79,8 +57,9 @@ class AdminSelectedApplicantsForm(forms.ModelForm):
     # widgets = {'CB':forms.CheckBoxSelectMultiple}
 
     # Representing the many to many related field in Project
-    selected = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple, queryset=Student.objects.all(),
-                                              required=False)
+    selected = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple, queryset=Student.objects.all(),
+        required=False)
 
     # Overriding __init__ here allows us to provide initial
     # data for 'selected' field
@@ -131,8 +110,6 @@ class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ['resume', 'transcript', 'email', 'backlogs']
-        widgets = {'dob': DateTimePicker(
-            options={"format": "YYYY-MM-DD", "pickTime": False})}
 
     def clean_resume(self):
         resume = self.cleaned_data['resume']
@@ -160,31 +137,13 @@ class StudentForm(forms.ModelForm):
             raise forms.ValidationError('File type is not supported')
         return transcript
 
-    def clean_dob(self):
-        DateOB = self.cleaned_data['dob']
-        if (DateOB > timezone.now()):
-            raise forms.ValidationError("Are you from the Future?")
-        return DateOB
-
 
 class NewStudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        exclude = ['user', 'email', 'companyapplications', 'status', 'placedat', 'cgpa_ug', 'cgpa_pg', 'name',
+        exclude = ['user', 'email', 'projectapplications', 'status', 'name',
                    'createdon']
-        widgets = {'dob': DateTimePicker(
-            options={"format": "YYYY-MM-DD", "pickTime": False})}
-
-    def clean_university_ug(self):
-        cleaned_data = self.cleaned_data
-        cleaned_data['university_ug'] = 'IIIT Delhi'
-        return cleaned_data['university_ug']
-
-    def clean_university_pg(self):
-        cleaned_data = self.cleaned_data
-        cleaned_data['university_pg'] = 'IIIT Delhi'
-        return cleaned_data['university_pg']
 
     def clean_rollno(self):
         rollno = self.cleaned_data['rollno']
@@ -194,19 +153,6 @@ class NewStudentForm(forms.ModelForm):
                 "Roll number should not contain any special characters.")
         return rollno
 
-    def clean_institution(self):
-        cleaned_data = self.cleaned_data
-        cleaned_data['institution'] = 'IIIT Delhi'
-        return cleaned_data['institution']
-
-    def clean_startyear(self):
-        cleaned_data = self.cleaned_data
-        return cleaned_data['startyear']
-
-    def clean_passingyear(self):
-        cleaned_data = self.cleaned_data
-        return cleaned_data['passingyear']
-
     def clean_resume(self):
         resume = self.cleaned_data['resume']
         resumeext = resume.name.split('.')[-1]
@@ -220,54 +166,25 @@ class NewStudentForm(forms.ModelForm):
             raise forms.ValidationError('File type is not supported')
         return resume
 
-    def clean_percentage_tenth(self):
-        percent10 = self.cleaned_data['percentage_tenth']
-        if (percent10 > 100):
-            raise forms.ValidationError(
-                "10th Percentage cannot be more than 100%!")
-        if (percent10 < 0):
-            raise forms.ValidationError(
-                "10th Percentage cannot be less than 0!")
-        return percent10
-
-    def clean_percentage_twelfth(self):
-        percent12 = self.cleaned_data['percentage_twelfth']
-        if (percent12 > 100):
-            raise forms.ValidationError(
-                "12th Percentage cannot be more than 100%!")
-        if (percent12 < 0):
-            raise forms.ValidationError(
-                "12th Percentage cannot be less than 0!")
-        return percent12
-
-    def clean_passingyear_tenth(self):
-        pass10 = self.cleaned_data['passingyear_tenth']
-        if (pass10 > 2020 or pass10 < 2000):
-            raise forms.ValidationError("Please enter a valid year")
-        return pass10
-
-    def clean_passingyear_twelfth(self):
-        pass12 = self.cleaned_data['passingyear_twelfth']
-        if (pass12 > 2020 or pass12 < 2000):
-            raise forms.ValidationError("Please enter a valid year")
-        return pass12
-
-    def clean_phone(self):
-        phoneno = self.cleaned_data['phone']
-        if (not phoneno.isdigit()):
-            raise forms.ValidationError(
-                "Phone number must contain only numbers!")
-        return phoneno
-
-    def clean_dob(self):
-        DateOB = self.cleaned_data['dob']
-        if (DateOB > timezone.now()):
-            raise forms.ValidationError("Are you from the Future?")
-        return DateOB
+    def clean_transcript(self):
+        transcript = self.cleaned_data['transcript']
+        transcriptext = transcript.name.split('.')[-1]
+        if type(transcript) == FieldFile:
+            return transcript
+        if transcriptext in EXTENSIONS:
+            if transcript._size > MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Please keep filesize under %s. Current filesize %s') % (
+                    filesizeformat(MAX_UPLOAD_SIZE), filesizeformat(transcript._size))
+        else:
+            raise forms.ValidationError('File type is not supported')
+        return transcript
 
 
-def onlynumbers(strg, search=re.compile(r'^[0-9]').search):
-    return bool(search(strg))
+class NewProfessorForm(forms.ModelForm):
+    """for NewProfessorForm"""
+    class Meta:
+        model = Professor
+        exclude = ['user', 'email', 'name', 'projects_mentored']
 
 
 class AdminStudentForm(forms.ModelForm):
@@ -275,13 +192,8 @@ class AdminStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         exclude = ['user']
-        widgets = {'dob': DateTimePicker(options={"format": "YYYY-MM-DD", "pickTime": False}), 'gender': RadioSelect(),
-                   'companyapplications': forms.CheckboxSelectMultiple, 'placedat': forms.CheckboxSelectMultiple}
-
-    """def clean(self):
-        cleaned_data = super(AdminStudentForm, self).clean()
-        #raise forms.ValidationError("This error was added to show the non field errors styling.")
-        return cleaned_data"""
+        widgets = {'gender': RadioSelect(),
+                   'projectapplications': forms.CheckboxSelectMultiple}
 
     def clean_resume(self):
         resume = self.cleaned_data['resume']
@@ -296,56 +208,18 @@ class AdminStudentForm(forms.ModelForm):
             raise forms.ValidationError('File type is not supported')
         return resume
 
-    def clean_cgpa_ug(self):
-        cgpa = self.cleaned_data['cgpa_ug']
-        if (cgpa > 10):
-            raise forms.ValidationError("CGPA cannot be more than 10!")
-        return cgpa
-
-    def clean_cgpa_pg(self):
-        cgpa = self.cleaned_data['cgpa_pg']
-        if (cgpa > 10):
-            raise forms.ValidationError("CGPA cannot be more than 10!")
-        return cgpa
-
-    def clean_percentage_tenth(self):
-        percent10 = self.cleaned_data['percentage_tenth']
-        if (percent10 > 100):
-            raise forms.ValidationError(
-                "10th Percentage cannot be more than 100%!")
-        if (percent10 < 0):
-            raise forms.ValidationError(
-                "10th Percentage cannot be less than 0!")
-        return percent10
-
-    def clean_percentage_twelfth(self):
-        percent12 = self.cleaned_data['percentage_twelfth']
-        if (percent12 > 100):
-            raise forms.ValidationError(
-                "12th Percentage cannot be more than 100%!")
-        if (percent12 < 0):
-            raise forms.ValidationError(
-                "12th Percentage cannot be less than 0!")
-        return percent12
-
-    def clean_passingyear_tenth(self):
-        pass10 = self.cleaned_data['passingyear_tenth']
-        if (pass10 > 2020 or pass10 < 2000):
-            raise forms.ValidationError("Please enter a valid year")
-        return pass10
-
-    def clean_passingyear_twelfth(self):
-        pass12 = self.cleaned_data['passingyear_twelfth']
-        if (pass12 > 2020 or pass12 < 2000):
-            raise forms.ValidationError("Please enter a valid year")
-        return pass12
-
-    def clean_phone(self):
-        phoneno = self.cleaned_data['phone']
-        if (not phoneno.isdigit()):
-            raise forms.ValidationError(
-                "Phone number must contain only numbers!")
-        return phoneno
+    def clean_transcript(self):
+        transcript = self.cleaned_data['transcript']
+        transcriptext = transcript.name.split('.')[-1]
+        if type(transcript) == FieldFile:
+            return transcript
+        if transcriptext in EXTENSIONS:
+            if transcript._size > MAX_UPLOAD_SIZE:
+                raise forms.ValidationError('Please keep filesize under %s. Current filesize %s') % (
+                    filesizeformat(MAX_UPLOAD_SIZE), filesizeformat(transcript._size))
+        else:
+            raise forms.ValidationError('File type is not supported')
+        return transcript
 
 
 class FeedbackForm(forms.ModelForm):
@@ -370,11 +244,3 @@ class RootSearchForm(haystack.forms.SearchForm):
         # you can then adjust the search results and ask for instance to order the results by title
         # sqs = sqs.order_by(title)
         return sqs
-
-
-# class AddProjectForm(forms.ModelForm):
-
-#     class Meta:
-#         model = Project
-#         fields = ['description', 'area', 'hours_of_work',
-#                   'openings', 'related_research', 'invite_people', 'progress_till_date', 'faculty_working']
