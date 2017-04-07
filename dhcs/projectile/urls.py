@@ -64,7 +64,11 @@ urlpatterns = patterns('',
                        url(r'^batch/(?P<batchid>\d+)/getbatchresume/$',
                            views.getbatchresumes, name='getbatchresumes'),
                        url(r'^feedback/$', views.feedback, name='feedback'),
+<<<<<<< HEAD
                        url(r'^filter/$', views.filter, name='filter'),
+=======
+                       url(r'^apply/$', views.apply, name='apply'),
+>>>>>>> fc1bd330a675ee826d18e12cfd4c01575d011272
                        url(r'^extraStuff/$', views.blockedUnplacedlist,
                            name='blockedUnplacedlist'),
                        url(r'files/resume/(.+)', views.fileview, name='fileview'),

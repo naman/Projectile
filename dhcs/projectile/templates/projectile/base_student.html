@@ -42,6 +42,7 @@
                     <li><a id="home" href="#">Home</a></li>
                     <li><a id="professors" href="#">Professors</a></li>
                     <li><a id="feedback" href="#">Feedback</a></li>
+                    <!-- <li><a id="apply" href="#">Apply</a></li> -->
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-user"></span> {{ user.first_name }} {{ user.last_name }} <b class="caret"></b></a>
                         <ul class="dropdown-menu">
@@ -77,17 +78,6 @@
                 </ul>
         </div>
     </footer>
-    <div id="feedbackmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                </div>
-                <div class="modal-body" id="feedbackdata">
-                </div>
-            </div>
-        </div>
-    </div>
     <div id="myappsmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -99,13 +89,35 @@
             </div>
         </div>
     </div>
+    <div id="feedbackmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                <div class="modal-body" id="feedbackdata">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="applymodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                </div>
+                <div class="modal-body" id="applydata">
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Your site ends -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="{% static "js/material.min.js" %}"></script>
     <script src="{% static "js/ripples.js" %}"></script>
 
 
-    <script type="text/javascript">
+    <script type="text/javascript">''
     $('.navbar li').click(function(e) {
         $('.navbar li.active').removeClass('active');
         var $this = $(this);
@@ -140,6 +152,15 @@
                 if (statusTxt == "success")
                 // alert("External content loaded successfully!");
                     $("#filtermodal").modal('show');
+                if (statusTxt == "error")
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
+        })
+        $("#apply").on('click', function() {
+            $("#applydata").load("{% url 'apply' %}", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success")
+                // alert("External content loaded successfully!");
+                    $("#applymodal").modal('show');
                 if (statusTxt == "error")
                     alert("Error: " + xhr.status + ": " + xhr.statusText);
             });
