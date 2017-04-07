@@ -395,9 +395,9 @@ class RootSearchForm(haystack.forms.SearchForm):
         return sqs
 
 
-class AddProjectForm(forms.ModelForm):
+# class AddProjectForm(forms.ModelForm):
 
-    class Meta:
-        model = Project
-        fields = ['description', 'area', 'hours_of_work',
-                  'openings', 'related_research', 'invite_people', 'progress_till_date', 'faculty_working']
+#     class Meta:
+#         model = Project
+#         fields = ['description', 'area', 'hours_of_work',
+#                   'openings', 'related_research', 'invite_people', 'progress_till_date', 'faculty_working']
