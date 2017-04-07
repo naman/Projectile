@@ -1,4 +1,4 @@
-{% extends "projectile/base_student.html" %} {% load humanize %} {% block content %}
+{% extends "projectile/base_admin.html" %} {% load humanize %} {% block content %}
 <br/>
 <br/>
 <br/>
@@ -16,125 +16,118 @@
             <li class="active">All Requests</li>
         </ol>
         <div class="row">
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <h3> ALL PENDING REQUESTS (3) </h3>
-          </div>
-          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <button style="color: white;" type="button" data-toggle="dropdown" class=" btn btn-primary dropdown-toggle pull-right">SORT<span style="margin-left: 20%; color: white;" class="caret"></span></button>
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li><a href="#">Recent</a></li>
-                            <li><a href="#">CGPA</a></li>
-                            <li><a href="#">Year</a></li>
-                            <li><a href="#">Experience</a></li>
-                            <li><a href="#">Project</a></li>
-                        </ul>
-          </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <h3> ALL PENDING REQUESTS (3) </h3>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <button style="color: white;" type="button" data-toggle="dropdown" class=" btn btn-primary dropdown-toggle pull-right">SORT<span style="margin-left: 20%; color: white;" class="caret"></span></button>
+                <ul class="dropdown-menu dropdown-menu-right">
+                    <li><a href="#">Recent</a></li>
+                    <li><a href="#">CGPA</a></li>
+                    <li><a href="#">Year</a></li>
+                    <li><a href="#">Experience</a></li>
+                    <li><a href="#">Project</a></li>
+                </ul>
+            </div>
         </div>
         <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
-
         <div class="row">
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-          <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <img src="https://ph-avatars.imgix.net/303917/original?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=140&h=140&fit=crop" class="img-responsive" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <h4>Srishti Sengupta</h4>
-              <h5>2013108</h5>
-              <h5>B.Tech 4th Year (CSE)</h5>
-              <h5>srishti13108@iiitd.ac.in</h5>
-            </div>
-          </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <h4>KILLFIE</h4>
-            <h6>View Statement of Purpose</h6>
-            <h6>View Queries</h6>
-            <h6>View Profile</h6>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary">Approve</button>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <img src="https://ph-avatars.imgix.net/303917/original?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=140&h=140&fit=crop" class="img-responsive" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <h4>Srishti Sengupta</h4>
+                        <h5>2013108</h5>
+                        <h5>B.Tech 4th Year (CSE)</h5>
+                        <h5>srishti13108@iiitd.ac.in</h5>
+                    </div>
+                </div>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary">Reject</button>
+                <h4>KILLFIE</h4>
+                <h6>View Statement of Purpose</h6>
+                <h6>View Queries</h6>
+                <h6>View Profile</h6>
             </div>
-          </div>
-          </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <button type="button" class="btn btn-primary">Approve</button>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <button type="button" class="btn btn-primary">Reject</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <hr style="width: 100%;  height: 2px; background-color:#989696;" />
-
         <div class="row">
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-          <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <img src="http://madtoes.iiitd.edu.in/assets/img/team/kartik.jpg" class="img-responsive" alt="Image" style="height: 100px; width: 170px; margin-top: 12px">
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <h4>Kartik Gupta</h4>
-              <h5>2013050</h5>
-              <h5>B.Tech 4th Year (CSE)</h5>
-              <h5>kartik13050@iiitd.ac.in</h5>
-            </div>
-          </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <h4>INFORMATION CAPSULE</h4>
-            <h6>View Statement of Purpose</h6>
-            <h6>View Queries</h6>
-            <h6>View Profile</h6>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary">Approve</button>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <img src="http://madtoes.iiitd.edu.in/assets/img/team/kartik.jpg" class="img-responsive" alt="Image" style="height: 100px; width: 170px; margin-top: 12px">
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <h4>Kartik Gupta</h4>
+                        <h5>2013050</h5>
+                        <h5>B.Tech 4th Year (CSE)</h5>
+                        <h5>kartik13050@iiitd.ac.in</h5>
+                    </div>
+                </div>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary">Reject</button>
+                <h4>INFORMATION CAPSULE</h4>
+                <h6>View Statement of Purpose</h6>
+                <h6>View Queries</h6>
+                <h6>View Profile</h6>
             </div>
-          </div>
-          </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <button type="button" class="btn btn-primary">Approve</button>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <button type="button" class="btn btn-primary">Reject</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
         <hr style="width: 100%;  height: 2px; background-color:#989696;" />
-
         <div class="row">
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-          <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <img src="https://avatars3.githubusercontent.com/u/5255299?v=3&s=460" class="img-responsive" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <h4>Naman Gupta</h4>
-              <h5>2013064</h5>
-              <h5>B.Tech 4th Year (CSE)</h5>
-              <h5>naman13064@iiitd.ac.in</h5>
-            </div>
-          </div>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <h4>FIREWALL FOR IOT</h4>
-            <h6>View Statement of Purpose</h6>
-            <h6>View Queries</h6>
-            <h6>View Profile</h6>
-          </div>
-          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <div class="row">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary">Approve</button>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <img src="https://avatars3.githubusercontent.com/u/5255299?v=3&s=460" class="img-responsive" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
+                    </div>
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <h4>Naman Gupta</h4>
+                        <h5>2013064</h5>
+                        <h5>B.Tech 4th Year (CSE)</h5>
+                        <h5>naman13064@iiitd.ac.in</h5>
+                    </div>
+                </div>
             </div>
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-              <button type="button" class="btn btn-primary">Reject</button>
+                <h4>FIREWALL FOR IOT</h4>
+                <h6>View Statement of Purpose</h6>
+                <h6>View Queries</h6>
+                <h6>View Profile</h6>
             </div>
-          </div>
-          </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <button type="button" class="btn btn-primary">Approve</button>
+                    </div>
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <button type="button" class="btn btn-primary">Reject</button>
+                    </div>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>
-
 <!-- <div class="container">
     <div class="row">
         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">

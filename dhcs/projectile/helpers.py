@@ -10,7 +10,7 @@
 
 import re
 
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import Group
 from django.utils import timezone
 
 
@@ -21,10 +21,11 @@ def is_member(user, group):
     return g.user_set.filter(email=str(user.email))
 
 
-def user_add_group(user, group):
+def contains_group(user, group):
     g = Group.objects.get(name=group)
-    user.groups.add(g)
-    user.save()
+    if g in user.groups.all():
+        return True
+    return False
 
 
 def is_eligible(candidate, project):

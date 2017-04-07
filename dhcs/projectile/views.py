@@ -22,7 +22,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
-from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, user_add_group
+from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, contains_group
 from projectile.models import Project, Student, Professor
 
 
@@ -59,9 +59,10 @@ def home(request):
                    'projects': Project.objects.all().order_by('-deadline')}
 
         if is_member(request.user, 'admin'):
-            user_add_group(request.user, 'admin')
-
-            return render(request, 'projectile/admin_home.html', context)
+            if not contains_group(request.user, 'admin'):
+                return HttpResponseRedirect('/newadmin')
+            else:
+                return render(request, 'projectile/admin_home.html', context)
         else:
             studentgroup = Group.objects.get(name='student')
             if (not is_member(request.user, studentgroup)):
@@ -193,9 +194,34 @@ def profile(request):
         return render(request, 'projectile/student_profile.html', context)
 
 
+def newadmin(request):
+    """New User Sign Up form."""
+    admingroup, created = Group.objects.get_or_create(
+        name='admin')  # Creating user group
+    if request.user.is_authenticated():
+        if request.method == 'POST':
+            form = forms.NewProfessorForm(request.POST)
+            if form.is_valid():
+                usr = form.save(commit=False)
+                usr.user = request.user
+                usr.email = request.user.username
+                usr.name = request.user.first_name + " " + request.user.last_name
+                admingroup.user_set.add(request.user)
+                messages.success(
+                    request, 'Your details were saved. Welcome to Projectile.')
+                return HttpResponseRedirect('/')
+            else:
+                context = {'form': form}
+                return render(request, 'projectile/newadmin.html', context)
+        elif request.method == 'GET':
+            prof_form = forms.NewProfessorForm()
+            context = {'user': request.user,
+                       'form': prof_form, 'layout': 'horizontal'}
+            return render(request, 'projectile/newadmin.html', context)
+    return HttpResponseRedirect('/')
+
+
 def newuser(request):
-    print request.user.username
-    print request.user.email
     """New User Sign Up form."""
     studentgroup, created = Group.objects.get_or_create(
         name='student')  # Creating user group
