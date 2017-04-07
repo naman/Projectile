@@ -34,6 +34,10 @@ def student_professor(request):
     return render(request, "projectile/student_professor.html")
 
 
+def professor_addproject(request):
+    return render(request, "projectile/professor_addproject.html")
+
+
 def _send_mail(subject, text_content, host_user, recipient_list):
     """Sending mail to the recipient_list. Written by http://darkryder.me/."""
     msg = EmailMultiAlternatives(
@@ -64,7 +68,7 @@ def not_found(request):
 
 
 # def test(request):
-# 	return render(request, 'projectile/material.min.js.map')
+#   return render(request, 'projectile/material.min.js.map')
 
 def home(request):
     """Landing home page after login of student or admin."""
