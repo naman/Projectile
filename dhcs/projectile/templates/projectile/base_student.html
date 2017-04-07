@@ -135,6 +135,15 @@
                     alert("Error: " + xhr.status + ": " + xhr.statusText);
             });
         })
+        $("#filter").on('click', function() {
+            $("#filterdata").load("{% url 'filter' %}", function(responseTxt, statusTxt, xhr) {
+                if (statusTxt == "success")
+                // alert("External content loaded successfully!");
+                    $("#filtermodal").modal('show');
+                if (statusTxt == "error")
+                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+            });
+        })
     }
     </script>
     <script>
