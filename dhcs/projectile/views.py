@@ -56,7 +56,6 @@ def not_found(request):
     return response
 
 
-@login_required()
 def home(request):
     """Landing home page after login of student or admin."""
     if request.user.is_authenticated():
