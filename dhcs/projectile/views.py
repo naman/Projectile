@@ -23,7 +23,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
 from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, contains_group
-from projectile.models import Project, Student, Professor
+from projectile.models import Project, Student
 
 
 def student_professor(request):
@@ -207,6 +207,14 @@ def newadmin(request):
                 usr.email = request.user.username
                 usr.name = request.user.first_name + " " + request.user.last_name
                 admingroup.user_set.add(request.user)
+
+                # prof = Professor()
+                # prof.website = request.POST.get("website", "")
+                # prof.email = usr.email
+                # prof.name = usr.name
+                # prof.interest_areas = request.POST.get("interest_areas", "")
+                # prof.save()
+
                 messages.success(
                     request, 'Your details were saved. Welcome to Projectile.')
                 return HttpResponseRedirect('/')
@@ -424,8 +432,10 @@ def filter(request):
     return render(request, 'projectile/student_filter_modal.html')
 
 
-def apply(request):
-    return render(request, 'projectile/student_project_apply.html')
+def apply(request, projectid):
+    # project_id = request.GET.get('project_id', '')
+    context = {'project_id' : projectid}
+    return render(request, 'projectile/student_project_apply.html', context)
 
 
 # @login_required()
