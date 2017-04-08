@@ -424,8 +424,10 @@ def filter(request):
     return render(request, 'projectile/student_filter_modal.html')
 
 
-def apply(request):
-    return render(request, 'projectile/student_project_apply.html')
+def apply(request, projectid):
+    # project_id = request.GET.get('project_id', '')
+    context = {'project_id' : projectid}
+    return render(request, 'projectile/student_project_apply.html', context)
 
 
 # @login_required()
