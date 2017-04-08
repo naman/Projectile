@@ -31,10 +31,22 @@
                             <p>Posted on: {{ project.createdon}}</p>
                             <!-- <p>Deadline: {{ project.deadline}}</p> -->
                         </div>
-                        <div style="background-color: red; text-align: center;" class="panel-footer">
+                        {% if project.status == 'O' %}
+                        <div id="apply" style="cursor: pointer; background-color: green; text-align: center;" class="panel-footer">
                             <!-- <span style="color: white; font-weight: normal;">Available</span> -->
-                            <span id="apply" style="color: white; font-weight: bold;"> NOT AVAILABLE </span>
+                            <span style="color: white; font-weight: bold;"> APPLY </span>
                         </div>
+                        {% elif project.status == 'A' %}
+                        <div style="background-color: yellow; text-align: center;" class="panel-footer">
+                            <!-- <span style="color: white; font-weight: normal;">Available</span> -->
+                            <span style="color: white; font-weight: bold;"> APPLICATIONS CLOSED</span>
+                        </div>
+                        {% else %}
+                         <div style="background-color: red; text-align: center;" class="panel-footer">
+                            <!-- <span style="color: white; font-weight: normal;">Available</span> -->
+                            <span style="color: white; font-weight: bold;"> NOT AVAILABLE </span>
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}

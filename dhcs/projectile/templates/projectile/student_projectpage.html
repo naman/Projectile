@@ -16,15 +16,31 @@
         <div style="margin-top: -20px;" class="row">
             <div class=" col-sm-10 col-md-10 col-lg-10">
                 <div class="container">
-                    <h1><B>Project Title #1</B></h1>
-                    <h4>Computer Vision</h4>
-                    <h4>B.Tech Project</h4>
-                    <h4>8/12 Credits</h4>
+                    <h1><B>{{ project.name }}</B></h1>
+                    <h4>{{ project.project_type }}</h4>
+                    <h4>4/8/12 credits</h4>
+                    <!-- <h4>B.Tech Project</h4>
+                    <h4>8/12 Credits</h4> -->
                 </div>
             </div>
-            <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
-                <button type="button" id="apply" class="btn btn-small btn-primary"><b>APPLY</b></button>
-            </div>
+            {% if hasapplied %} {% if not deadlinepassed %}
+            <a href="/project/{{ project.pk }}/withdraw">
+                <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
+                    <button type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
+                </div>
+            </a>
+             {% endif %} {% else %} {% if deadlinepassed %}
+            <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
+            <ul>
+                <li><b>{{reason}}</b></li>
+            </ul>
+            {% endfor %} {% else %}
+            <!-- <a href="/project/{{ project.pk }}/apply"> -->
+                <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
+                    <button id="apply" type="button" class="btn btn-small btn-success"><b>APPLY</b></button>
+                </div>
+            <!-- </a> -->
+            {% endif %} {% endif %}
         </div>
     </div>
     <br/>

@@ -121,7 +121,7 @@ def projectpage(request, projectid):
         context = {'user': request.user, 'project': Project.objects.get(pk=projectid), 'deadlinepassed': deadlinepassed,
                    'hasapplied': hasapplied, 'iseligible': iseligible['value'],
                    'iseligiblereasons': iseligible['reasons']}
-        return render(request, 'projectile/project_student.html', context)
+        return render(request, 'projectile/student_projectpage.html', context)
 
 
 @login_required()
