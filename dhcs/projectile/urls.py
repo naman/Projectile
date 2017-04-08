@@ -27,6 +27,7 @@ urlpatterns = patterns('',
                        # modals
                        url(r'^filter/$', views.filter, name='filter'),
                        url(r'^apply/(?P<projectid>\d+)/$', views.apply, name='apply'),
+                       url(r'^withdraw/(?P<projectid>\d+)/$', views.withdraw, name='withdraw'),
                        url(r'^profile/$', views.profile, name='profile'),
 
                        # old pages

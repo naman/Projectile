@@ -41,11 +41,11 @@ def is_eligible(candidate, project):
     if (candidate.cgpa < project.cgpa_min):
         eligibility['value'] = False
         eligibility['reasons'].append(
-            "Your CGPA is below the requirement.")
+            "CGPA requirement not fulfilled.")
 
-    if (project.status == 'C' or project.status == 'A'):
-        eligibility['value'] = False
-        eligibility['reasons'].append("This Project cannot be applied to.")
+    # if (project.status == 'C' or project.status == 'A'):
+    #     eligibility['value'] = False
+    #     eligibility['reasons'].append("This Project cannot be applied to.")
 
     return eligibility
 
