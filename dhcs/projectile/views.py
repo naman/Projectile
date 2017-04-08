@@ -438,6 +438,12 @@ def apply(request, projectid):
     return render(request, 'projectile/student_project_apply.html', context)
 
 
+def withdraw(request, projectid):
+    # project_id = request.GET.get('project_id', '')
+    context = {'projectid' : projectid}
+    return render(request, 'projectile/student_project_withdraw.html', context)
+
+
 # @login_required()
 # def fileview(request, filename):
 #     """Protect the resume location, by adding headers, using nginx."""

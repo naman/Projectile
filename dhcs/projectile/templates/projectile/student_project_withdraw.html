@@ -1,0 +1,21 @@
+{% extends "projectile/base_modals.html" %} {% load bootstrap3 %} {% block pagelibraries %} {{ form.media }} {% endblock %} {% block content %}
+<br/>
+<button style="margin-top: -15px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+<div class="container-fluid">
+    <div style="text-align: center;" class="row">
+        <p>Do you want to withdraw from {{ Project.objects.get(pk=projectid) }} project? </p>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-md-6 col-lg-6">
+            <a href="/project/{{ projectid }}/withdraw">
+                <button type="button" class="btn btn-small btn-primary"><b>Yes</b></button>
+            </a>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <button data-dismiss="modal" type="button" class="btn btn-small btn-primary"><b>No</b></button>
+        </div>
+    </div>
+    <br/>
+</div>
+{% endblock %}

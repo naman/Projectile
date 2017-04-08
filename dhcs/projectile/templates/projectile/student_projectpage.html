@@ -23,24 +23,36 @@
                     <h4>8/12 Credits</h4> -->
                 </div>
             </div>
-            {% if hasapplied %} {% if not deadlinepassed %}
-            <a href="/project/{{ project.pk }}/withdraw">
-                <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
-                    <button type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
-                </div>
-            </a>
-            {% endif %} {% else %} {% if deadlinepassed %}
-            <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
-            <ul>
-                <li><b>{{reason}}</b></li>
-            </ul>
-            {% endfor %} {% else %}
-            <!-- <a href="/project/{{ project.pk }}/apply"> -->
-                <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
-                    <button id="apply" type="button" class="btn btn-small btn-success"><b>APPLY</b></button>
-                </div>
-            <!-- </a> -->
-            {% endif %} {% endif %}
+            <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
+                {% if hasapplied %} {% if not deadlinepassed %}
+                <button id="withdraw" type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
+                {% endif %} {% else %} {% if deadlinepassed %}
+                <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
+                <h3>{{reason}}</h3>
+                {% endfor %} {% else %}
+                <button id="apply" type="button" class="btn btn-small btn-success"><b>APPLY</b></button>
+                {% endif %} {% endif %}
+            </div>
+            <script>
+                $("#withdraw").on('click', function() {
+                    $("#withdrawdata").load("{% url 'withdraw' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
+                        if (statusTxt == "success")
+                        // alert("External content loaded successfully!");
+                            $("#withdrawmodal").modal('show');
+                        if (statusTxt == "error")
+                            alert("Error: " + xhr.status + ": " + xhr.statusText);
+                    });
+                })
+                $("#apply").on('click', function() {
+                    $("#applydata").load("{% url 'apply' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
+                        if (statusTxt == "success")
+                        // alert("External content loaded successfully!");
+                            $("#applymodal").modal('show');
+                        if (statusTxt == "error")
+                            alert("Error: " + xhr.status + ": " + xhr.statusText);
+                    });
+                })
+            </script>
         </div>
     </div>
     <br/>
@@ -51,15 +63,15 @@
         <div class=" col-sm-8 col-md-8 col-lg-8">
             <div style="padding: 35px;" class="well">
                 <!-- <div class="container"> -->
-                    <h3 style="font-weight: 500; letter-spacing: .025em;">About</h3>
-                    <hr style="width: 100%; height: 2px; background-color:#005A6A;" />
-                    <br/>
-                    <h3 style="font-weight: 500; letter-spacing: .025em;">Eligibility Criteria</h3>
-                    <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
-                    <br/>
-                    <h3 style="font-weight: 500; letter-spacing: .025em;">Current Status</h3>
-                    <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
-                    <br/>
+                <h3 style="font-weight: 500; letter-spacing: .025em;">About</h3>
+                <hr style="width: 100%; height: 2px; background-color:#005A6A;" />
+                <br/>
+                <h3 style="font-weight: 500; letter-spacing: .025em;">Eligibility Criteria</h3>
+                <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
+                <br/>
+                <h3 style="font-weight: 500; letter-spacing: .025em;">Current Status</h3>
+                <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
+                <br/>
                 <!-- </div> -->
             </div>
         </div>
@@ -80,24 +92,36 @@
                 <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
                 <h3 style="margin-top:40px; font-weight: 500; letter-spacing: .025em;">PHDs and Students</h3>
                 <div style="padding-top:20px; padding-bottom: 20px;" class="row">
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile"><div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                    </div></a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile"><div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                    </div></a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile"><div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                    </div></a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile"><div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                    </div></a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile"><div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                    </div></a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile"><div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                    </div></a>
+                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        </div>
+                    </a>
+                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        </div>
+                    </a>
+                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        </div>
+                    </a>
+                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        </div>
+                    </a>
+                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        </div>
+                    </a>
+                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        </div>
+                    </a>
                 </div>
             </div>
         </div>
