@@ -26,7 +26,8 @@ class ProjectForm(forms.ModelForm):
     class Meta:
         model = Project
         exclude = ['createdon']
-        widgets = {'deadline': DateTimePicker(options={"format": "YYYY-MM-DD HH:mm", "pickTime": True})}
+        widgets = {'deadline': DateTimePicker(
+            options={"format": "YYYY-MM-DD HH:mm", "pickTime": True})}
 
     def clean_jobfile(self):
         jobfile = self.cleaned_data['jobfile']
@@ -191,7 +192,7 @@ class NewProfessorForm(forms.ModelForm):
     """for NewProfessorForm"""
     class Meta:
         model = Professor
-        exclude = ['user', 'email', 'name', 'projects_mentored']
+        fields = ['interest_areas', 'website']
 
 
 class AdminStudentForm(forms.ModelForm):
