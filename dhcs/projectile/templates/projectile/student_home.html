@@ -8,39 +8,13 @@
         <div class="col-xs-12 col-md-12">
             <h3 style="font-weight: bold; letter-spacing: .05em;">My Projects</h3>
             <!-- <hr class="divider"> -->
-            <hr style="width: 100%;  height: 2px; background-color:#005A6A;" /> {% if not projects %}
+            <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
             <h5 align="text-center">You haven't opted for any projects.</h5> 
-            <!-- <div class="row">
-                {% for project in projects %} {% if project.deadlineexpired %}
-                <div class="col-xs-12 col-md-3">
-                    <div class="panel panel-danger">
-                        {% elif not project.deadlineexpired %}
-                        <div class="panel panel-primary">
-                            {% endif %}
-                            <div class="panel-heading" data-toggle="collapse" aria-expanded="false" href="#collapseExample{{ project.pk }}" aria-controls="collapseExample{{ project.pk }}">
-                                <h3 class="panel-title">{{ project.company_name }}</h3>
-                            </div>
-                            <div class="panel-body collapse" id="collapseExample{{ project.pk }}">
-                                <a href="/project/{{ project.pk }}"><h6>{{ project.profile }}</h6></a>
-                                <h6>Posted on: {{ project.createdon }}</h6>
-                                <h6>Date of Visit: {{ project.dateofvisit }}</h6>
-                                <div class="panel-footer">
-                                    Deadline: {{ project.deadline }} {% if project.deadlineexpired %}
-                                    <span class="label label-danger">
-                        {{ project.deadline|naturaltime }}
-                        {% elif not project.deadlineexpired %}
-                        <span class="label label-success"> {{ project.deadline|naturaltime }}</span> {% endif %}</span>
-                                </div>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div> -->
+                
+            
         </div>
     </div>
-    {% endif %}
+   
     <br/>
     <br/>
     <div class="row">
@@ -157,14 +131,20 @@
     <br/>
     <div class="row">
         <div class="col-xs-12 col-md-12">
-            <div style="margin-bottom: -12px;" class="row">
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <h3 style="font-weight: bold; letter-spacing: .05em;">All Projects</h3>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                
-            <button style="margin-bottom: -12px;" id="filter" type="button" class="btn btn-sm btn-primary pull-right">Filter</button>
-            </div>
+            <div style="margin-bottom: -10px;" class="row">
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <h3 style="font-weight: bold; letter-spacing: .05em;">All Projects</h3>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    
+                    <button style="font-size:80%; margin-top: 15px; margin-bottom: 0px; color: white;" type="button" data-toggle="dropdown" class=" btn btn-primary dropdown-toggle pull-right">Filter<span style="margin-left: 20%; color: white;" class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#">Separated link</a></li>
+                        </ul>
+                </div>
             </div>
             <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
             <div class="center">
