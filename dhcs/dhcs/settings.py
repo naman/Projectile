@@ -30,7 +30,7 @@ INSTALLED_APPS = (
     'social.apps.django_app.default',
     'django.contrib.humanize',
     'projectile',
-    # 'south',
+    'south',
     'bootstrap3',
     'timezone_field',
     'datetimezone_field',
@@ -49,7 +49,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social.apps.django_app.middleware.SocialAuthExceptionMiddleware',
-    'projectile.middleware.MyMiddleware',
+    # 'projectile.middleware.MyMiddleware',
 )
 
 ROOT_URLCONF = 'dhcs.urls'
