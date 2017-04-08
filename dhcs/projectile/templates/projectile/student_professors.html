@@ -11,7 +11,7 @@
             <h5 align="text-center"></h5> {% if not proffessors %}
             <h4 align="text-center">You aren't working with any professor right now.</h4> {% endif %}
             <div class="row">
-                {% for professor in professors %}
+                {% for professor in all_professors %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="panel panel-primary">
                         <a href=""><img src="files/{{ professor.image_file }}" class="img-responsive" alt="Image"></a>

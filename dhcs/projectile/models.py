@@ -50,9 +50,11 @@ class Project(models.Model):
     interest_areas = models.CharField(
         "Interest Areas (comma separated)", default="None",
         max_length=10000, blank=True)
-    image_file = models.FileField("File ", upload_to='image_file',
-                                  default='', storage=OverwriteStorage(),
-                                  blank=True, null=True)
+    image_file = models.ImageField("Picture", upload_to='image_file',
+                                   default='image_file/project.jpeg',
+                                   storage=OverwriteStorage(),
+                                   blank=True, null=True)
+
     PROJECTSTREAMS = (
         ('CS', 'Computer Science'),
         ('EC', 'Eelectronics and Communications'),
@@ -94,7 +96,10 @@ class Student(models.Model):
     batch_year = models.CharField("Batch Year", max_length=100)
     course_enrolled = models.CharField("Course Enrolled in", max_length=100)
     course_stream = models.CharField("Course Stream", max_length=100)
-
+    display_picture = models.ImageField("Picture", upload_to='display_picture',
+                                        default='display_picture/user.jpg',
+                                        storage=OverwriteStorage(),
+                                        blank=True, null=True)
     email = models.EmailField(max_length=70)
     cgpa = models.FloatField(
         "CGPA", max_length=4, default=0, blank=True)
@@ -139,6 +144,11 @@ class Professor(models.Model):
     user = models.OneToOneField(User)
     name = models.CharField("Full Name", max_length=100)
     email = models.EmailField(max_length=70)
+    display_picture = models.ImageField("Picture", upload_to='display_picture',
+                                        default='display_picture/professor.png',
+                                        storage=OverwriteStorage(),
+                                        blank=True, null=True)
+
     interest_areas = models.CharField(
         "Interest Areas (comma separated)", default="None",
         max_length=10000, blank=True)

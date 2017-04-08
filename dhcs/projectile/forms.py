@@ -103,7 +103,7 @@ class StudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['cgpa', 'resume', 'transcript', 'backlogs']
+        fields = ['cgpa', 'resume', 'transcript', 'backlogs', 'display_picture']
 
     def clean_resume(self):
         cgpa = self.cleaned_data['cgpa']
@@ -192,7 +192,7 @@ class NewProfessorForm(forms.ModelForm):
     """for NewProfessorForm"""
     class Meta:
         model = Professor
-        fields = ['interest_areas', 'website']
+        fields = ['interest_areas', 'website', 'display_picture']
 
 
 class AdminStudentForm(forms.ModelForm):
