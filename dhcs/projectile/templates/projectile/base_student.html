@@ -177,15 +177,7 @@
                     alert("Error: " + xhr.status + ": " + xhr.statusText);
             });
         })
-        $("#apply").on('click', function() {
-            $("#applydata").load("{% url 'apply' %}", function(responseTxt, statusTxt, xhr) {
-                if (statusTxt == "success")
-                // alert("External content loaded successfully!");
-                    $("#applymodal").modal('show');
-                if (statusTxt == "error")
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
-            });
-        })
+       
         $("#profile").on('click', function() {
             $("#profiledata").load("{% url 'profile' %}", function(responseTxt, statusTxt, xhr) {
                 if (statusTxt == "success")
@@ -195,6 +187,8 @@
                     alert("Error: " + xhr.status + ": " + xhr.statusText);
             });
         })
+
+
     }
     </script>
     <script>
