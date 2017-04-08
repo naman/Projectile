@@ -427,13 +427,13 @@ def filter(request):
 
 def apply(request, projectid):
     # project_id = request.GET.get('project_id', '')
-    context = {'project_id' : projectid}
+    context = {'project_id': projectid}
     return render(request, 'projectile/student_project_apply.html', context)
 
 
 def withdraw(request, projectid):
     # project_id = request.GET.get('project_id', '')
-    context = {'projectid' : projectid}
+    context = {'projectid': projectid}
     return render(request, 'projectile/student_project_withdraw.html', context)
 
 
@@ -461,6 +461,24 @@ def docfileview(request, filename):
     response = HttpResponse()
     response['Content-Type'] = 'application/pdf'
     response['X-Accel-Redirect'] = "/projectfiles/%s" % filename
+    return response
+
+
+@login_required()
+def display_picture(request, filename):
+    """Protect the project file location, by adding headers, using nginx."""
+    response = HttpResponse()
+    # response['Content-Type'] = 'application/pdf'
+    response['X-Accel-Redirect'] = "/display_picture/%s" % filename
+    return response
+
+
+@login_required()
+def image_file(request, filename):
+    """Protect the project file location, by adding headers, using nginx."""
+    response = HttpResponse()
+    # response['Content-Type'] = 'application/pdf'
+    response['X-Accel-Redirect'] = "/image_file/%s" % filename
     return response
 
 

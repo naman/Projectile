@@ -26,8 +26,10 @@ urlpatterns = patterns('',
 
                        # modals
                        url(r'^filter/$', views.filter, name='filter'),
-                       url(r'^apply/(?P<projectid>\d+)/$', views.apply, name='apply'),
-                       url(r'^withdraw/(?P<projectid>\d+)/$', views.withdraw, name='withdraw'),
+                       url(r'^apply/(?P<projectid>\d+)/$',
+                           views.apply, name='apply'),
+                       url(r'^withdraw/(?P<projectid>\d+)/$',
+                           views.withdraw, name='withdraw'),
                        url(r'^profile/$', views.profile, name='profile'),
 
                        # old pages
@@ -65,6 +67,10 @@ urlpatterns = patterns('',
                        url(r'files/resume/(.+)', views.fileview, name='fileview'),
                        url(r'files/projectfiles/(.+)',
                            views.docfileview, name='docfileview'),
+                       # url(r'files/display_picture/(.+)',
+                       #     views.display_picture, name='display_picture'),
+                       # url(r'files/image_file/(.+)',
+                       #     views.image_file, name='image_file'),
 
                        url(r'search/results/$', views.search, name='search'),
                        url(r'^feedback/$', views.feedback, name='feedback'),
