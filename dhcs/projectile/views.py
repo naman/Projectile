@@ -299,7 +299,7 @@ def openproject(request):
     """Open a new Project from admin side."""
     if is_admin(request.user):
         if request.method == 'POST':
-            form = forms.ProjectForm(request.POST)
+            form = forms.ProjectForm(request.POST, request.FILES)
             if form.is_valid():
                 tosaveproject = form.save(commit=False)
                 tosaveproject.createdon = timezone.now()
