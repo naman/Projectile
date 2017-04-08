@@ -13,16 +13,18 @@
                 {% for project in projects %} {% if project.status == 'O' %} {% if project in request.user.student.projectapplications.all %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="panel panel-primary">
-                        <a href=""><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
+                        <a href="/project/{{project.pk}}/"><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
                         <div class="panel-body" id="collapseExample{{ project.pk }}">
                             <a style="text-decoration: none;" href="/project/{{project.pk}}/"><h3>{{ project.name }} </h3></a>
                             <p>Typ of Project: {{ project.project_type }}</p>
                             <p>Posted on: {{ project.createdon}}</p>
                         </div>
-                        <div id="withdraw" style="cursor: pointer; background-color: red; text-align: center;" class="panel-footer">
-                            <span style="color: white; font-weight: bold;"> WITHDRAW </span>
-                        </div>
-                         <script>
+                        <a href="/project/{{ project.pk }}/withdraw">
+                            <div style="cursor: pointer; background-color: red; text-align: center;" class="panel-footer">
+                                <span style="color: white; font-weight: bold;"> WITHDRAW </span>
+                            </div>
+                        </a>
+                         <!-- <script>
                             $("#withdraw").on('click', function() {
                                 $("#withdrawdata").load("{% url 'withdraw' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
                                     if (statusTxt == "success")
@@ -32,7 +34,7 @@
                                         alert("Error: " + xhr.status + ": " + xhr.statusText);
                                 });
                             })
-                        </script>
+                        </script> -->
                     </div>
                 </div>
                 {% endif %}
@@ -53,10 +55,10 @@
                 {% for project in projects %} {% if project.status == 'O' %} {% if not project in request.user.student.projectapplications.all %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="panel panel-primary">
-                        <a href=""><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
+                        <a href="/project/{{project.pk}}/"><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
                         <div class="panel-body" id="collapseExample{{ project.projectk }}">
                             <a style="text-decoration: none;" href="/project/{{project.pk}}/"><h3>{{ project.name }} </h3></a>
-                            <p>Typ of Project: {{ project.project_type }}</p> -->
+                            <p>Typ of Project: {{ project.project_type }}</p> 
                             <p>Posted on: {{ project.createdon}}</p>
                         </div>
                         <div id="apply" style="cursor: pointer; background-color: green; text-align: center;" class="panel-footer">
@@ -64,13 +66,13 @@
                         </div>
                     </div>
                 </div>
-                {% endif % } {% else % }
+                {% endif %} {% else %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="panel panel-primary">
-                        <a href=""><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
+                        <a href="/project/{{project.pk}}/"><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
                         <div class="panel-body" id="collapseExample{{ project.pk }}">
                             <a style="text-decoration: none;" href="/project/{{project.pk}}/"><h3>{{ project.name }} </h3></a>
-                            <p>Typ of Project: {{ project.project_type }}</p> -->
+                            <p>Typ of Project: {{ project.project_type }}</p> 
                             <p>Posted on: {{ project.createdon}}</p>
                         </div>
                         {% if project.status == 'A' %}
@@ -86,7 +88,6 @@
                         {% endif %}
                     </div>
                 </div>
-                {% endif %}
                 {% endif %}
                 <script>
                 $("#apply").on('click', function() {
@@ -124,23 +125,7 @@
             <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A; " />
             <div class="center ">
                 <div class="row ">
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
-                        <div class="panel panel-primary ">
-                            <!-- <div class="panel-heading ">
-                                <h3 class="panel-title ">Project #1</h3>
-                            </div> -->
-                            <a href="/project/{{ project.pk }} "><img src="../../static/images/project.jpeg " class="img-responsive " alt="Image "></a>
-                            <div class="panel-body " id="collapseExample{{ project.pk }} ">
-                                <a style="text-decoration: none; " href="/project/{{ project.pk }} "><h3>Project Name </h3></a>
-                                <p>Independent Project </p>
-                                <h6>Posted on: Jan 6, 2017</h6>
-                            </div>
-                            <div style="text-align: center; " class="panel-footer ">
-                                <!-- <span style="color: white; font-weight: normal; ">Available</span> -->
-                                <span id="apply " style="font-weight: bold; "> CGPA requirement not fulfilled. </span>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 ">
                         <div class="panel panel-primary ">
                             <!-- <div class="panel-heading ">

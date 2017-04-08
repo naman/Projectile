@@ -186,12 +186,12 @@ def profile(request):
             return HttpResponseRedirect('/')
         else:
             context = {'form': form, 'student': request.user.student}
-            return render(request, 'projectile/student_profile.html', context)
+            return render(request, 'projectile/student_profile_modal.html', context)
     elif request.method == 'GET':
         studentform = forms.StudentForm(instance=request.user.student)
         context = {'user': request.user, 'form': studentform, 'layout': 'horizontal',
                    'student': request.user.student}
-        return render(request, 'projectile/student_profile.html', context)
+        return render(request, 'projectile/student_profile_modal.html', context)
 
 
 def newadmin(request):

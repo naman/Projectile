@@ -25,7 +25,9 @@
             </div>
             <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
                 {% if hasapplied %} {% if not deadlinepassed %}
-                <button id="withdraw" type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
+                <a href="/project/{{ project.pk }}/withdraw">
+                <button type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
+                </a>
                 {% endif %} {% else %} {% if deadlinepassed %}
                 <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
                 <h3>{{reason}}</h3>
@@ -34,15 +36,15 @@
                 {% endif %} {% endif %}
             </div>
             <script>
-                $("#withdraw").on('click', function() {
-                    $("#withdrawdata").load("{% url 'withdraw' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
-                        if (statusTxt == "success")
-                        // alert("External content loaded successfully!");
-                            $("#withdrawmodal").modal('show');
-                        if (statusTxt == "error")
-                            alert("Error: " + xhr.status + ": " + xhr.statusText);
-                    });
-                })
+                // $("#withdraw").on('click', function() {
+                //     $("#withdrawdata").load("{% url 'withdraw' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
+                //         if (statusTxt == "success")
+                //         // alert("External content loaded successfully!");
+                //             $("#withdrawmodal").modal('show');
+                //         if (statusTxt == "error")
+                //             alert("Error: " + xhr.status + ": " + xhr.statusText);
+                //     });
+                // })
                 $("#apply").on('click', function() {
                     $("#applydata").load("{% url 'apply' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
                         if (statusTxt == "success")
