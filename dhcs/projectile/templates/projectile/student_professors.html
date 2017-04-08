@@ -8,9 +8,24 @@
         <div class="col-xs-12 col-md-12">
             <h3 style="font-weight: bold; letter-spacing: .05em;">Professor(s) I am working with</h3>
             <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
-            <!-- {% if not projects %}
-            <h4 align="text-center">There are no projects available right now.</h4> {% endif %} -->
-            <h5 align="text-center">You aren't working with any professor right now.</h5>
+            <h5 align="text-center"></h5> {% if not proffessors %}
+            <h4 align="text-center">You aren't working with any professor right now.</h4> {% endif %}
+            <div class="row">
+                {% for professor in professors %}
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="panel panel-primary">
+                        <a href=""><img src="files/{{ professor.image_file }}" class="img-responsive" alt="Image"></a>
+                        <div class="panel-body" id="collapseExample{{ professor.pk }}">
+                            <a style="text-decoration: none;" href="/professor/{{professor.pk}}/"><h4>{{ professor.name }} </h4></a>
+                            <p>{{ professor.professor_type }}</p>
+                            <p>{{ professor.interest_areas }}</p>
+                            <p>Posted on: {{ professor.createdon}}</p>
+                            <!-- <p>Deadline: {{ professor.deadline}}</p> -->
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
     <br/>
@@ -18,76 +33,23 @@
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <h3 style="font-weight: bold; letter-spacing: .05em;">Recommended Professors</h3>
-            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
-            <!-- {% if not projects %}
-            <h4 align="text-center">There are no projects available right now.</h4> {% endif %} -->
-            <div class="center">
-                <div class="row">
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
+            <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" /> {% if not proffessors %}
+            <h4 align="text-center">There are no proffessors available right now.</h4> {% endif %}
+            <div class="row">
+                {% for professor in professors %}
+                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                    <div class="panel panel-primary">
+                        <a href=""><img src="files/{{ professor.image_file }}" class="img-responsive" alt="Image"></a>
+                        <div class="panel-body" id="collapseExample{{ professor.pk }}">
+                            <a style="text-decoration: none;" href="/professor/{{professor.pk}}/"><h4>{{ professor.name }} </h4></a>
+                            <p>{{ professor.professor_type }}</p>
+                            <p>{{ professor.interest_areas }}</p>
+                            <p>Posted on: {{ professor.createdon}}</p>
+                            <!-- <p>Deadline: {{ professor.deadline}}</p> -->
                         </div>
                     </div>
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -96,126 +58,33 @@
     <div class="row">
         <div class="col-xs-12 col-md-12">
             <div style="margin-bottom: -12px;" class="row">
-            <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
-                            <h3 style="font-weight: bold; letter-spacing: .05em;">All Professors</h3>
-            </div>
-            <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-                
-            <button style="margin-bottom: -12px;" id="filter" type="button" class="btn btn-sm btn-primary pull-right">Filter</button>
-            </div>
+                <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                    <h3 style="font-weight: bold; letter-spacing: .05em;">All Professors</h3>
+                </div>
+                <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                    <button style="margin-bottom: -12px;" id="filter" type="button" class="btn btn-sm btn-primary pull-right">Filter</button>
+                </div>
             </div>
             <hr style="width: 100%; color: #005A6A; height: 2px; background-color:#005A6A;" />
             <div class="center">
                 <div class="row">
+                    {% for professor in professors %}
                     <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                         <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
+                            <a href=""><img src="files/{{ professor.image_file }}" class="img-responsive" alt="Image"></a>
+                            <div class="panel-body" id="collapseExample{{ professor.pk }}">
+                                <a style="text-decoration: none;" href="/professor/{{professor.pk}}/"><h4>{{ professor.name }} </h4></a>
+                                <p>{{ professor.professor_type }}</p>
+                                <p>{{ professor.interest_areas }}</p>
+                                <p>Posted on: {{ professor.createdon}}</p>
+                                <!-- <p>Deadline: {{ professor.deadline}}</p> -->
                             </div>
-                           
                         </div>
                     </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
-                        </div>
-                    </div>
-                    <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                        <div class="panel panel-primary">
-                            <!-- <div class="panel-heading">
-                                <h3 class="panel-title">Project #1</h3>
-                            </div> -->
-                            <a href="/student_professor/{{professor.name}}"><img src="../../static/images/project.jpeg" class="img-responsive" alt="Image"></a>
-                            
-                            <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                <a style="text-decoration: none;" href="/student_professor/{{professor.name}}"><h3>Professor Name </h3></a>
-                                <p>Computer Vision </p>
-                                <h6>CSE</h6>
-                                
-                            </div>
-                           
-                        </div>
-                    </div>
-                
-
-                    <!-- <div class="row">
-                        <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading">
-                                    <h3 class="panel-title">Project #1</h3>
-                                </div>
-                                <div class="panel-body" id="collapseExample{{ project.pk }}">
-                                    <a href="/project/{{ project.pk }}"><h6>CSE</h6></a>
-                                    <h6>Posted on: Jan 6, 2017</h6>
-                                    
-                                </div>
-                                <div class="panel-footer">
-                                        Deadline: Aug 6, 2017
-                                        <span class="label label-success"> Aug 6, 2017 </span>
-                                    </div>
-                            </div>
-                        </div>
-                    </div> -->
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- <div id="filtermodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-            </div>
-            <div class="modal-body" id="filterdata">
-            </div>
-        </div>
-    </div>
-</div> -->
 {% endblock %}
-
-
-<!-- <div class="btn-group">
-                    <button style="margin-bottom: -12px;" type="button" data-toggle="dropdown" class=" btn btn-primary dropdown-toggle pull-right">Filter<span class="caret"></span></button>
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
-                    </ul>
-                </div> -->

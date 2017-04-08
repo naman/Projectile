@@ -10,13 +10,21 @@
 
 import re
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.utils import timezone
 
 
 def is_member(user, group):
     """Checks if the user object is a member of the group or not."""
-    return user.groups.filter(name=group)
+    # return user.groups.filter(name=group)
+    g = Group.objects.get(name=group)
+    return g.user_set.filter(email=str(user.email))
+
+
+def user_add_group(user, group):
+    g = Group.objects.get(name=group)
+    user.groups.add(g)
+    user.save()
 
 
 def is_eligible(candidate, project):
@@ -51,12 +59,9 @@ def checkdeadline(project):
 
 def is_admin(user):
     """Checks if the user object is a member of the admin group or not."""
-    allowed_group = {'admin'}
-    usr = User.objects.get(username=user)
-    groups = [x.name for x in usr.groups.all()]
-    if allowed_group.intersection(set(groups)):
-        return True
-    return False
+    x = user.groups.filter(name='admin')
+    print x
+    return x
 
 
 def special_match(strg, search=re.compile(r'[^A-Za-z0-9., -]').search):

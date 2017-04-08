@@ -21,6 +21,8 @@ urlpatterns = patterns('',
                            name='professor_addproject'),
                        url(r'^requests/$', views.admin_notifications,
                            name='admin_notifications'),
+                       url(r'professors/$', views.student_professors,
+                           name='student_professors'),
 
                        # modals
                        url(r'^filter/$', views.filter, name='filter'),
@@ -63,10 +65,5 @@ urlpatterns = patterns('',
                            views.docfileview, name='docfileview'),
 
                        url(r'search/results/$', views.search, name='search'),
-                       url(r'professors/$', views.professors_home,
-                           name='professors_home'),
                        url(r'^feedback/$', views.feedback, name='feedback'),
-
-
-
                        )

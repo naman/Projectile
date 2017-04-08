@@ -22,8 +22,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
-from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline
-from projectile.models import Project, Student
+from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, user_add_group
+from projectile.models import Project, Student, Professor
 
 
 def student_professor(request):
@@ -57,7 +57,10 @@ def home(request):
     if request.user.is_authenticated():
         context = {'user': request.user,
                    'projects': Project.objects.all().order_by('-deadline')}
+
         if is_member(request.user, 'admin'):
+            user_add_group(request.user, 'admin')
+
             return render(request, 'projectile/admin_home.html', context)
         else:
             studentgroup = Group.objects.get(name='student')
@@ -141,12 +144,6 @@ def admineditstudent(request, studentid):
                         my_student.user.username.split('@')[0] + ".pdf"
                     usr.transcript.name = my_student.course_enrolled + '_' + \
                         my_student.user.username.split('@')[0] + ".pdf"
-                    if "@iiitd.ac.in" in request.user.username:
-                        usr.email = Student.objects.get(
-                            pk=studentid).user.username
-                    else:
-                        usr.email = Student.objects.get(
-                            pk=studentid).user.username + "@iiitd.ac.in"
                 usr.save()
                 form.save_m2m()
                 messages.success(request, 'Your form was saved')
@@ -178,10 +175,6 @@ def profile(request):
         if form.is_valid():
             usr = form.save(commit=False)
             usr.user = request.user
-            if "@iiitd.ac.in" in request.user.username:
-                usr.email = request.user.username
-            else:
-                usr.email = usr.email = request.user.username + "@iiitd.ac.in"
             if (request.FILES.__len__() == 0):
                 usr.resume = request.user.student.resume
             else:
@@ -201,6 +194,8 @@ def profile(request):
 
 
 def newuser(request):
+    print request.user.username
+    print request.user.email
     """New User Sign Up form."""
     studentgroup, created = Group.objects.get_or_create(
         name='student')  # Creating user group
@@ -213,7 +208,7 @@ def newuser(request):
             if form.is_valid():
                 usr = form.save(commit=False)
                 usr.user = request.user
-                usr.email = request.user.username + "@iiitd.ac.in"
+                usr.email = request.user.username
                 usr.name = request.user.first_name + " " + request.user.last_name
                 usr.resume.name = request.user.username.split('@')[0] + ".pdf"
                 usr.transcript.name = request.user.username.split('@')[
@@ -451,5 +446,6 @@ def search(request):
 
 
 @login_required()
-def professors_home(request):
-    return render(request, 'projectile/student_professors.html')
+def student_professors(request):
+    context = Professor.objects.all()
+    return render(request, 'projectile/student_professors.html', context)
