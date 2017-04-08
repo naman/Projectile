@@ -99,11 +99,19 @@ class AdminSelectedApplicantsForm(forms.ModelForm):
         return instance
 
 
+class ProfessorForm(forms.ModelForm):
+
+    class Meta:
+        model = Professor
+        exclude = ['user', 'projects_mentored', 'createdon']
+
+
 class StudentForm(forms.ModelForm):
 
     class Meta:
         model = Student
-        fields = ['cgpa', 'resume', 'transcript', 'backlogs', 'display_picture']
+        fields = ['cgpa', 'resume', 'transcript',
+                  'backlogs', 'display_picture']
 
     def clean_resume(self):
         cgpa = self.cleaned_data['cgpa']

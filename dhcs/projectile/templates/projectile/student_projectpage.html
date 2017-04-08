@@ -26,34 +26,33 @@
             <div style="margin-top: 30px;" class=" col-sm-2 col-md-2 col-lg-2">
                 {% if hasapplied %} {% if not deadlinepassed %}
                 <a href="/project/{{ project.pk }}/withdraw">
-                <button type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
+                    <button type="button" class="btn btn-small btn-danger"><b>WITHDRAW</b></button>
                 </a>
                 {% endif %} {% else %} {% if deadlinepassed %}
                 <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
-                <h3>{{reason}}</h3>
-                {% endfor %} {% else %}
+                <h3>{{reason}}</h3> {% endfor %} {% else %}
                 <button id="apply" type="button" class="btn btn-small btn-success"><b>APPLY</b></button>
                 {% endif %} {% endif %}
             </div>
             <script>
-                // $("#withdraw").on('click', function() {
-                //     $("#withdrawdata").load("{% url 'withdraw' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
-                //         if (statusTxt == "success")
-                //         // alert("External content loaded successfully!");
-                //             $("#withdrawmodal").modal('show');
-                //         if (statusTxt == "error")
-                //             alert("Error: " + xhr.status + ": " + xhr.statusText);
-                //     });
-                // })
-                $("#apply").on('click', function() {
-                    $("#applydata").load("{% url 'apply' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
-                        if (statusTxt == "success")
-                        // alert("External content loaded successfully!");
-                            $("#applymodal").modal('show');
-                        if (statusTxt == "error")
-                            alert("Error: " + xhr.status + ": " + xhr.statusText);
-                    });
-                })
+            // $("#withdraw").on('click', function() {
+            //     $("#withdrawdata").load("{% url 'withdraw' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
+            //         if (statusTxt == "success")
+            //         // alert("External content loaded successfully!");
+            //             $("#withdrawmodal").modal('show');
+            //         if (statusTxt == "error")
+            //             alert("Error: " + xhr.status + ": " + xhr.statusText);
+            //     });
+            // })
+            $("#apply").on('click', function() {
+                $("#applydata").load("{% url 'apply' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
+                    if (statusTxt == "success")
+                    // alert("External content loaded successfully!");
+                        $("#applymodal").modal('show');
+                    if (statusTxt == "error")
+                        alert("Error: " + xhr.status + ": " + xhr.statusText);
+                });
+            })
             </script>
         </div>
     </div>
@@ -67,22 +66,24 @@
                 <!-- <div class="container"> -->
                 <h3 style="font-weight: 500; letter-spacing: .025em;">About</h3>
                 <hr style="width: 100%; height: 2px; background-color:#005A6A;" />
-                <br/>
+                {{project.description}}
                 <h3 style="font-weight: 500; letter-spacing: .025em;">Eligibility Criteria</h3>
                 <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
-                <br/>
+                {{project.eligibility_criteria}}
                 <h3 style="font-weight: 500; letter-spacing: .025em;">Current Status</h3>
                 <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
-                <br/>
+                Progress till date: {{project.progress_till_date}}
+
                 <!-- </div> -->
             </div>
         </div>
         <div class=" col-sm-4 col-md-4 ocl-lg-4">
             <div style="padding: 35px;" class="well">
                 <h3 style="font-weight: 500; letter-spacing: .025em;">Professors(s)</h3>
+
                 <div style="padding-top:20px; padding-bottom: 20px;" class="row">
                     <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-                        <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                        <div class="circle-avatar" style="background-image:url(/files/display_picture/professor.png)"></div>
                     </div>
                     <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                         <p></p>
@@ -90,40 +91,29 @@
                         <p>Full Time Faculty</p>
                         <p>Privacy, Security and HCI</p>
                     </div>
+
                 </div>
                 <hr style="width: 100%;  height: 2px; background-color:#005A6A;" />
                 <h3 style="margin-top:40px; font-weight: 500; letter-spacing: .025em;">PHDs and Students</h3>
                 <div style="padding-top:20px; padding-bottom: 20px;" class="row">
+                    {% for student in project.applicants.all %}
                     <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
                         <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                            <div class="circle-avatar" style="background-image:url(/files/{{student.display_picture}})"></div>
                         </div>
                     </a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                        </div>
-                    </a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                        </div>
-                    </a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                        </div>
-                    </a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                        </div>
-                    </a>
-                    <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                        <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                            <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                        </div>
-                    </a>
+                    <script type="text/javascript">
+                        $("#profile").on('click', function() {
+                            $("#profiledata").load("{% url 'profile_modal' studid=student.pk %}", function(responseTxt, statusTxt, xhr) {
+                                if (statusTxt == "success")
+                                // alert("External content loaded successfully!");
+                                    $("#profilemodal").modal('show');
+                                if (statusTxt == "error")
+                                    alert("Error: " + xhr.status + ": " + xhr.statusText);
+                            });
+                        })
+                    </script>
+                    {% endfor %}
                 </div>
             </div>
         </div>

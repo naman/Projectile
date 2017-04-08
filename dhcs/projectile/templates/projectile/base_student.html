@@ -40,7 +40,7 @@
                         <a id="search" href="#" class="glyphicon glyphicon-search"></a>
                     </li>
                     <li class="selected"><a id="home" href="/">Projects</a></li>
-                    <li><a id="professors" href="/professors">Professors</a></li>
+                    <li><a id="professors" href="/professor/">Professors</a></li>
                     <li><a id="feedback" href="#">Feedback</a></li>
                     <!-- <li><a id="apply" href="#">Apply</a></li> -->
                     <li class="dropdown">
@@ -180,15 +180,7 @@
             });
         })
        
-        $("#profile").on('click', function() {
-            $("#profiledata").load("{% url 'profile' %}", function(responseTxt, statusTxt, xhr) {
-                if (statusTxt == "success")
-                // alert("External content loaded successfully!");
-                    $("#profilemodal").modal('show');
-                if (statusTxt == "error")
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
-            });
-        })
+
 
 
     }

@@ -15,15 +15,16 @@ handler404 = 'views.my_404_view'
 
 urlpatterns = patterns('',
                        # new pages
-                       url(r'^student_professor/$',
+                       url(r'^professor/(?P<profid>.*)/$',
                            views.student_professor, name='student_professor'),
-                       url(r'^add_project/$', views.professor_addproject,
-                           name='professor_addproject'),
                        url(r'^requests/$', views.admin_notifications,
                            name='admin_notifications'),
-                       url(r'professors/$', views.student_professors,
+                       url(r'^professor/$', views.student_professors,
                            name='student_professors'),
-
+                       url(r'^professor_profile/$', views.professor_profile,
+                           name='professor_profile'),
+                       url(r'^profile_modal/(?P<studid>\d+)/$', views.profile_modal,
+                           name='profile_modal'),
                        # modals
                        url(r'^filter/$', views.filter, name='filter'),
                        url(r'^apply/(?P<projectid>\d+)/$',

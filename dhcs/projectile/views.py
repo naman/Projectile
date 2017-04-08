@@ -26,14 +26,18 @@ from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, 
 from projectile.models import Project, Student, Professor
 
 
-def student_professor(request):
-    return render(request, "projectile/student_professor.html")
+@login_required()
+def student_professor(request, profid):
+    prof = Professor.objects.get(pk=profid)
+    usr = prof.user
+    stud = Student.objects.get(user=usr)
+    ongoing_projects = stud.projectapplications.all()
+    prof.projects_mentored = ongoing_projects
+    context = {'professor': prof}
+    return render(request, "projectile/student_professor.html", context)
 
 
-def professor_addproject(request):
-    return render(request, "projectile/professor_addproject.html")
-
-
+@login_required()
 def admin_notifications(request):
     return render(request, "projectile/admin_notification.html")
 
@@ -52,6 +56,7 @@ def not_found(request):
     return response
 
 
+@login_required()
 def home(request):
     """Landing home page after login of student or admin."""
     if request.user.is_authenticated():
@@ -165,6 +170,28 @@ def admineditstudent(request, studentid):
 
 
 @login_required()
+def professor_profile(request):
+    """Allows editing student profile by themselves."""
+    if request.method == 'POST':
+        form = forms.ProfessorForm(
+            request.POST, request.FILES, instance=request.user.professor)
+        if form.is_valid():
+            usr = form.save(commit=False)
+            usr.user = request.user
+            usr.save()
+            messages.success(request, 'Your details were saved.')
+            return HttpResponseRedirect('/')
+        else:
+            context = {'form': form}
+            return render(request, 'projectile/admin_profile.html', context)
+    elif request.method == 'GET':
+        studentform = forms.ProfessorForm(instance=request.user.professor)
+        context = {'user': request.user,
+                   'form': studentform, 'layout': 'horizontal'}
+        return render(request, 'projectile/admin_profile.html', context)
+
+
+@login_required()
 def profile(request):
     """Allows editing student profile by themselves."""
     studentgroup = Group.objects.get(name='student')
@@ -186,12 +213,12 @@ def profile(request):
             return HttpResponseRedirect('/')
         else:
             context = {'form': form, 'student': request.user.student}
-            return render(request, 'projectile/student_profile_modal.html', context)
+            return render(request, 'projectile/student_profile.html', context)
     elif request.method == 'GET':
         studentform = forms.StudentForm(instance=request.user.student)
         context = {'user': request.user, 'form': studentform, 'layout': 'horizontal',
                    'student': request.user.student}
-        return render(request, 'projectile/student_profile_modal.html', context)
+        return render(request, 'projectile/student_profile.html', context)
 
 
 def newadmin(request):
@@ -200,7 +227,7 @@ def newadmin(request):
         name='admin')  # Creating user group
     if request.user.is_authenticated():
         if request.method == 'POST':
-            form = forms.NewProfessorForm(request.POST)
+            form = forms.NewProfessorForm(request.POST, request.FILES)
             if form.is_valid():
                 usr = form.save(commit=False)
                 usr.user = request.user
@@ -499,6 +526,20 @@ def search(request):
 
 
 @login_required()
+def profile_modal(request, studid):
+    context = {'student': Student.objects.get(pk=studid)}
+    return render(request, 'projectile/student_profile_modal.html', context)
+
+
+@login_required()
 def student_professors(request):
-    context = {"all_professors": Professor.objects.all()}
+    a = []
+    for person in Professor.objects.all():
+        try:
+            print person.user.student
+            a.append(person)
+        except Exception:
+            pass
+
+    context = {"all_professors": a}
     return render(request, 'projectile/student_professors.html', context)
