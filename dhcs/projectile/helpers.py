@@ -34,10 +34,6 @@ def is_eligible(candidate, project):
         eligibility['reasons'].append(
             "Your CGPA is below the requirement.")
 
-    if (candidate.backlogs > project.max_blacklogs):
-        eligibility['value'] = False
-        eligibility['reasons'].append("You have too many backlogs.")
-
     if (project.status == 'C' or project.status == 'A'):
         eligibility['value'] = False
         eligibility['reasons'].append("This Project cannot be applied to.")
