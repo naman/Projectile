@@ -59,8 +59,11 @@ def not_found(request):
 def home(request):
     """Landing home page after login of student or admin."""
     if request.user.is_authenticated():
+        all_projects = Project.objects.all().order_by('-deadline')
+        my_projects = request.user.student.projectapplications.all().order_by('-deadline')
         context = {'user': request.user,
-                   'projects': Project.objects.all().order_by('-deadline')}
+                   'all_projects': all_projects,
+                   'my_projects': my_projects}
 
         if is_member(request.user, 'admin'):
             if not contains_group(request.user, 'admin'):

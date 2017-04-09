@@ -11,7 +11,7 @@
             <li>
                 <a href="/">Home</a>
             </li>
-            <li class="active">Project Title</li>
+            <li class="active">{{ project.name }}</li>
         </ol>
         <div style="margin-top: -20px;" class="row">
             <div class=" col-sm-10 col-md-10 col-lg-10">
@@ -33,6 +33,7 @@
                 <h3>{{reason}}</h3> {% endfor %} {% else %}
                 <button id="apply" type="button" class="btn btn-small btn-success"><b>APPLY</b></button>
                 {% endif %} {% endif %}
+                TODO: There should be no button if status is 'A' or 'C'.
             </div>
             <script>
             // $("#withdraw").on('click', function() {
