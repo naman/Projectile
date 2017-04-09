@@ -28,6 +28,7 @@ from projectile.models import Project, Student, Professor
 
 @login_required()
 def student_professor(request, profid):
+    # wrong
     prof = Professor.objects.get(pk=profid)
     usr = prof.user
     stud = Student.objects.get(user=usr)
@@ -60,7 +61,15 @@ def home(request):
     """Landing home page after login of student or admin."""
     if request.user.is_authenticated():
         all_projects = Project.objects.all().order_by('-deadline')
-        my_projects = request.user.student.projectapplications.all().order_by('-deadline')
+        my_projects = []
+        try:
+            my_projects = request.user.student.projectapplications.all().order_by('-deadline')
+        except Exception:
+            prof = Professor.objects.get(user=request.user)
+            # stud = Student.objects.get(user=request.user)
+            # prof.projects_mentored = stud.projectapplications.all()
+            my_projects = prof.projects_mentored.all().order_by('-deadline')
+
         context = {'user': request.user,
                    'all_projects': all_projects,
                    'my_projects': my_projects}
