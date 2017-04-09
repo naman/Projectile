@@ -59,14 +59,14 @@ dhcs/static
 .idea
 
 #CVs
-*.pdf
+#*.pdf
 
 #Database/Index Files
 dhcs/projectile/migrations
 dhcs/dhcs/whoosh_index
 # dhcs/projectile.db
-*.jpeg
-*.png
-*.jpg
-*.doc
-*.docx
+#*.jpeg
+#*.png
+#*.jpg
+#*.doc
+#*.docx
