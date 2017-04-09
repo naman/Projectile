@@ -16,7 +16,7 @@
                         <a href=""><img src="files/{{ project.image_file }}" class="img-responsive" alt="Image"></a>
                         <div class="panel-body" id="collapseExample{{ project.pk }}">
                             <a style="text-decoration: none;" href="/project/{{project.pk}}/"><h4>{{ project.name }} </h4></a>
-                            <p>{{ project.project_type }}</p>
+                            <p>{{ project.get_project_type_display }}</p>
                             <p>{{ project.interest_areas }}</p>
                             <p>Posted on: {{ project.createdon}}</p>
                             <!-- <p>Deadline: {{ project.deadline}}</p> -->
