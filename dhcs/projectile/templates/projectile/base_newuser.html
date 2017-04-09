@@ -1,19 +1,19 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
 
 <head>
-
-    <head>
-        {% load humanize %} {% load staticfiles %}
-        <title>Projectile</title>
-        <script src="{% static "js/jquery-2.1.1.min.js" %}"></script>
-        {% block pagelibraries %}{% endblock %}
-        <link rel="stylesheet" href="{% static "css/showup.css" %}">
-        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-        <link href="{% static "css/ripples.min.css" %}" rel="stylesheet">
-        <link href="{% static "css/material-wfont.min.css" %}" rel="stylesheet">
-        <!--        <script src="{% static "js/jquery-2.1.1.min.js" %}"></script>-->
-    </head>
+    <title>Projectile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    {% block pagelibraries %}{% endblock %}
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="{% static "css/material-wfont.min.css" %}" rel="stylesheet">
+    <link href="{% static "css/ripples.min.css" %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static "css/logo.css" %}">
+    <link rel="stylesheet" href="{% static "css/showup.css" %}">
+    <link rel="stylesheet" href="{% static "css/circle-avatar.css" %}">
+</head>
 
     <body>
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -60,7 +60,7 @@
                 <p>
                     <ul class="nav nav-pills nav-justified">
                         <li><a href="/">Projectile, 2017</a></li>
-                        <li><a href="http://byld.iiitd.edu.in" target="_blank">Byld</a></li>
+                        <li><a href="#" target="_blank">Team Rocket</a></li>
                         <li><a href="http://www.iiitd.ac.in" target="_blank">© IIIT Delhi</a></li>
                     </ul>
             </div>
