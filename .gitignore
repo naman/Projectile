@@ -64,7 +64,7 @@ dhcs/static
 #Database/Index Files
 dhcs/projectile/migrations
 dhcs/dhcs/whoosh_index
-dhcs/projectile.db
+# dhcs/projectile.db
 *.jpeg
 *.png
 *.jpg
