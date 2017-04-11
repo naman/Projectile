@@ -28,12 +28,7 @@ from projectile.models import Project, Student, Professor
 
 @login_required()
 def student_professor(request, profid):
-    # wrong
     prof = Professor.objects.get(pk=profid)
-    usr = prof.user
-    stud = Student.objects.get(user=usr)
-    ongoing_projects = stud.projectapplications.all()
-    prof.projects_mentored = ongoing_projects
     context = {'professor': prof}
     return render(request, "projectile/student_professor.html", context)
 
@@ -66,8 +61,6 @@ def home(request):
             my_projects = request.user.student.projectapplications.all().order_by('-deadline')
         except Exception:
             prof = Professor.objects.get(user=request.user)
-            # stud = Student.objects.get(user=request.user)
-            # prof.projects_mentored = stud.projectapplications.all()
             my_projects = prof.projects_mentored.all().order_by('-deadline')
 
         context = {'user': request.user,
@@ -308,9 +301,12 @@ def openproject(request):
         if request.method == 'POST':
             form = forms.ProjectForm(request.POST, request.FILES)
             if form.is_valid():
-                tosaveproject = form.save(commit=False)
-                tosaveproject.createdon = timezone.now()
-                tosaveproject.save()
+                project = form.save(commit=False)
+                project.createdon = timezone.now()
+                project.save()
+
+                prof = Professor.objects.get(user=request.user)
+                prof.projects_mentored.add(project)
                 return HttpResponseRedirect('/')
             else:
                 context = {'form': form}
