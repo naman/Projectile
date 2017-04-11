@@ -59,7 +59,9 @@ dhcs/static
 .idea
 
 #CVs
-#*.pdf
+*.pdf
+*.doc
+*.docx
 
 #Database/Index Files
 dhcs/projectile/migrations
@@ -68,5 +70,3 @@ dhcs/dhcs/whoosh_index
 #*.jpeg
 #*.png
 #*.jpg
-#*.doc
-#*.docx
