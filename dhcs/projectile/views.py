@@ -115,22 +115,17 @@ def projectwithdraw(request, projectid):
 
 
 @login_required()
-def myapplications(request):
-    """Enumerate student's applications for a project."""
-    studentgroup = Group.objects.get(name='student')
-    if (not is_member(request.user, studentgroup)):
-        return HttpResponseRedirect('/newuser')
-    context = {'user': request.user,
-               'projects': request.user.student.projectapplications.all()}
-    return render(request, 'projectile/applications_student.html', context)
-
-
-@login_required()
 def projectpage(request, projectid):
     """Loads the page for a particular Project."""
     if is_admin(request.user):
-        context = {'user': request.user,
-                   'project': Project.objects.get(pk=projectid)}
+        p = Project.objects.get(pk=projectid)
+        count = 0
+        for student in Student.objects.all():
+            if is_eligible(student, p)['value']:
+                count = count + 1
+        context = {'eligiblestudentcount': count,
+                   'applicants': p.applicants.all(),
+                   'project': p}
         return render(request, 'projectile/admin_project.html', context)
     else:
         hasapplied = request.user.student.projectapplications.filter(
@@ -389,19 +384,6 @@ def projectedit(request, projectid):
                 instance=Project.objects.get(pk=projectid))
             c = {'form': form}
             return render(request, 'projectile/admin_editproject.html', c)
-
-
-@login_required()
-def projectapplicants(request, projectid):
-    """See the applicants for a particular Project."""
-    if is_admin(request.user):
-        count = 0
-        for student in Student.objects.all():
-            if is_eligible(student, Project.objects.get(pk=projectid))['value']:
-                count = count + 1
-        context = {'eligiblestudentcount': count, 'applicants': Project.objects.get(pk=projectid).applicants.all(),
-                   'project': Project.objects.get(pk=projectid)}
-        return render(request, 'projectile/admin_projectapplicants.html', context)
 
 
 @login_required()

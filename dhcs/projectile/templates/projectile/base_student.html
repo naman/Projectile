@@ -80,17 +80,7 @@
                 </ul>
         </div>
     </footer>
-    <div id="myappsmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                </div>
-                <div class="modal-body" id="myappsdata">
-                </div>
-            </div>
-        </div>
-    </div>
+
     <div id="feedbackmodal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -152,17 +142,6 @@
     </script>
     <script type="text/javascript">
     window.onload = function() {
-
-
-        $("#myjobs").on('click', function() {
-            $("#myappsdata").load("{% url 'myapplications' %}", function(responseTxt, statusTxt, xhr) {
-                if (statusTxt == "success")
-                // alert("External content loaded successfully!");
-                    $("#myappsmodal").modal("show");
-                if (statusTxt == "error")
-                    alert("Error: " + xhr.status + ": " + xhr.statusText);
-            });
-        })
         $("#feedback").on('click', function() {
             $("#feedbackdata").load("{% url 'feedback' %}", function(responseTxt, statusTxt, xhr) {
                 if (statusTxt == "success")

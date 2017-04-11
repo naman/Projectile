@@ -132,75 +132,49 @@
                             </div>
                         </div>
                         <div style="padding-left: 35px;padding-right: 35px;" class="well" id="aboutSection">
-                            <div class="row">
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="row">
-                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                            <img src="https://ph-avatars.imgix.net/303917/original?auto=format&auto=compress&codec=mozjpeg&cs=strip&w=140&h=140&fit=crop" class="img-responsive" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
+                            <div class="container">
+                                {% if applicants %}{% for applicant in applicants %}
+                                <div class="row">
+                                    <div class="col-xs-4 `col-sm-4 col-md-4 col-lg-4">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <img src="/files/{{applicant.display_picture}}" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                                <h4>{{applicant.name}}</h4>
+                                                <h5>{{applicant.rollno}}</h5>
+                                                <h5>{{applicant.course_enrolled}} {{applicant.batch_year}} ({{applicant.course_stream}})</h5>
+
+                                                <h5>{{applicant.email}}</h5>
+                                            </div>
                                         </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                            <h4>Srishti Sengupta</h4>
-                                            <h5>2013108</h5>
-                                            <h5>B.Tech 4th Year (CSE)</h5>
-                                            <h5>srishti13108@iiitd.ac.in</h5>
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <h6>View Statement of Purpose</h6>
+                                        <h6>View Queries</h6>
+                                        <h6>View Profile
+                                         Open student modal </h6>
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="row">
+                                            <div style="float: right; margin-left: 10px;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                <!-- <button type="button" class="btn btn-danger">Reject</button> -->
+                                                <button type="button" class="btn btn-primary">Reject (remove from the project)</button>
+                                            </div>
+                                            <div style="float: right; margin-left: 10px;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                <!-- <button type="button" class="btn btn-success">Approve</button> -->
+                                                <button type="button" class="btn btn-primary">Approve (send professor to /selectapplicants)</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <h4>KILLFIE</h4>
-                                    <h6>View Statement of Purpose</h6>
-                                    <h6>View Queries</h6>
-                                    <h6>View Profile</h6>
-                                </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="row">
-                                        <div style="float: right; margin-left: 10px;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                            <button type="button" class="btn btn-primary">Reject</button>
-                                        </div>
-                                        <div style="float: right; margin-left: 10px;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                            <button type="button" class="btn btn-primary">Approve</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                {% endfor %} {% endif %}
+                                <a class="btn btn-primary" href="/project/{{ project.pk }}/getresume">Download Resumes</a>
                             </div>
-                            <br/>
-                            <div class="row">
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="row">
-                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                            <img src="http://madtoes.iiitd.edu.in/assets/img/team/kartik.jpg" class="img-responsive" alt="Image" style="height: 100px; width: 170px; margin-top: 12px">
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                            <h4>Kartik Gupta</h4>
-                                            <h5>2013050</h5>
-                                            <h5>B.Tech 4th Year (CSE)</h5>
-                                            <h5>kartik13050@iiitd.ac.in</h5>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <h4>INFORMATION CAPSULE</h4>
-                                    <h6>View Statement of Purpose</h6>
-                                    <h6>View Queries</h6>
-                                    <h6>View Profile</h6>
-                                </div>
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <div class="row">
-                                        <div style="float: right; margin-left: 10px;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                            <button type="button" class="btn btn-primary">Reject</button>
-                                        </div>
-                                        <div style="float: right; margin-left: 10px;" class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                            <button type="button" class="btn btn-primary">Approve</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <br/>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-{% endblock %}
+    {% endblock %}
