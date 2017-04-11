@@ -60,8 +60,11 @@ def home(request):
         try:
             my_projects = request.user.student.projectapplications.all().order_by('-deadline')
         except Exception:
-            prof = Professor.objects.get(user=request.user)
-            my_projects = prof.projects_mentored.all().order_by('-deadline')
+            try:
+                prof = Professor.objects.get(user=request.user)
+                my_projects = prof.projects_mentored.all().order_by('-deadline')
+            except Exception:
+                pass
 
         context = {'user': request.user,
                    'all_projects': all_projects,
@@ -382,33 +385,6 @@ def projectedit(request, projectid):
             return render(request, 'projectile/admin_editproject.html', c)
 
 
-@login_required()
-def adminprojectselected(request, projectid):
-    """Select the final students fot the Project :D"""
-    if is_admin(request.user):
-        if request.method == 'POST':
-            form = forms.AdminSelectedApplicantsForm(
-                request.POST, instance=Project.objects.get(pk=projectid))
-            if form.is_valid():
-                tosaveproject = form.save(commit=False)
-                tosaveproject.save()
-                form.save()
-                form.save_m2m()
-                for candidate in Project.objects.get(pk=projectid).selectedcandidates.all():
-                    candidate.status = 'P'
-                    candidate.save()
-                return HttpResponseRedirect('/')
-            else:
-                context = {'form': form}
-                return render(request, 'projectile/admin_projectselections.html', context)
-        else:
-            form = forms.AdminSelectedApplicantsForm(
-                instance=Project.objects.get(pk=projectid))
-            context = {'selected': Project.objects.get(pk=projectid).selectedcandidates.all(), 'form': form,
-                       'project': Project.objects.get(pk=projectid)}
-            return render(request, 'projectile/admin_projectselections.html', context)
-
-
 def feedback(request):
     """FeedbackForm"""
     if (request.method == 'POST'):
@@ -445,21 +421,6 @@ def apply(request, projectid):
     # project_id = request.GET.get('project_id', '')
     context = {'project_id': projectid}
     return render(request, 'projectile/student_project_apply.html', context)
-
-
-def withdraw(request, projectid):
-    # project_id = request.GET.get('project_id', '')
-    context = {'projectid': projectid}
-    return render(request, 'projectile/student_project_withdraw.html', context)
-
-
-# @login_required()
-# def fileview(request, filename):
-#     """Protect the resume location, by adding headers, using nginx."""
-#     response = HttpResponse()
-#     response['Content-Type'] = 'application/png'
-#     response['X-Accel-Redirect'] = "/protected/%s" % filename
-#     return response
 
 
 @login_required()

@@ -152,7 +152,7 @@ class NewStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         exclude = ['user', 'email', 'projectapplications', 'status', 'name',
-                   'createdon']
+                   'createdon', 'working_on']
 
     def clean_rollno(self):
         rollno = self.cleaned_data['rollno']

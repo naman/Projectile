@@ -14,7 +14,12 @@ from projectile import views
 handler404 = 'views.my_404_view'
 
 urlpatterns = patterns('',
-                       # new pages
+                       # modals
+                       url(r'^filter/$', views.filter, name='filter'),
+                       url(r'^apply/(?P<projectid>\d+)/$',
+                           views.apply, name='apply'),
+                       url(r'^profile/$', views.profile, name='profile'),
+
                        url(r'^professor/(?P<profid>.*)/$',
                            views.student_professor, name='student_professor'),
                        url(r'^requests/$', views.admin_notifications,
@@ -25,15 +30,6 @@ urlpatterns = patterns('',
                            name='professor_profile'),
                        url(r'^profile_modal/(?P<studid>\d+)/$', views.profile_modal,
                            name='profile_modal'),
-                       # modals
-                       url(r'^filter/$', views.filter, name='filter'),
-                       url(r'^apply/(?P<projectid>\d+)/$',
-                           views.apply, name='apply'),
-                       url(r'^withdraw/(?P<projectid>\d+)/$',
-                           views.withdraw, name='withdraw'),
-                       url(r'^profile/$', views.profile, name='profile'),
-
-                       # old pages
                        url(r'^$', views.home, name='home'),
                        url(r'^logout/$', views.logout, name='logout'),
                        url(r'^needlogin/$', views.needlogin, name='needlogin'),
@@ -56,8 +52,6 @@ urlpatterns = patterns('',
                            views.projectpage, name='projectpage'),
                        url(r'^project/(?P<projectid>\d+)/getresume/$',
                            views.getresumes, name='projectgetresumes'),
-                       url(r'^project/(?P<projectid>\d+)/selections/$',
-                           views.adminprojectselected, name='adminprojectselected'),
 
                        url(r'files/resume/(.+)', views.fileview, name='fileview'),
                        url(r'files/projectfiles/(.+)',

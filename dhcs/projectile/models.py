@@ -27,6 +27,7 @@ class Project(models.Model):
 
     name = models.CharField("Title", max_length=200)
     description = models.CharField("Description", max_length=10000)
+    incentive = models.CharField("Incentive", max_length=10000)
     progress_till_date = models.CharField(
         "Progress till date", max_length=10000, blank=True)
 
@@ -132,6 +133,9 @@ class Student(models.Model):
 
     projectapplications = models.ManyToManyField(
         Project, related_name='applicants', null=True, blank=True)
+
+    working_on = models.ManyToManyField(
+        Project, related_name='selectedcandidates', null=True, blank=True)
 
     createdon = models.DateTimeField(
         "Student Creation Date", default=datetime.now)
