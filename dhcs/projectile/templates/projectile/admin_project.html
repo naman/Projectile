@@ -144,7 +144,6 @@
                                                 <h4>{{applicant.name}}</h4>
                                                 <h5>{{applicant.rollno}}</h5>
                                                 <h5>{{applicant.course_enrolled}} {{applicant.batch_year}} ({{applicant.course_stream}})</h5>
-
                                                 <h5>{{applicant.email}}</h5>
                                             </div>
                                         </div>
@@ -169,7 +168,7 @@
                                     </div>
                                 </div>
                                 {% endfor %} {% endif %}
-                                <a class="btn btn-primary" href="/project/{{ project.pk }}/getresume">Download Resumes</a>
+                                <a class="btn btn-primary" href="/project/{{ project.pk }}/getresume/?req=applied">Download Resumes</a>
                             </div>
                         </div>
                     </div>

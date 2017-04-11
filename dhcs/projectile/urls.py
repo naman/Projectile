@@ -54,22 +54,14 @@ urlpatterns = patterns('',
                            views.projectdelete, name='projectdelete'),
                        url(r'^project/(?P<projectid>\d+)/$',
                            views.projectpage, name='projectpage'),
-
                        url(r'^project/(?P<projectid>\d+)/getresume/$',
                            views.getresumes, name='projectgetresumes'),
-                       # url(r'^project/(?P<projectid>\d+)/getcsv/$',
-                       # views.getprojectcsv, name='projectgetcsvs'),
                        url(r'^project/(?P<projectid>\d+)/selections/$',
                            views.adminprojectselected, name='adminprojectselected'),
 
                        url(r'files/resume/(.+)', views.fileview, name='fileview'),
                        url(r'files/projectfiles/(.+)',
                            views.docfileview, name='docfileview'),
-                       # url(r'files/display_picture/(.+)',
-                       #     views.display_picture, name='display_picture'),
-                       # url(r'files/image_file/(.+)',
-                       #     views.image_file, name='image_file'),
-
                        url(r'search/results/$', views.search, name='search'),
                        url(r'^feedback/$', views.feedback, name='feedback'),
                        )
