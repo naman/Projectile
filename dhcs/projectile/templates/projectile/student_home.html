@@ -27,8 +27,9 @@
                             </a>
                         </div>
                     </div>
-                </div>{% endfor %}
+                </div>
             </div>
+            {% endfor %}
         </div>
     </div>
     <br/>
@@ -53,7 +54,7 @@
                             <h4>{{ project.get_project_type_display }}</h4> {% if project.status == 'O' %}
                             <div id="apply{{project.pk}}">
                                 <a href="/project/{{ project.pk }}/apply">
-                                    <button class="btn btn-success btn-fab btn-raised mdi-action-add" style="margin-top: -4px"></button>
+                                    <button class="btn btn-success btn-fab btn-raised mdi-content-add" style="margin-top: -4px"></button>
                                 </a>
                             </div>
                             {% elif project.status == 'A' %}
@@ -62,7 +63,7 @@
                             </a>
                             {% elif project.status == 'C' %}
                             <a href="/project/{{ project.pk }}/">
-                                <button class="btn btn-danger btn-fab btn-raised mdi-action-info" style="margin-top: -4px"></button>
+                                <button class="btn btn-warning btn-fab btn-raised mdi-action-info" style="margin-top: -4px"></button>
                             </a>
                             {% endif %}
                         </div>
