@@ -52,8 +52,8 @@
                             </a>
                             <h4>{{ project.get_project_type_display }}</h4> {% if project.status == 'O' %}
                             <div id="apply{{project.pk}}">
-                                <a href="/project/{{ project.pk }}/withdraw">
-                                    <button class="btn btn-success btn-fab btn-raised mdi-action-done" style="margin-top: -4px"></button>
+                                <a href="/project/{{ project.pk }}/apply">
+                                    <button class="btn btn-success btn-fab btn-raised mdi-action-add" style="margin-top: -4px"></button>
                                 </a>
                             </div>
                             {% elif project.status == 'A' %}
