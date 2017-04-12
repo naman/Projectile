@@ -4,20 +4,31 @@
         <br/>
         <br/>
         <h1>{{ project.name }}</h1>
-        <h4>{{ project.description }}</h4> {% if hasapplied %} {% if not deadlinepassed %}
-        <a href="/project/{{ project.pk }}/withdraw">
-            <button type="button" class="btn btn-danger">Withdraw</button>
-        </a>
-        {% endif %} {% else %} {% if deadlinepassed %}
-        <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
-        <ul>
-            <li><b>{{reason}}</b></li>
-        </ul>
-        {% endfor %} {% else %}
-        <a href="/project/{{ project.pk }}/apply">
-            <button type="button" class="btn btn-success">Apply</button>
-        </a>
-        {% endif %} {% endif %}
+        <h4>{{ project.description }}</h4>
+
+        {% if display %}
+            {% if hasapplied %}
+                {% if not deadlinepassed %}
+                <a href="/project/{{ project.pk }}/withdraw">
+                    <button type="button" class="btn btn-danger">Withdraw</button>
+                </a>
+                {% endif %}
+            {% else %}
+                {% if deadlinepassed %}
+                    <h3>Deadline has passed!</h3>
+                {% elif not iseligible %}
+                    {% for reason in iseligiblereasons %}
+                    <ul>
+                        <li><b>{{reason}}</b></li>
+                    </ul>
+                    {% endfor %}
+                {% else %}
+                <a href="/project/{{ project.pk }}/apply">
+                    <button type="button" class="btn btn-success">Apply</button>
+                </a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 <div class="container">

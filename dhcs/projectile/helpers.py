@@ -72,7 +72,6 @@ def checkdeadline(project):
 def is_admin(user):
     """Checks if the user object is a member of the admin group or not."""
     x = user.groups.filter(name='admin')
-    print x
     return x
 
 

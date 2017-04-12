@@ -57,7 +57,7 @@ body {
         <div style="padding: 0px;" class="panel-heading">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab1primary" data-toggle="tab">About</a></li>
-                <li><a href="#tab2primary" data-toggle="tab">Requests ({{ applicants|length }})</a></li>
+                <li><a href="#tab2primary" data-toggle="tab">Requests ({{ applications|length }})</a></li>
             </ul>
         </div>
         <div style="padding-bottom: 0px; background-color: rgb(235,235,235); box-shadow: 0;" class="panel-body">
@@ -120,7 +120,7 @@ body {
                                 </ul>
                             </div>
                         </div> -->
-                        {% if not applicants %}
+                        {% if not applications %}
                         <div class="well" id="requests">
                             <div class="container">
                                 <div class="row text-center">
@@ -128,46 +128,37 @@ body {
                                 </div>
                             </div>
                         </div>
-                        {% endif %} {% if applicants %}
+                        {% endif %} {% if applications %}
                         <div class="row">
                             <a href="/project/{{ project.pk }}/getresume/?req=applied">
                                 <button style="color: white;" class="btn btn-primary pull-right">Download All Resumes</button>
                             </a>
                         </div>
-                        {% for applicant in applicants %}
+                        {% for app in applications %}
                         <div class="well" id="requests">
                             <div class="container">
                                 <div class="row">
                                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                <img src="/files/{{applicant.display_picture}}" alt="Image" style="height: 100px; width: 170px;margin-top: 12px">
+                                                <img src="/files/{{app.applicants.first.display_picture}}" alt="Image" style="height: 140px; width: 140px;padding: 10px">
                                             </div>
                                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                                <h4>{{applicant.name}}</h4>
-                                                <h5>{{applicant.rollno}}</h5>
-                                                <h5>{{applicant.course_enrolled}} {{applicant.batch_year}} ({{applicant.course_stream}})</h5>
-                                                <h5>{{applicant.email}}</h5>
+                                                <h4>{{app.applicants.first.name}}</h4>
+                                                <h5>{{app.applicants.first.rollno}}</h5>
+                                                <h5>{{app.applicants.first.course_enrolled}} {{app.applicants.first.batch_year}} ({{app.applicants.first.course_stream}})</h5>
+                                                <h5>{{app.applicants.first.email}}</h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    here
-                                        {% for a in applicant.applications.all %}
-                                            <h6>View Queries {{ a.queries }} </h6>
-                                        <h6>View Statement of Purpose {{a.sop}}</h6>
-                                        {% endfor %}
-
-
-                                        <h6>View Profile
-                                         Open student modal </h6>
+                                        <h6>Queries {{ app.queries }} </h6>
+                                        <h6>Statement of Purpose: {{app.sop}}</h6>
                                     </div>
                                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                        <div>
-                                            <div class="btn-group">
-                                                <a class="btn btn-danger" href="reject/{{applicant.pk}}/" role="button">Reject</a>
-                                                <a class="btn btn-primary" href="approve/{{applicant.pk}}/" role="button">Approve</a>
-                                            </div>
+                                        <div class="btn-group" style="margin-top:35px">
+                                            <a class="btn btn-danger" href="reject/{{app.pk}}/" role="button">Reject</a>
+                                            <a class="btn btn-primary" href="approve/{{app.pk}}/" role="button">Approve</a>
                                         </div>
                                     </div>
                                 </div>

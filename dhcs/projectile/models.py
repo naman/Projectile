@@ -102,6 +102,10 @@ class Application(models.Model):
         "Queries ", default="None",
         max_length=1000)
 
+    projects = models.ManyToManyField(
+        Project, related_name='project_applications', null=True, blank=True)
+    display = models.BooleanField(default=True)
+
 
 class Student(models.Model):
     user = models.OneToOneField(User)
@@ -144,11 +148,8 @@ class Student(models.Model):
         "transcript", upload_to='transcript', default='',
         storage=OverwriteStorage())
 
-    projectapplications = models.ManyToManyField(
-        Project, related_name='applicants', null=True, blank=True)
-
     applications = models.ManyToManyField(
-        Application, related_name='appliedstudents', null=True, blank=True)
+        Application, related_name='applicants', null=True, blank=True)
 
     working_on = models.ManyToManyField(
         Project, related_name='selectedcandidates', null=True, blank=True)

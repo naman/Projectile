@@ -103,7 +103,7 @@ class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
-        exclude = []
+        exclude = ['projects']
 
 
 class ProfessorForm(forms.ModelForm):

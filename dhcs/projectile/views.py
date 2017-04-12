@@ -57,8 +57,14 @@ def home(request):
     if request.user.is_authenticated():
         all_projects = Project.objects.all().order_by('-deadline')
         my_projects = []
+        working_projects = []
+
         try:
-            my_projects = request.user.student.projectapplications.all().order_by('-deadline')
+            applications = request.user.student.applications.filter(
+                display=True)
+            my_projects = [x.projects.first() for x in applications]
+            working_projects = request.user.student.working_on.all()
+            print working_projects
         except Exception:
             try:
                 prof = Professor.objects.get(user=request.user)
@@ -68,7 +74,8 @@ def home(request):
 
         context = {'user': request.user,
                    'all_projects': all_projects,
-                   'my_projects': my_projects}
+                   'my_projects': my_projects,
+                   'working_projects': working_projects}
 
         if is_member(request.user, 'admin'):
             if not contains_group(request.user, 'admin'):
@@ -84,15 +91,16 @@ def home(request):
 
 
 @login_required()
-def projectapply(request, projectid):
+def projectapply(request, projectid, appid):
     """Apply for a project, if deadline permits."""
     p = Project.objects.get(pk=projectid)
     if (timezone.now() < p.deadline):
         if (is_eligible(request.user.student, p)['value']):
-            request.user.student.projectapplications.add(p)
+            a = Application.objects.get(pk=appid)
+            request.user.student.applications.add(a)
+            a.projects.add(p)
 
             profs = Professor.objects.filter(projects_mentored=p)
-            print profs
             for prof in profs:
                 send('Application received for ' + p.name,
 
@@ -104,6 +112,7 @@ def projectapply(request, projectid):
                      settings.EMAIL_HOST,
                      [prof.email],
                      )
+
             messages.success(request, 'Thanks for applying!')
             return HttpResponseRedirect('/')
         else:
@@ -115,9 +124,10 @@ def projectapply(request, projectid):
 @login_required()
 def projectwithdraw(request, projectid):
     """Withdraw from the project, if deadline permits."""
-    if (timezone.now() < Project.objects.get(pk=projectid).deadline):
-        request.user.student.projectapplications.remove(
-            Project.objects.get(pk=projectid))
+    p = Project.objects.get(pk=projectid)
+    if (timezone.now() < p.deadline):
+        request.user.student.applications.projects.remove(p)
+        request.user.student.applications.remove(p)
         messages.success(request, 'You have withdrawn!')
         return HttpResponseRedirect('/')
     else:
@@ -133,20 +143,32 @@ def projectpage(request, projectid):
         for student in Student.objects.all():
             if is_eligible(student, p)['value']:
                 count = count + 1
+
+        applications = p.project_applications.filter(display=True)
         context = {'eligiblestudentcount': count,
-                   'applicants': p.applicants.all(),
+                   'applications': applications,
                    'working_students': p.selectedcandidates.all(),
                    'project': p}
         return render(request, 'projectile/admin_project.html', context)
     else:
-        hasapplied = request.user.student.projectapplications.filter(
-            pk__contains=projectid).count()
-        iseligible = is_eligible(request.user.student,
-                                 Project.objects.get(pk=projectid))
-        deadlinepassed = checkdeadline(Project.objects.get(pk=projectid))
-        context = {'user': request.user, 'project': Project.objects.get(pk=projectid), 'deadlinepassed': deadlinepassed,
+        p = Project.objects.get(pk=projectid)
+        hasapplied = False
+        applications = request.user.student.applications.filter(
+            display=True)
+
+        for x in applications:
+            if x.projects.first().pk == projectid:
+                hasapplied = True
+                break
+        display = True
+        if p in request.user.student.working_on.all():
+            display = False
+        iseligible = is_eligible(request.user.student, p)
+        deadlinepassed = checkdeadline(p)
+        context = {'user': request.user, 'project': p, 'deadlinepassed': deadlinepassed,
                    'hasapplied': hasapplied, 'iseligible': iseligible['value'],
-                   'iseligiblereasons': iseligible['reasons']}
+                   'iseligiblereasons': iseligible['reasons'], 'display': display,
+                   'working_students': p.selectedcandidates.all()}
         return render(request, 'projectile/student_projectpage.html', context)
 
 
@@ -342,16 +364,13 @@ def getresumes(request, projectid):
     """Return resumes for students according to the incoming request."""
     if is_admin(request.user):
         filenames = []
+        p = Project.objects.get(pk=projectid)
         if (request.GET.get('req') == 'selected'):
-            checklist = Project.objects.get(
-                pk=projectid).selectedcandidates.all()
-            zip_subdir = Project.objects.get(
-                pk=projectid).name + "_Selected_Resumes"
+            checklist = p.selectedcandidates.all()
+            zip_subdir = p.name + "_Selected_Resumes"
         else:
-            checklist = Project.objects.get(
-                pk=projectid).applicants.all()  # AllApplicants
-            zip_subdir = Project.objects.get(
-                pk=projectid).name + "_Applicant_Resumes"
+            checklist = p.project_applications.applicants.all()  # AllApplicants
+            zip_subdir = p.name + "_Applicant_Resumes"
         for student in checklist:
             filenames.append(student.resume.path)
         zip_filename = "%s.zip" % zip_subdir
@@ -375,13 +394,15 @@ def getresumes(request, projectid):
 def projectapprove(request, projectid, applicantid):
     """Delete a Project from admin side."""
     if is_admin(request.user):
-        s = Student.objects.get(pk=applicantid)
         p = Project.objects.get(pk=projectid)
+        a = Application.objects.get(pk=applicantid)
+        s = a.applicants.first()
         s.working_on.add(p)
         p.selectedcandidates.add(s)
-        s.projectapplications.remove(p)
-        prof = Professor.objects.get(user=request.user)
+        a.display = False
+        a.save()
 
+        prof = Professor.objects.get(user=request.user)
         send(
             'Congratulations! :D',
             'Your request for the project ' + p.name +
@@ -399,11 +420,15 @@ def projectapprove(request, projectid, applicantid):
 def projectreject(request, projectid, applicantid):
     """Delete a Project from admin side."""
     if is_admin(request.user):
-        s = Student.objects.get(pk=applicantid)
         p = Project.objects.get(pk=projectid)
-        s.projectapplications.remove(p)
-        prof = Professor.objects.get(user=request.user)
+        a = Application.objects.get(pk=applicantid)
+        s = a.applicants.first()
+        s.working_on.add(p)
 
+        a.display = False
+
+        a.save()
+        prof = Professor.objects.get(user=request.user)
         send(
             'Sad news! :(',
             'Your request for the project ' + p.name +
@@ -483,8 +508,8 @@ def apply_modal(request, projectid):
     if (request.method == 'POST'):
         form = forms.ApplicationForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect('/project/' + projectid + '/apply/')
+            a = form.save()
+            return HttpResponseRedirect('/project/' + projectid + '/apply/' + str(a.pk))
         else:
             context = {'form': form, 'project': p}
             return render(request, 'projectile/student_project_apply.html', context)
@@ -518,15 +543,6 @@ def display_picture(request, filename):
     response = HttpResponse()
     # response['Content-Type'] = 'application/pdf'
     response['X-Accel-Redirect'] = "/display_picture/%s" % filename
-    return response
-
-
-@login_required()
-def image_file(request, filename):
-    """Protect the project file location, by adding headers, using nginx."""
-    response = HttpResponse()
-    # response['Content-Type'] = 'application/pdf'
-    response['X-Accel-Redirect'] = "/image_file/%s" % filename
     return response
 
 
