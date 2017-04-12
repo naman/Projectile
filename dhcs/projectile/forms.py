@@ -15,7 +15,7 @@ from django.db.models.fields.files import FieldFile
 from django.forms import RadioSelect
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
-from projectile.models import Project, Student, Feedback, Professor
+from projectile.models import Project, Student, Feedback, Professor, Application
 
 EXTENSIONS = ['pdf']
 MAX_UPLOAD_SIZE = "5242880"
@@ -99,6 +99,13 @@ class AdminSelectedApplicantsForm(forms.ModelForm):
         return instance
 
 
+class ApplicationForm(forms.ModelForm):
+
+    class Meta:
+        model = Application
+        exclude = []
+
+
 class ProfessorForm(forms.ModelForm):
 
     class Meta:
@@ -152,7 +159,7 @@ class NewStudentForm(forms.ModelForm):
     class Meta:
         model = Student
         exclude = ['user', 'email', 'projectapplications', 'status', 'name',
-                   'createdon', 'working_on']
+                   'createdon', 'working_on', 'applications']
 
     def clean_rollno(self):
         rollno = self.cleaned_data['rollno']

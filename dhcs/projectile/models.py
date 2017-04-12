@@ -26,13 +26,18 @@ class Project(models.Model):
             return False
 
     name = models.CharField("Title", max_length=200)
-    description = models.CharField("Description", max_length=10000)
-    incentive = models.CharField("Incentive", max_length=10000)
+    description = models.CharField(
+        "Description", max_length=10000, default="None")
+    incentive = models.CharField("Incentive", max_length=10000, default="None")
     progress_till_date = models.CharField(
-        "Progress till date", max_length=10000, blank=True)
+        "Progress till date", max_length=10000, default="None", blank=True)
 
     eligibility_criteria = models.CharField(
-        "Eligibility Criteria", max_length=10000, blank=True)
+        "Eligibility Criteria", max_length=10000, default="None", blank=True)
+
+    interest_areas = models.CharField(
+        "Interest Areas (comma separated)", default="None",
+        max_length=10000, blank=True)
 
     PROJECT_TYPES = (
         ('R', 'Research'),
@@ -48,9 +53,6 @@ class Project(models.Model):
     project_type = models.CharField(
         "Project Type", max_length=3, choices=PROJECT_TYPES, default='R')
 
-    interest_areas = models.CharField(
-        "Interest Areas (comma separated)", default="None",
-        max_length=10000, blank=True)
     image_file = models.ImageField("Picture", upload_to='image_file',
                                    default='image_file/project.jpeg',
                                    storage=OverwriteStorage(),
@@ -88,6 +90,17 @@ class Project(models.Model):
 
     def __str__(self):  # __unicode__ on Python 2
         return self.name
+
+
+class Application(models.Model):
+    """docstring for Application"""
+    sop = models.TextField(
+        "Statement of Purpose", default="None",
+        max_length=10000)
+
+    queries = models.TextField(
+        "Queries ", default="None",
+        max_length=1000)
 
 
 class Student(models.Model):
@@ -133,6 +146,9 @@ class Student(models.Model):
 
     projectapplications = models.ManyToManyField(
         Project, related_name='applicants', null=True, blank=True)
+
+    applications = models.ManyToManyField(
+        Application, related_name='appliedstudents', null=True, blank=True)
 
     working_on = models.ManyToManyField(
         Project, related_name='selectedcandidates', null=True, blank=True)

@@ -152,8 +152,13 @@ body {
                                         </div>
                                     </div>
                                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                        <h6>View Statement of Purpose</h6>
-                                        <h6>View Queries</h6>
+                                    here
+                                        {% for a in applicant.applications.all %}
+                                            <h6>View Queries {{ a.queries }} </h6>
+                                        <h6>View Statement of Purpose {{a.sop}}</h6>
+                                        {% endfor %}
+
+
                                         <h6>View Profile
                                          Open student modal </h6>
                                     </div>

@@ -16,8 +16,8 @@ handler404 = 'views.my_404_view'
 urlpatterns = patterns('',
                        # modals
                        url(r'^filter/$', views.filter, name='filter'),
-                       url(r'^apply/(?P<projectid>\d+)/$',
-                           views.apply, name='apply'),
+                       url(r'^apply_modal/(?P<projectid>\d+)/$',
+                           views.apply_modal, name='apply_modal'),
                        url(r'^profile/$', views.profile, name='profile'),
 
                        url(r'^professor/(?P<profid>.*)/$',

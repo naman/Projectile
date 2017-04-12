@@ -2,55 +2,26 @@
 <br/>
 <button style="margin-top: -15px;" type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
 <div class="container-fluid">
+    <div class="row">
+        <h3 style="margin-top: 0px;" align="center"><b>Application for {{project.name}}
+        </b></h3>
+    </div>
 
     <div class="row">
-        <h3 style="margin-top: 0px;" align="center"><B>Application of Project {{project_name}}
-        </B></h3>
+        <h4 style="font-weight: 500; letter-spacing: .025em;">Eligiblity Criteria</h4>
+        <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
+        <p>{{project.eligibility_criteria}}</p>
     </div>
-    <br/>
-    <div class="row">
-    	<h4 style="font-weight: 500; letter-spacing: .025em;">Eligiblity Criteria</h4>
-    	<hr style="width: 100%;  height: 2px; background-color:#00796B;" />
-    </div>
-    <div class="row">
-    	<p>{{project_ec}}</p>
-    </div>
-    <br/>
     <div class="row">
         <h4 style="font-weight: 500; letter-spacing: .025em;">Incentives</h4>
         <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
+        <p>{{project.incentive}}</p>
     </div>
-    <div class="row">
-        <p>{{project_incentive}}</p>
+    <div class="container text-center">
+        <form role="form" class="form-horizontal" action="/apply_modal/{{project.pk}}/" method="post" enctype="multipart/form-data">
+            {% csrf_token %} {% bootstrap_form form layout="horizontal" %}
+            <a class="btn btn-danger" style="margin-left:350px" href="{{ resume_url }}" role="button" target="_blank">Sample Resume</a> {% buttons submit='OK' layout='horizontal' %}{% endbuttons %}
+        </form>
     </div>
-    <br/>
-    <div class="row">
-    	<h4 style="font-weight: 500; letter-spacing: .025em;">Statement of Purpose*</h4>
-    	<hr style="width: 100%;  height: 2px; background-color:#00796B;" />
-        <textarea rows="4" style="width: 100%" placeholder="Enter your SOP here"></textarea>
-    </div>
-    <!-- <div class="row">
-
-  		<div style="padding: 0px;" class="col-lg-9">
-            <input type="text" class="form-control">
-        </div>
-        <div style="padding: 0px; "  class="col-lg-3">
-            <button style="margin-top: -7px; float: left;" type="button" class="btn btn-small btn-primary"><b>Upload</b></button>
-        </div>
-  		<!-- /.col-lg-6 -->
-	<!-- </div> --> <!-- /.row -->
-    <br/>
-	<div class="row">
-		<h4 style="font-weight: 500; letter-spacing: .025em;">Any Questions?</h4>
-		<hr style="width: 100%;  height: 2px; background-color:#00796B;" />
-		<textarea rows="4" style="width: 100%" placeholder="Enter your queries here"></textarea>
-	</div>
-    <br/>
-    <div class="row">
-        <a href="/project/{{ project_id }}/apply">
-            <button style="margin-right: 40%" type="button" class="btn btn-small btn-primary"><b>Apply</b></button>
-        </a>
-    </div>
-    <br/>
 </div>
 {% endblock %}

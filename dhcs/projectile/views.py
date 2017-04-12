@@ -23,7 +23,7 @@ from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
 from projectile.helpers import *
-from projectile.models import Project, Student, Professor
+from projectile.models import Project, Student, Professor, Application
 
 
 @login_required()
@@ -86,11 +86,24 @@ def home(request):
 @login_required()
 def projectapply(request, projectid):
     """Apply for a project, if deadline permits."""
-    if (timezone.now() < Project.objects.get(pk=projectid).deadline):
-        if (is_eligible(request.user.student, Project.objects.get(pk=projectid))['value']):
-            request.user.student.projectapplications.add(
-                Project.objects.get(pk=projectid))
-            send('')
+    p = Project.objects.get(pk=projectid)
+    if (timezone.now() < p.deadline):
+        if (is_eligible(request.user.student, p)['value']):
+            request.user.student.projectapplications.add(p)
+
+            profs = Professor.objects.filter(projects_mentored=p)
+            print profs
+            for prof in profs:
+                send('Application received for ' + p.name,
+
+                     'Hey! You have received an application for the project ' +
+                     p.name + ' from ' + request.user.student.name +
+                     '. You can check the application here - ' +
+                     'jobport.iiitd.edu.in/project/' + projectid,
+
+                     settings.EMAIL_HOST,
+                     [prof.email],
+                     )
             messages.success(request, 'Thanks for applying!')
             return HttpResponseRedirect('/')
         else:
@@ -437,18 +450,17 @@ def feedback(request):
     """FeedbackForm"""
     if (request.method == 'POST'):
         form = forms.FeedbackForm(request.POST)
-        # pdb.set_trace()
         if form.is_valid():
             form.save()
-            type = form.cleaned_data['type']
-            type = dict(form.fields['type'].choices)[type]
-            settings.EMAIL_HOST_USER += 'Tester@projectile.iiitd.edu.in'
-            # send_mail(
-            #     '[' + type + '] ' + form.cleaned_data['title'],
-            #     'A new feedback was posted on Projectile' + '\n\n' +
-            #     form.cleaned_data['body'], ['projectileiiitd@gmail.com']
-            # )
-            settings.EMAIL_HOST_USER += ''
+            type_ = form.cleaned_data['type']
+            type_ = dict(form.fields['type'].choices)[type]
+            # settings.EMAIL_HOST_USER += 'Tester@projectile.com'
+            send(
+                '[' + type_ + '] ' + form.cleaned_data['title'],
+                'A new feedback was posted on Projectile' + '\n\n' +
+                form.cleaned_data['body'], 'tester@projectile.com', [
+                    'projectile.iiitd@gmail.com']
+            )
             messages.success(
                 request, 'Thanks for filling your precious feedback! :) ')
             return HttpResponseRedirect('/')
@@ -465,13 +477,21 @@ def filter(request):
     return render(request, 'projectile/student_filter_modal.html')
 
 
-def apply(request, projectid):
+def apply_modal(request, projectid):
     p = Project.objects.get(pk=projectid)
-    context = {'project_id': projectid,
-               'project_name': p.name,
-               'project_ec': p.eligibility_criteria,
-               'project_incentive': p.incentive}
-    return render(request, 'projectile/student_project_apply.html', context)
+
+    if (request.method == 'POST'):
+        form = forms.ApplicationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/project/' + projectid + '/apply/')
+        else:
+            context = {'form': form, 'project': p}
+            return render(request, 'projectile/student_project_apply.html', context)
+    else:
+        form = forms.ApplicationForm()
+        context = {'form': form, 'project': p}
+        return render(request, 'projectile/student_project_apply.html', context)
 
 
 @login_required()
