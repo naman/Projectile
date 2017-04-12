@@ -106,9 +106,11 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 MEDIA_ROOT = 'files'
 MEDIA_URL = '/files/'
 
-# MANDRILL_API_KEY = os.environ.get('MANDRILL_API_KEY')
-# EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
-EMAIL_HOST_USER = ''
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'projectile.iiitd@gmail.com'
+EMAIL_HOST_PASSWORD = 'projectile@iiitd'
 
 GOOGLECHARTS_API = '1.1'
 
@@ -118,5 +120,3 @@ HAYSTACK_CONNECTIONS = {
         'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
     },
 }
-
-RESUME_URL = "https://docs.google.com/a/iiitd.ac.in/document/d/10uKehH-VwEWLV_KSf7Hot0j8eYjoBjPQ8Xh_UnVwKUU/edit?usp=sharing"

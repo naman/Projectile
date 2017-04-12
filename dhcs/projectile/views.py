@@ -24,6 +24,7 @@ from django.utils import timezone
 from projectile import forms
 from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, contains_group
 from projectile.models import Project, Student, Professor
+from django.core.mail import send_mail
 
 
 @login_required()
@@ -354,6 +355,54 @@ def getresumes(request, projectid):
         return resp
     else:
         return render(request, 'projectport/badboy.html')
+
+
+@login_required()
+def projectapprove(request, projectid, applicantid):
+    """Delete a Project from admin side."""
+    if is_admin(request.user):
+        s = Student.objects.get(pk=applicantid)
+        p = Project.objects.get(pk=projectid)
+        s.working_on.add(p)
+        p.selectedcandidates.add(s)
+        s.projectapplications.remove(p)
+        prof = Professor.objects.get(user=request.user)
+
+        send_mail(
+            '[Projectile] Congratulations! :D',
+            'Your request for the project ' + p.name +
+            ' has been approved! You have been shortlisted! ',
+            prof.email,
+            [s.email, settings.EMAIL_HOST_USER, prof.email],
+            fail_silently=False,
+        )
+        messages.success(
+            request, 'Project approved!')
+
+    return HttpResponseRedirect('/project/' + projectid)
+
+
+@login_required()
+def projectreject(request, projectid, applicantid):
+    """Delete a Project from admin side."""
+    if is_admin(request.user):
+        s = Student.objects.get(pk=applicantid)
+        p = Project.objects.get(pk=projectid)
+        s.projectapplications.remove(p)
+        prof = Professor.objects.get(user=request.user)
+
+        send_mail(
+            '[Projectile] Sad news! :(',
+            'Your request for the project ' + p.name +
+            ' has NOT been approved! You have not been shortlisted!' +
+            ' Please try again next time :)',
+            prof.email,
+            [s.email, settings.EMAIL_HOST_USER, prof.email],
+            fail_silently=False,
+        )
+        messages.success(
+            request, 'Project rejected! Notification sent!')
+        return HttpResponseRedirect('/project/' + projectid)
 
 
 @login_required()
