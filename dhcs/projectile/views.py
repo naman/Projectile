@@ -22,9 +22,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.utils import timezone
 from projectile import forms
-from projectile.helpers import is_admin, is_member, is_eligible, checkdeadline, contains_group
+from projectile.helpers import *
 from projectile.models import Project, Student, Professor
-from django.core.mail import send_mail
 
 
 @login_required()
@@ -91,6 +90,7 @@ def projectapply(request, projectid):
         if (is_eligible(request.user.student, Project.objects.get(pk=projectid))['value']):
             request.user.student.projectapplications.add(
                 Project.objects.get(pk=projectid))
+            send('')
             messages.success(request, 'Thanks for applying!')
             return HttpResponseRedirect('/')
         else:
@@ -122,6 +122,7 @@ def projectpage(request, projectid):
                 count = count + 1
         context = {'eligiblestudentcount': count,
                    'applicants': p.applicants.all(),
+                   'working_students': p.selectedcandidates.all(),
                    'project': p}
         return render(request, 'projectile/admin_project.html', context)
     else:
@@ -368,18 +369,19 @@ def projectapprove(request, projectid, applicantid):
         s.projectapplications.remove(p)
         prof = Professor.objects.get(user=request.user)
 
-        send_mail(
-            '[Projectile] Congratulations! :D',
+        send(
+            'Congratulations! :D',
             'Your request for the project ' + p.name +
             ' has been approved! You have been shortlisted! ',
             prof.email,
-            [s.email, settings.EMAIL_HOST_USER, prof.email],
-            fail_silently=False,
+            [s.email, settings.EMAIL_HOST_USER, prof.email]
         )
         messages.success(
             request, 'Project approved!')
 
     return HttpResponseRedirect('/project/' + projectid)
+
+
 
 
 @login_required()
@@ -391,14 +393,13 @@ def projectreject(request, projectid, applicantid):
         s.projectapplications.remove(p)
         prof = Professor.objects.get(user=request.user)
 
-        send_mail(
-            '[Projectile] Sad news! :(',
+        send(
+            'Sad news! :(',
             'Your request for the project ' + p.name +
             ' has NOT been approved! You have not been shortlisted!' +
             ' Please try again next time :)',
             prof.email,
-            [s.email, settings.EMAIL_HOST_USER, prof.email],
-            fail_silently=False,
+            [s.email, settings.EMAIL_HOST_USER, prof.email]
         )
         messages.success(
             request, 'Project rejected! Notification sent!')

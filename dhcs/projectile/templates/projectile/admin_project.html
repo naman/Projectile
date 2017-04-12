@@ -87,38 +87,19 @@ body {
                             </div>
                             <div class=" col-sm-4 col-md-4 ocl-lg-4">
                                 <div style="padding: 35px; margin-right: 28px" class="well">
-                                    <h3 style="margin-top: -5px; font-weight: 500; letter-spacing: .025em;">Students</h3>
-                                    <div style="padding-top:20px; padding-bottom: 20px;" class="row">
-                                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                                    <h3 style="margin-top: -5px; font-weight: 500; letter-spacing: .025em;">Working Students</h3>
+                                    <div class="row">
+                                        <br/> {% if not working_students %}
+                                        <div class="row text-center">
+                                            <h3>No working students.</h3>
+                                        </div>
+                                        {% endif %} {% if working_students %} {% for worker in working_students %}
+                                        <a href="#profilemodal{{worker.pk}}" data-toggle="modal" data-target="#profilemodal" id="profile">
                                             <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
+                                                <div class="circle-avatar" style="background-image:url(/files/{{worker.display_picture}})"></div>
                                             </div>
                                         </a>
-                                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                                            <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                                            </div>
-                                        </a>
-                                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                                            <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                                            </div>
-                                        </a>
-                                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                                            <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                                            </div>
-                                        </a>
-                                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                                            <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                                            </div>
-                                        </a>
-                                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
-                                            <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="circle-avatar" style="background-image:url(http://placekitten.com/g/200/400)"></div>
-                                            </div>
-                                        </a>
+                                        {% endfor %} {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -143,8 +124,7 @@ body {
                         <div class="row text-center">
                             <h3>No applicants</h3>
                         </div>
-                        {% endif %}
-                        {% if applicants %}
+                        {% endif %} {% if applicants %}
                         <div class="row">
                             <a href="/project/{{ project.pk }}/getresume/?req=applied">
                                 <button style="color: white;" class="btn btn-primary pull-right">Download All Resumes</button>

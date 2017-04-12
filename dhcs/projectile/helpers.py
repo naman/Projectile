@@ -13,6 +13,17 @@ import re
 from django.contrib.auth.models import Group
 from django.utils import timezone
 
+from django.core.mail import send_mail
+
+
+def send(subject, message, sender, to):
+    send_mail(
+        '[Projectile] ' + subject,
+        message, sender,
+        to,
+        fail_silently=False,
+    )
+
 
 def is_member(user, group):
     """Checks if the user object is a member of the group or not."""
@@ -43,9 +54,9 @@ def is_eligible(candidate, project):
         eligibility['reasons'].append(
             "CGPA requirement not fulfilled.")
 
-    # if (project.status == 'C' or project.status == 'A'):
-    #     eligibility['value'] = False
-    #     eligibility['reasons'].append("This Project cannot be applied to.")
+    if (project.status == 'C' or project.status == 'A'):
+        eligibility['value'] = False
+        eligibility['reasons'].append("This project application is closed!")
 
     return eligibility
 
