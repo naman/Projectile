@@ -382,8 +382,6 @@ def projectapprove(request, projectid, applicantid):
     return HttpResponseRedirect('/project/' + projectid)
 
 
-
-
 @login_required()
 def projectreject(request, projectid, applicantid):
     """Delete a Project from admin side."""
@@ -468,8 +466,11 @@ def filter(request):
 
 
 def apply(request, projectid):
-    # project_id = request.GET.get('project_id', '')
-    context = {'project_id': projectid}
+    p = Project.objects.get(pk=projectid)
+    context = {'project_id': projectid,
+               'project_name': p.name,
+               'project_ec': p.eligibility_criteria,
+               'project_incentive': p.incentive}
     return render(request, 'projectile/student_project_apply.html', context)
 
 

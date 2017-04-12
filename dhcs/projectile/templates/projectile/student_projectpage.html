@@ -32,7 +32,7 @@
                 <h3>Deadline has passed!</h3> {% elif not iseligible %} {% for reason in iseligiblereasons %}
                 <h3>{{reason}}</h3> {% endfor %} {% else %}
                 <button id="apply" type="button" class="btn btn-small btn-success"><b>APPLY</b></button>
-                {% endif %} {% endif %} TODO: There should be no button if status is 'A' or 'C'.
+                {% endif %} {% endif %} 
             </div>
             <script>
             $("#apply").on('click', function() {

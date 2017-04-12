@@ -53,9 +53,10 @@
                             </a>
                             <h4>{{ project.get_project_type_display }}</h4> {% if project.status == 'O' %}
                             <div id="apply{{project.pk}}">
-                                <a href="/project/{{ project.pk }}/apply">
-                                    <button class="btn btn-success btn-fab btn-raised mdi-content-add" style="margin-top: -4px"></button>
-                                </a>
+                                <!--                                 <a href="/project/{{ project.pk }}/apply">
+ -->
+                                <button class="btn btn-success btn-fab btn-raised mdi-content-add" style="margin-top: -4px"></button>
+                                <!-- </a> -->
                             </div>
                             {% elif project.status == 'A' %}
                             <a href="/project/{{ project.pk }}/">
@@ -71,7 +72,7 @@
                 </div>
                 <script>
                 $("#apply{{project.pk}}").on('click', function() {
-                    $("#applydata").load("{% url 'apply' projectid=project.pk %}", function(responseTxt, statusTxt, xhr) {
+                    $("#applydata").load("/apply/{{project.pk}}", function(responseTxt, statusTxt, xhr) {
                         if (statusTxt == "success")
                         // alert("External content loaded successfully!");
                             $("#applymodal").modal('show');

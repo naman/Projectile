@@ -4,7 +4,7 @@
 <div class="container-fluid">
 
     <div class="row">
-        <h3 style="margin-top: 0px;" align="center"><B>Apply for {{project.name}}
+        <h3 style="margin-top: 0px;" align="center"><B>Application of Project {{project_name}}
         </B></h3>
     </div>
     <br/>
@@ -13,7 +13,15 @@
     	<hr style="width: 100%;  height: 2px; background-color:#00796B;" />
     </div>
     <div class="row">
-    	<p>{{project.eligibility_criteria}}</p>
+    	<p>{{project_ec}}</p>
+    </div>
+    <br/>
+    <div class="row">
+        <h4 style="font-weight: 500; letter-spacing: .025em;">Incentives</h4>
+        <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
+    </div>
+    <div class="row">
+        <p>{{project_incentive}}</p>
     </div>
     <br/>
     <div class="row">
@@ -33,7 +41,7 @@
 	<!-- </div> --> <!-- /.row -->
     <br/>
 	<div class="row">
-		<h4 style="font-weight: 500; letter-spacing: .025em;">Questions?</h4>
+		<h4 style="font-weight: 500; letter-spacing: .025em;">Any Questions?</h4>
 		<hr style="width: 100%;  height: 2px; background-color:#00796B;" />
 		<textarea rows="4" style="width: 100%" placeholder="Enter your queries here"></textarea>
 	</div>
