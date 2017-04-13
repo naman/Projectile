@@ -95,17 +95,28 @@ body {
                                 <div style="padding: 35px; margin-right: 28px" class="well text-center">
                                     <h3 style="margin-top: -5px; font-weight: 500; letter-spacing: .025em;">Working Students</h3>
                                     <div class="row">
-                                        <div class="container-fluid" style="margin-top: -20px">
+                                        <div class="container-fluid">
                                             <br/> {% if not working_students %}
                                             <div class="row text-center">
                                                 <h4>There are no students currently working on this project.</h4>
                                             </div>
-                                            {% endif %} {% if working_students %} {% for worker in working_students %}
-                                            <a href="#profilemodal{{worker.pk}}" data-toggle="modal" data-target="#profilemodal" id="profile">
+                                            {% endif %} {% if working_students %} {% for student in working_students %}
+                                            <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile{{student.pk}}3">
                                                 <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                    <div class="circle-avatar" style="background-image:url(/files/{{worker.display_picture}})"></div>
+                                                    <div class="circle-avatar" style="background-image:url(/files/{{student.display_picture}})"></div>
                                                 </div>
                                             </a>
+                                            <script type="text/javascript">
+                                            $("#profile{{student.pk}}3").on('click', function() {
+                                                $("#profiledata").load("{% url 'profile_modal' studid=student.pk %}", function(responseTxt, statusTxt, xhr) {
+                                                    if (statusTxt == "success")
+                                                    // alert("External content loaded successfully!");
+                                                        $("#profilemodal").modal('show');
+                                                    if (statusTxt == "error")
+                                                        alert("Error: " + xhr.status + ": " + xhr.statusText);
+                                                });
+                                            })
+                                            </script>
                                             {% endfor %} {% endif %}
                                         </div>
                                     </div>
@@ -179,7 +190,7 @@ body {
                             </div>
                         </div>
                         <script type="text/javascript">
-                        $("#profile{{app.applicants.first.pk}}1").on('click', function() {
+                        $("#profile{{app.applicants.first.pk}}").on('click', function() {
                             $("#profiledata").load("{% url 'profile_modal' studid=app.applicants.first.pk %}", function(responseTxt, statusTxt, xhr) {
                                 if (statusTxt == "success")
                                 // alert("External content loaded successfully!");
