@@ -8,7 +8,8 @@
         <h3><b>PENDING PROJECT APPLICATIONS</b></h3>
         <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
         <div class="row">
-            {% for project in my_projects %}
+            {% if not my_projects %}
+            <h4 align="text-center" style="margin-left: 20px">You have not applied to any projects.</h4> {% endif %} {% for project in my_projects %}
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card">
                     <div class="card-height-indicator"></div>
@@ -35,11 +36,10 @@
     <br/>
     <div class="row">
         <h3><b>ALL PROJECTS</b></h3>
-        <hr style="width: 100%; color: #00796B; height: 2px; background-color:#00796B;" /> {% if not all_projects %}
-        <h4 align="text-center">There are no projects available right now.</h4> {% endif %}
+        <hr style="width: 100%; color: #00796B; height: 2px; background-color:#00796B;" />
         <div class="row">
-            {% for project in all_projects %} {% if not project in my_projects %}
-            {% if not project in working_projects %}
+            {% if not all_projects %}
+            <h4 align="text-center" style="margin-left: 20px">There are no projects available right now.</h4> {% endif %} {% for project in all_projects %} {% if not project in my_projects %} {% if not project in working_projects %}
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card">
                     <div class="card-height-indicator"></div>
@@ -80,8 +80,7 @@
                 })
                 </script>
             </div>
-            {% endif %}
-            {% endif %} {% endfor %}
+            {% endif %} {% endif %} {% endfor %}
         </div>
     </div>
     <br/>
@@ -89,7 +88,8 @@
         <h3><b>WORKING PROJECTS</b></h3>
         <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
         <div class="row">
-            {% for project in working_projects %}
+            {% if not working_projects %}
+            <h4 align="text-center" style="margin-left: 20px">You have not working on any projects.</h4> {% endif %} {% for project in working_projects %}
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                 <div class="card">
                     <div class="card-height-indicator"></div>
