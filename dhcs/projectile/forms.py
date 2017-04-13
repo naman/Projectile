@@ -15,7 +15,7 @@ from django.db.models.fields.files import FieldFile
 from django.forms import RadioSelect
 from django.template.defaultfilters import filesizeformat
 from django.utils import timezone
-from projectile.models import Project, Student, Feedback, Professor, Application
+from projectile.models import *
 
 EXTENSIONS = ['pdf']
 MAX_UPLOAD_SIZE = "5242880"
@@ -42,68 +42,11 @@ class ProjectForm(forms.ModelForm):
         return deadline
 
 
-class AdminSelectedApplicantsForm(forms.ModelForm):
-
-    class Meta:
-        model = Project
-        fields = ['selected']
-
-    # widgets = {'CB':forms.CheckBoxSelectMultiple}
-
-    # Representing the many to many related field in Project
-    selected = forms.ModelMultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple, queryset=Student.objects.all(),
-        required=False)
-
-    # Overriding __init__ here allows us to provide initial
-    # data for 'selected' field
-    def __init__(self, *args, **kwargs):
-        # Only in case we build the form from an instance
-        # (otherwise, 'selected' list should be empty)
-        forms.ModelForm.__init__(self, *args, **kwargs)
-        if 'instance' in kwargs:
-            self.fields['selected'].queryset = kwargs[
-                'instance'].applicants.all()
-            # We get the 'initial' keyword argument or initialize it
-            # as a dict if it didn't exist.
-            initial = kwargs.setdefault('initial', {})
-            # The widget for a ModelMultipleChoiceField expects
-            # a list of primary key for the selected data.
-            # for t in kwargs['instance'].selectedcandidates.all():
-            # print t
-            initial['selected'] = [t.pk for t in kwargs[
-                'instance'].selectedcandidates.all()]  # applicants.all()]
-
-    # Overriding save allows us to process the value of 'selected' field
-    def save(self, commit=True):
-        # Get the unsaved Project instance
-        instance = forms.ModelForm.save(self, False)
-
-        # Prepare a 'save_m2m' method for the form,
-        old_save_m2m = self.save_m2m
-
-        def save_m2m():
-            old_save_m2m()
-            # This is where we actually link the selected with job
-            instance.selectedcandidates.clear()
-            for student in self.cleaned_data['selected']:
-                instance.selectedcandidates.add(student)
-
-        self.save_m2m = save_m2m
-
-        # Do we need to save all changes now?
-        if commit:
-            instance.save()
-            self.save_m2m()
-
-        return instance
-
-
 class ApplicationForm(forms.ModelForm):
 
     class Meta:
         model = Application
-        exclude = ['projects']
+        exclude = ['projects', 'display']
 
 
 class ProfessorForm(forms.ModelForm):

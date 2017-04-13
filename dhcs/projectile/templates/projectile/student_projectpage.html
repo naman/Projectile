@@ -93,13 +93,13 @@
                     <h3 style="margin-top:40px; font-weight: 500; letter-spacing: .025em;">Working Students</h3>
                     <div style="padding-top:20px; padding-bottom: 20px;" class="row">
                         {% for student in working_students %}
-                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile">
+                        <a href="#profilemodal" data-toggle="modal" data-target="#profilemodal" id="profile{{student.pk}}">
                             <div style="margin-bottom: 20px;" class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                 <div class="circle-avatar" style="background-image:url(/files/{{student.display_picture}})"></div>
                             </div>
                         </a>
                         <script type="text/javascript">
-                        $("#profile").on('click', function() {
+                        $("#profile{{student.pk}}").on('click', function() {
                             $("#profiledata").load("{% url 'profile_modal' studid=student.pk %}", function(responseTxt, statusTxt, xhr) {
                                 if (statusTxt == "success")
                                 // alert("External content loaded successfully!");

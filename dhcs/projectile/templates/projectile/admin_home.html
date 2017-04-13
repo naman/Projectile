@@ -6,9 +6,11 @@
 <div class="container">
     <div class="row">
         <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
-          <h3><b>MY PROJECTS</b></h3>
+            <h3><b>MY PROJECTS</b></h3>
             <hr style="height: 2px; background-color:#00796B;" /> {% if not my_projects %}
-            <h4 align="text-center">There are no projects available right now.</h4> {% endif %}
+            <h4 align="text-center">You have not started any projects. How about <a href="/openproject/">
+              starting
+            </a>  a new one?</h4> {% endif %}
             <div class="row">
                 {% for project in my_projects %}
                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
@@ -24,11 +26,9 @@
                                     <h4 style="margin-top: -2px">{{project.name}}</h4>
                                 </a>
                                 <h5>{{ project.get_project_type_display }}</h5>
-                                <div id="apply{{project.pk}}">
-                                    <a href="/project/{{ project.pk }}/edit">
-                                        <button class="btn btn-warning btn-fab btn-raised mdi-content-create"></button>
-                                    </a>
-                                </div>
+                                <a href="/project/{{ project.pk }}/edit">
+                                    <button class="btn btn-sm btn-warning btn-fab btn-raised mdi-content-create" style="margin-top: -25px"></button>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -37,11 +37,14 @@
             </div>
         </div>
         <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-            <div class="well" style="background-color: #00796B">
-                <h3 class="text-center" style="color: white;">NOTIFICATIONS </h3>
+            <div class="well" style="background-color: #00796B;">
+                <h3 class="text-center" style="color: white;">NOTIFICATIONS ({{ notifications|length }})</h3>
                 <hr class="divider" /> {% if not notifications %}
                 <h4 class="text-center" style="color: white;" align="text-center">There are no notifications right now.</h4> {% endif %} {% for n in notifications %}
                 <div class="row">
+                    <div class="container-fluid" style="color: white;">
+                        <h5 style="margin-left: 10px"> <b><a style="color: white;" href="/project/{{n.projects.first.pk}}">{{n.applicants.first.name}} applied on the project {{n.projects.first.name}}.</a></b> </h5>
+                    </div>
                 </div>
                 {% endfor %}
             </div>

@@ -64,7 +64,6 @@ def home(request):
                 display=True)
             my_projects = [x.projects.first() for x in applications]
             working_projects = request.user.student.working_on.all()
-            print working_projects
         except Exception:
             try:
                 prof = Professor.objects.get(user=request.user)
@@ -75,7 +74,8 @@ def home(request):
         context = {'user': request.user,
                    'all_projects': all_projects,
                    'my_projects': my_projects,
-                   'working_projects': working_projects}
+                   'working_projects': working_projects,
+                   'notifications': Application.objects.filter(display=True).filter(projects__in=my_projects)}
 
         if is_member(request.user, 'admin'):
             if not contains_group(request.user, 'admin'):
@@ -125,9 +125,13 @@ def projectapply(request, projectid, appid):
 def projectwithdraw(request, projectid):
     """Withdraw from the project, if deadline permits."""
     p = Project.objects.get(pk=projectid)
+    s = request.user.student
     if (timezone.now() < p.deadline):
-        request.user.student.applications.projects.remove(p)
-        request.user.student.applications.remove(p)
+        # request.user.student.applications.projects.remove(p)
+        # request.user.student.applications.remove(p)
+        app = p.project_applications.filter(applicants__in=[s]).first()
+        app.display = False
+        app.save()
         messages.success(request, 'You have withdrawn!')
         return HttpResponseRedirect('/')
     else:
@@ -173,42 +177,6 @@ def projectpage(request, projectid):
 
 
 @login_required()
-def admineditstudent(request, studentid):
-    """Allows admin to change the student details."""
-    if is_admin(request.user):
-        if request.method == 'POST':
-            form = forms.AdminStudentForm(
-                request.POST, request.FILES, instance=Student.objects.get(pk=studentid))
-            if form.is_valid():
-                usr = form.save(commit=False)
-                if (request.FILES.__len__() == 0):
-                    usr.resume = Student.objects.get(pk=studentid).resume
-                else:
-                    my_student = Student.objects.get(pk=studentid)
-                    usr.resume.name = my_student.course_enrolled + '_' + \
-                        my_student.user.username.split('@')[0] + ".pdf"
-                    usr.transcript.name = my_student.course_enrolled + '_' + \
-                        my_student.user.username.split('@')[0] + ".pdf"
-                usr.save()
-                form.save_m2m()
-                messages.success(request, 'Your form was saved')
-                return HttpResponseRedirect('/')
-            else:
-                messages.error(request, 'Error in form!')
-                context = {'form': form}
-                return render(request, 'projectile/admin_editstudent.html', context)
-        elif request.method == 'GET':
-            studentform = forms.AdminStudentForm(
-                instance=Student.objects.get(pk=studentid))
-            context = {'user': request.user,
-                       'form': studentform, 'layout': 'horizontal'}
-            return render(request, 'projectile/admin_editstudent.html', context)
-        return HttpResponseRedirect('/')
-    else:
-        return render(request, 'projectile/badboy.html')
-
-
-@login_required()
 def professor_profile(request):
     """Allows editing student profile by themselves."""
     if request.method == 'POST':
@@ -245,8 +213,7 @@ def profile(request):
             if (request.FILES.__len__() == 0):
                 usr.resume = request.user.student.resume
             else:
-                usr.resume.name = usr.course_enrolled + '_' + \
-                    request.user.username.split('@')[0] + ".pdf"
+                usr.resume.name = request.user.username.split('@')[0] + ".pdf"
             usr.save()
             messages.success(request, 'Your details were saved.')
             return HttpResponseRedirect('/')
@@ -369,7 +336,10 @@ def getresumes(request, projectid):
             checklist = p.selectedcandidates.all()
             zip_subdir = p.name + "_Selected_Resumes"
         else:
-            checklist = p.project_applications.applicants.all()  # AllApplicants
+            a = p.project_applications.filter(display=True)
+            # print a[0].applicants.first()
+            checklist = [s.applicants.first() for s in a]
+            # checklist = []  # AllApplicants
             zip_subdir = p.name + "_Applicant_Resumes"
         for student in checklist:
             filenames.append(student.resume.path)
@@ -420,11 +390,7 @@ def projectapprove(request, projectid, applicantid):
 def projectreject(request, projectid, applicantid):
     """Delete a Project from admin side."""
     if is_admin(request.user):
-        p = Project.objects.get(pk=projectid)
         a = Application.objects.get(pk=applicantid)
-        s = a.applicants.first()
-        s.working_on.add(p)
-
         a.display = False
 
         a.save()
@@ -524,7 +490,7 @@ def fileview(request, filename):
     """Protect the resume location, by adding headers, using nginx."""
     response = HttpResponse()
     response['Content-Type'] = 'application/pdf'
-    response['X-Accel-Redirect'] = "/protected/%s" % filename
+    # response['X-Accel-Redirect'] = "/protected/%s" % filename
     return response
 
 
@@ -573,6 +539,6 @@ def student_professors(request):
     if not is_admin(request.user):
         a = Professor.objects.all()
         ps = request.user.student.working_on.all()
-        my = [p.mentors.first for p in ps]
+        my = list(set([p.mentors.first() for p in ps]))
         context = {"all_professors": a, "my_professors": my}
         return render(request, 'projectile/student_professors.html', context)
