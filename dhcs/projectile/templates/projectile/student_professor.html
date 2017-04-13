@@ -19,8 +19,8 @@
             <div class="col-sm-10 col-md-10 col-lg-10">
                 <div class="container">
                     <h1><b>{{ professor.name }}</b></h1>
-                    <h4>{{ professor.interest_areas }}</h4>
                     <h4>{{ professor.email }}</h4>
+                    <h4>{{ professor.website }}</h4>
                 </div>
             </div>
             <div class="col-sm-2 col-md-2 col-lg-2">
@@ -36,23 +36,19 @@
     <div class="row">
         <div class="col-sm-8 col-md-8 col-lg-8">
             <div style="padding: 35px;" class="well">
-                <h3 style="font-weight: 500; letter-spacing: .025em;">About</h3>
+                <!--        <h3 style="font-weight: 500; letter-spacing: .025em;">About</h3>
                 <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
-                {{professor.about}}
-                <h3 style="font-weight: 500; letter-spacing: .025em;">Research Interests</h3>
+             -->
+                <h3 style="font-weight: 500; letter-spacing: .025em;">Interest Areas</h3>
                 <hr style="width: 100%;  height: 2px; background-color:#00796B;" />
                 <h3>{{professor.interest_areas}} </h3>
-
             </div>
         </div>
         <div class="col-sm-4 col-md-4 col-lg-4">
             <div style="padding: 35px;" class="well">
-                <h3 style="font-weight: 500; letter-spacing: .025em;">Ongoing Projects</h3>
+                <h3 style="font-weight: 500; letter-spacing: .025em;">Projects</h3>
                 <hr style="width: 100%;  height: 2px; background-color:#00796B;" /> {% for project in professor.projects_mentored.all %}
                 <h4><a href="/project/{{project.pk}}">{{project.name}}</a></h4> {% endfor %}
-                <h3 style="margin-top:40px; font-weight: 500; letter-spacing: .025em;">Past Projects</h3>
-                <hr style="width: 100%;  height: 2px; background-color:#00796B;" /> {% for project in professor.projects_mentored.all %} {% if project.status == 'C' %}
-                <h4><a href="/project/{{project.pk}}">{{project.name}}</a></h4> {% endif %} {% endfor %}
             </div>
         </div>
     </div>

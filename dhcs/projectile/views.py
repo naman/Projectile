@@ -570,13 +570,9 @@ def profile_modal(request, studid):
 
 @login_required()
 def student_professors(request):
-    a = []
-    for person in Professor.objects.all():
-        try:
-            print person.user.student
-            a.append(person)
-        except Exception:
-            pass
-
-    context = {"all_professors": a}
-    return render(request, 'projectile/student_professors.html', context)
+    if not is_admin(request.user):
+        a = Professor.objects.all()
+        ps = request.user.student.working_on.all()
+        my = [p.mentors.first for p in ps]
+        context = {"all_professors": a, "my_professors": my}
+        return render(request, 'projectile/student_professors.html', context)
