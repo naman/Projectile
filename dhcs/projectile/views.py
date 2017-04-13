@@ -392,6 +392,8 @@ def projectreject(request, projectid, applicantid):
     if is_admin(request.user):
         a = Application.objects.get(pk=applicantid)
         a.display = False
+        a.save()
+        p = Project.objects.get(pk=projectid)
 
         a.save()
         prof = Professor.objects.get(user=request.user)
